@@ -1,32 +1,29 @@
-// Google Sheets API Integration
-const SHEET_ID = '15SwhJnQK5Y9v8A6lpQ2Yxcb-rKwjVSDga5twy6DL7Os';
-const API_URL = 'https://script.google.com/macros/s/AKfycbxvfvqhMcjZSv1DFmY9TEad-Wwi7IywNKPpj5mEi3ayqwcp-Ja--ppAi_ZQFh3900JmCA/exec';
+// Google Sheets API Integration via Proxy Server
+const PROXY_URL = 'https://your-proxy-server-url.com'; // We'll update this after deployment
 
 // Save submission to Google Sheets
 async function saveToGoogleSheets(submissionData) {
     try {
-        console.log('Attempting to save to Google Sheets:', submissionData);
+        console.log('Attempting to save to Google Sheets via proxy:', submissionData);
         
-        // Use no-cors mode to bypass CORS restrictions
-        const response = await fetch(API_URL, {
+        const response = await fetch(PROXY_URL + '/proxy/google-sheets', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                action: 'append',
-                data: submissionData
-            }),
-            mode: 'no-cors'
+            body: JSON.stringify(submissionData)
         });
         
-        console.log('Google Sheets request sent (no-cors mode)');
-        
-        // With no-cors, we can't read the response, but the request should go through
-        // Check Google Apps Script executions to see if it worked
-        return true;
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Google Sheets response via proxy:', result);
+            return result.success;
+        } else {
+            console.error('Google Sheets error via proxy:', response.status, response.statusText);
+            return false;
+        }
     } catch (error) {
-        console.error('Error saving to Google Sheets:', error);
+        console.error('Error saving to Google Sheets via proxy:', error);
         // Fallback to localStorage
         const submissions = JSON.parse(localStorage.getItem('submissions') || '[]');
         submissions.push(submissionData);
@@ -35,30 +32,28 @@ async function saveToGoogleSheets(submissionData) {
     }
 }
 
-// Load submissions from Google Sheets API
+// Load submissions from Google Sheets via Proxy Server
 async function loadFromGoogleSheets() {
     try {
-        console.log('Attempting to load from Google Sheets API');
+        console.log('Attempting to load from Google Sheets via proxy');
         
-        const response = await fetch(API_URL + '?action=get', {
+        const response = await fetch(PROXY_URL + '/proxy/google-sheets', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-            },
-            mode: 'no-cors'
+            }
         });
         
-        console.log('Google Sheets API load request sent');
-        
-        // Since we can't read response with no-cors, we need to use a different approach
-        // Let's use a simple timestamp-based cache busting
-        const cacheBuster = Date.now();
-        const fallbackData = JSON.parse(localStorage.getItem('submissions') || '[]');
-        
-        console.log('Using fallback data from localStorage:', fallbackData);
-        return fallbackData;
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Google Sheets data loaded via proxy:', data);
+            return data;
+        } else {
+            console.error('Google Sheets load error via proxy:', response.status, response.statusText);
+            return [];
+        }
     } catch (error) {
-        console.error('Error loading from Google Sheets:', error);
-        return JSON.parse(localStorage.getItem('submissions') || '[]');
+        console.error('Error loading from Google Sheets via proxy:', error);
+        return [];
     }
 }
