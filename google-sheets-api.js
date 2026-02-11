@@ -1,5 +1,5 @@
 // Google Sheets API Integration - Direct Approach
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx61TEEZuZv8uBgQp_qobhD28QtC8y0C_wvavbZO3lDx6Cth8f5OdZh3oIxL7Jv8kGp0A/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbykpFD-LwYU_Osadg2u_fyFKKwCyRGmuT8ILxHqlq-uqgLdwgAuRrtiZjjNiYHwq-WhnA/exec';
 
 // Save submission to Google Sheets
 async function saveToGoogleSheets(submissionData) {
