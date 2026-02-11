@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Legal Leads</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="geometric-bg"></div>
+    
+    <header class="header">
+        <div class="container">
+            <div class="nav">
+                <div class="logo">
+                    <img src="images/sliq-logo.png" alt="Sliq By Design" class="logo-img">
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">View Site</a>
+                    <a href="#" id="logoutBtn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="admin-dashboard">
+            <div class="container">
+                <div class="admin-card">
+                    <h2>Admin Dashboard</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 40px;">Manage your CPQL target settings</p>
+                    
+                    <div class="settings-section">
+                        <h3>CPQL Target Settings</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">Adjust the guaranteed Cost per Qualified Lead target that will be displayed to users</p>
+                        
+                        <form id="cpqlForm">
+                            <div class="form-group">
+                                <label for="cpqlTarget">Current CPQL Target ($)</label>
+                                <input type="number" id="cpqlTarget" name="cpqlTarget" min="0" step="50" required>
+                            </div>
+                            
+                            <button type="submit" class="submit-btn">Update CPQL Target</button>
+                        </form>
+                        
+                        <div id="updateSuccess" style="color: var(--success-color); margin-top: 15px; display: none;">
+                            CPQL target updated successfully!
+                        </div>
+                        
+                        <div class="current-settings" style="margin-top: 30px; padding: 20px; background: var(--secondary-bg); border-radius: 10px;">
+                            <h4>Current Settings</h4>
+                            <p><strong>CPQL Target:</strong> $<span id="currentCpqlDisplay">700</span></p>
+                            <p style="color: var(--text-secondary); font-size: 14px; margin-top: 10px;">This value will be displayed as your guaranteed CPQL on the main landing page</p>
+                        </div>
+                    </div>
+                    
+                    <div class="submissions-section" style="margin-top: 40px;">
+                        <h3>Form Submissions</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">View all contact form submissions from potential clients</p>
+                        
+                        <div class="submissions-controls">
+                            <button id="refreshSubmissions" class="submit-btn" style="margin-bottom: 20px;">Refresh Submissions</button>
+                            <button id="clearSubmissions" class="submit-btn" style="margin-bottom: 20px; background: var(--accent-color);">Clear All Submissions</button>
+                        </div>
+                        
+                        <div id="submissionsList" class="submissions-list">
+                            <!-- Submissions will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="admin-dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal Leads - Lower Your Personal Injury Case Cost per Qualified Lead</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="geometric-bg"></div>
+    
+    <header class="header">
+        <div class="container">
+            <div class="nav">
+                <div class="logo">
+                    <img src="images/sliq-logo.png" alt="Sliq By Design" class="logo-img">
+                </div>
+                <div class="nav-links">
+                    <a href="#calculator">Calculator</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h2 class="hero-title">Stop Overpaying for Personal Injury Leads</h2>
+                    <p class="hero-subtitle">Calculate your current Cost per Qualified Lead and discover how you can save thousands with our guaranteed <span id="heroCpqlTarget">$700</span> CPQL for PI cases</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="calculator" class="calculator-section">
+            <div class="container">
+                <div class="calculator-card">
+                    <h3>PI Case CPQL Calculator</h3>
+                    <p class="calculator-desc">Find out your current Cost per Qualified Lead for Personal Injury cases in seconds</p>
+                    
+                    <form id="cplForm" class="calculator-form">
+                        <div class="form-group">
+                            <label for="adSpend">Monthly Ad Spend ($)</label>
+                            <input type="number" id="adSpend" name="adSpend" placeholder="5000" required min="0" step="100">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="marketingFees">Monthly Marketing Fees ($)</label>
+                            <input type="number" id="marketingFees" name="marketingFees" placeholder="2000" required min="0" step="100">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="leadsCount">Number of PI Leads per Month</label>
+                            <input type="number" id="leadsCount" name="leadsCount" placeholder="50" required min="1" step="1">
+                        </div>
+                        
+                        <button type="submit" class="calculate-btn">Calculate My PI Case CPQL</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="why-overspend" class="why-overspend-section">
+            <div class="container">
+                <div class="overspend-card">
+                    <h3>Why Personal Injury Firms Overspend on Marketing</h3>
+                    <p class="section-desc">The hidden costs draining your PI marketing budget</p>
+                    
+                    <div class="overspend-points">
+                        <div class="point-item">
+                            <div class="point-icon">🎯</div>
+                            <div class="point-content">
+                                <h4>Generic Lead Generation</h4>
+                                <p>Most agencies cast too wide a net, attracting unqualified leads who have no intention of hiring a PI attorney</p>
+                            </div>
+                        </div>
+                        
+                        <div class="point-item">
+                            <div class="point-icon">💸</div>
+                            <div class="point-content">
+                                <h4>High Competition Keywords</h4>
+                                <p>Bidding on broad terms like "personal injury lawyer" costs $50-150+ per click with low conversion rates</p>
+                            </div>
+                        </div>
+                        
+                        <div class="point-item">
+                            <div class="point-icon">📱</div>
+                            <div class="point-content">
+                                <h4>Poor Ad Creative</h4>
+                                <p>Generic ads that don't speak to accident victims' specific pain points and immediate needs</p>
+                            </div>
+                        </div>
+                        
+                        <div class="point-item">
+                            <div class="point-icon">🔄</div>
+                            <div class="point-content">
+                                <h4>No Nurturing System</h4>
+                                <p>Leads go cold because there's no follow-up system to build trust and urgency</p>
+                            </div>
+                        </div>
+                        
+                        <div class="point-item">
+                            <div class="point-icon">📊</div>
+                            <div class="point-content">
+                                <h4>Wrong Metrics</h4>
+                                <p>Focusing on click counts instead of actual qualified leads that convert to cases</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="results" class="results-section" style="display: none;">
+            <div class="container">
+                <div class="results-card">
+                    <div class="current-cpl">
+                        <h4>Your Current PI Case CPQL</h4>
+                        <div class="cpl-amount" id="currentCpl">$0</div>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 5px;">Cost per Qualified Lead</p>
+                    </div>
+                    
+                    <div class="comparison">
+                        <div class="our-cpl">
+                            <h4>Our Guaranteed CPQL</h4>
+                            <div class="cpl-amount guaranteed" id="targetCpl">$700</div>
+                        </div>
+                        
+                        <div class="savings">
+                            <h4>You Could Save</h4>
+                            <div class="savings-amount" id="savingsAmount">0%</div>
+                            <p class="savings-desc" id="savingsDesc">compared to your current CPQL</p>
+                        </div>
+                    </div>
+                    
+                    <div class="cta-section">
+                        <h4>Ready to Lower Your PI Case CPQL?</h4>
+                        <p>Leave your information below and we'll contact you within 24 hours</p>
+                    </div>
+                    
+                    <div class="how-we-do-it">
+                        <h4>How We Achieve Your Guaranteed CPQL</h4>
+                        <p>Our proven system cuts costs while delivering higher-quality PI leads</p>
+                        
+                        <div class="method-points">
+                            <div class="method-item">
+                                <div class="method-icon">🎯</div>
+                                <div class="method-content">
+                                    <h5>Solid Landing Pages</h5>
+                                    <p>PI-specific landing pages that speak directly to accident victims with compelling copy, trust signals, and clear calls-to-action that drive qualified submissions</p>
+                                </div>
+                            </div>
+                            
+                            <div class="method-item">
+                                <div class="method-icon">🚀</div>
+                                <div class="method-content">
+                                    <h5>Optimized & Curated Ads</h5>
+                                    <p>Killer creatives targeting long-tail PI keywords, geo-fenced campaigns, and ad copy that addresses specific accident scenarios - cutting CPC by 60-80%</p>
+                                </div>
+                            </div>
+                            
+                            <div class="method-item">
+                                <div class="method-icon">📧</div>
+                                <div class="method-content">
+                                    <h5>Nurturing Funnel System</h5>
+                                    <p>Automated email sequences, SMS follow-ups, and retargeting that builds trust and urgency - nurturing leads until they're ready to speak with your appointment setter</p>
+                                </div>
+                            </div>
+                            
+                            <div class="method-item">
+                                <div class="method-icon">📞</div>
+                                <div class="method-content">
+                                    <h5>Post-Call Nurturing</h5>
+                                    <p>Continued engagement after initial contact with case-relevant content, follow-up sequences, and appointment reminders to maximize show rates and conversions</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact-section" style="display: none;">
+            <div class="container">
+                <div class="contact-card">
+                    <h3>Get Started Today</h3>
+                    <form id="contactForm" class="contact-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="lawFirm">Law Firm Name</label>
+                            <input type="text" id="lawFirm" name="lawFirm" required>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Get Your Lower PI Case CPQL</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Legal Leads. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
