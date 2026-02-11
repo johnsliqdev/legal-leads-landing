@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // Google Apps Script URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxvfvqhMcjZSv1DFmY9TEad-Wwi7IywNKPpj5mEi3ayqwcp-Ja--ppAi_ZQFh3900JmCA/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx61TEEZuZv8uBgQp_qobhD28QtC8y0C_wvavbZO3lDx6Cth8f5OdZh3oIxL7Jv8kGp0A/exec';
 
 // Proxy endpoint to forward requests to Google Apps Script
 app.post('/proxy/google-sheets', async (req, res) => {
