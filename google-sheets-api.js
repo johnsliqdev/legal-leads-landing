@@ -1,4 +1,4 @@
-// Google Sheets API Integration - Direct Approach
+// Google Sheets API Integration - Direct Approach v2
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbykpFD-LwYU_Osadg2u_fyFKKwCyRGmuT8ILxHqlq-uqgLdwgAuRrtiZjjNiYHwq-WhnA/exec';
 
 // Save submission to Google Sheets
