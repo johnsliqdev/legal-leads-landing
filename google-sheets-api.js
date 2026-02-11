@@ -35,28 +35,46 @@ async function saveToGoogleSheets(submissionData) {
     }
 }
 
-// Load submissions from Google Sheets
+// Load submissions from Google Sheets via public CSV export
 async function loadFromGoogleSheets() {
     try {
-        console.log('Attempting to load from Google Sheets');
+        console.log('Attempting to load from Google Sheets via CSV export');
         
-        const response = await fetch(API_URL + '?action=get', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+        // Use Google Sheets public CSV export (no CORS issues)
+        const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
+        
+        const response = await fetch(csvUrl);
         
         if (response.ok) {
-            const data = await response.json();
-            console.log('Google Sheets data loaded:', data);
+            const csvText = await response.text();
+            console.log('Google Sheets CSV loaded:', csvText.substring(0, 100));
+            
+            // Parse CSV to JSON
+            const rows = csvText.split('\n').filter(row => row.trim());
+            if (rows.length < 2) return []; // No data
+            
+            const headers = rows[0].split(',').map(h => h.trim().replace(/"/g, ''));
+            const data = [];
+            
+            for (let i = 1; i < rows.length; i++) {
+                const values = rows[i].split(',').map(v => v.trim().replace(/"/g, ''));
+                if (values.length === headers.length) {
+                    const row = {};
+                    headers.forEach((header, index) => {
+                        row[header] = values[index];
+                    });
+                    data.push(row);
+                }
+            }
+            
+            console.log('Parsed Google Sheets data:', data);
             return data;
         } else {
-            console.error('Google Sheets load error:', response.status, response.statusText);
-            return JSON.parse(localStorage.getItem('submissions') || '[]');
+            console.error('Google Sheets CSV error:', response.status);
+            return [];
         }
     } catch (error) {
         console.error('Error loading from Google Sheets:', error);
-        return JSON.parse(localStorage.getItem('submissions') || '[]');
+        return [];
     }
 }
