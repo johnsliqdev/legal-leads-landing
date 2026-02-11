@@ -7,17 +7,7 @@ async function saveToGoogleSheets(submissionData) {
     try {
         console.log('Attempting to save to Google Sheets:', submissionData);
         
-        // Send preflight request first
-        await fetch(API_URL, {
-            method: 'OPTIONS',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Request-Method': 'POST',
-                'Access-Control-Request-Headers': 'Content-Type'
-            }
-        });
-        
-        // Now send the actual POST request
+        // Simple POST request without preflight
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
@@ -28,6 +18,8 @@ async function saveToGoogleSheets(submissionData) {
                 data: submissionData
             })
         });
+        
+        console.log('Google Sheets response status:', response.status);
         
         if (response.ok) {
             const result = await response.json();
