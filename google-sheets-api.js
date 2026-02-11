@@ -6,21 +6,33 @@ async function saveToGoogleSheets(submissionData) {
     try {
         console.log('Attempting to save to Google Sheets:', submissionData);
         
-        // Use GET request with parameters to bypass CORS
-        const data = {
+        // Create a simple test URL to verify it works
+        const testData = {
             action: 'append',
             data: submissionData
         };
         
-        const url = GOOGLE_SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(data));
+        const url = GOOGLE_SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(testData));
+        console.log('Full URL being requested:', url);
         
-        // Create a simple fetch with no-cors
-        const response = await fetch(url, {
-            method: 'GET',
-            mode: 'no-cors'
-        });
+        // Try multiple approaches
+        try {
+            // Approach 1: Direct GET request
+            const response = await fetch(url, {
+                method: 'GET',
+                mode: 'no-cors'
+            });
+            console.log('GET request sent');
+        } catch (error) {
+            console.log('GET approach failed:', error);
+            
+            // Approach 2: Image pixel
+            const img = new Image();
+            img.src = url;
+            console.log('Image approach sent');
+        }
         
-        console.log('Google Sheets request sent via GET');
+        console.log('Google Sheets request sent');
         return true;
     } catch (error) {
         console.error('Error saving to Google Sheets:', error);
