@@ -1,6 +1,6 @@
 // Google Sheets API Integration
 const SHEET_ID = '15SwhJnQK5Y9v8A6lpQ2Yxcb-rKwjVSDga5twy6DL7Os';
-const API_URL = 'https://script.google.com/macros/s/AKfycbx0PEkP1L_qChzNSWQsGswKs5m9XzIbj-2SrE2vxS74TyIUaub1QCmtM4ivRQj2rmrGJw/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbxVkVnmNHXXKV3dIFl0bChduaT_WAhJ1l0iaGDzXaT7IyLlFWm1y9rwTHAinsGMYuGVRg/exec';
 
 // Save submission to Google Sheets
 async function saveToGoogleSheets(submissionData) {

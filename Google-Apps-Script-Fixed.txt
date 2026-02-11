@@ -3,66 +3,42 @@
 
 function doPost(e) {
   try {
-    // Set CORS headers
-    const headers = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type'
-    };
-    
     const data = JSON.parse(e.postData.contents);
     
     if (data.action === 'append') {
       appendToSheet(data.data);
       return ContentService.createTextOutput(JSON.stringify({success: true}))
-        .setMimeType(ContentService.MimeType.JSON)
-        .setHeaders(headers);
+        .setMimeType(ContentService.MimeType.JSON);
     }
   } catch (error) {
     Logger.log('Error in doPost: ' + error.toString());
     return ContentService.createTextOutput(JSON.stringify({error: error.toString()}))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeaders({'Access-Control-Allow-Origin': '*'});
+      .setMimeType(ContentService.MimeType.JSON);
   }
 }
 
 function doGet(e) {
   try {
-    // Set CORS headers
-    const headers = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type'
-    };
-    
     if (e.parameter.action === 'get') {
       const data = getSheetData();
       return ContentService.createTextOutput(JSON.stringify(data))
-        .setMimeType(ContentService.MimeType.JSON)
-        .setHeaders(headers);
+        .setMimeType(ContentService.MimeType.JSON);
     }
     
     // Default response
     return ContentService.createTextOutput(JSON.stringify({status: 'Google Sheets API is working'}))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeaders(headers);
+      .setMimeType(ContentService.MimeType.JSON);
   } catch (error) {
     Logger.log('Error in doGet: ' + error.toString());
     return ContentService.createTextOutput(JSON.stringify({error: error.toString()}))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeaders({'Access-Control-Allow-Origin': '*'});
+      .setMimeType(ContentService.MimeType.JSON);
   }
 }
 
 function doOptions(e) {
   // Handle preflight requests
   return ContentService.createTextOutput('')
-    .setMimeType(ContentService.MimeType.TEXT)
-    .setHeaders({
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type'
-    });
+    .setMimeType(ContentService.MimeType.TEXT);
 }
 
 function appendToSheet(submissionData) {
