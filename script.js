@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 1500);
     }
     
-    // Save submission to localStorage
+    // Save submission to localStorage and Google Sheets
     function saveSubmission(formData) {
         const submissions = JSON.parse(localStorage.getItem('submissions') || '[]');
         const submission = {
@@ -184,6 +184,9 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         submissions.push(submission);
         localStorage.setItem('submissions', JSON.stringify(submissions));
+        
+        // Also save to Google Sheets
+        saveToGoogleSheets(submission);
     }
     
     function showNotification(message, type) {
