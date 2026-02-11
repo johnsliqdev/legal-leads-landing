@@ -49,24 +49,39 @@ async function loadFromGoogleSheets() {
         
         if (response.ok) {
             const csvText = await response.text();
-            console.log('Google Sheets CSV loaded:', csvText.substring(0, 200));
+            console.log('Raw CSV text:', csvText);
             
-            // Parse CSV to JSON
-            const rows = csvText.split('\n').filter(row => row.trim());
-            if (rows.length < 2) return []; // No data
+            if (!csvText || csvText.trim() === '') {
+                console.log('CSV is empty');
+                return [];
+            }
+            
+            // Parse CSV to JSON with better error handling
+            const rows = csvText.split('\n').filter(row => row.trim() !== '');
+            console.log('CSV rows:', rows);
+            
+            if (rows.length < 2) {
+                console.log('No data rows found');
+                return [];
+            }
             
             const headers = rows[0].split(',').map(h => h.trim().replace(/"/g, ''));
+            console.log('CSV headers:', headers);
+            
             const data = [];
             
             for (let i = 1; i < rows.length; i++) {
-                const values = rows[i].split(',').map(v => v.trim().replace(/"/g, ''));
-                if (values.length === headers.length) {
-                    const row = {};
-                    headers.forEach((header, index) => {
-                        row[header] = values[index];
-                    });
-                    data.push(row);
-                }
+                const row = rows[i];
+                if (!row || row.trim() === '') continue;
+                
+                const values = row.split(',').map(v => v.trim().replace(/"/g, ''));
+                console.log(`Row ${i} values:`, values);
+                
+                const rowData = {};
+                headers.forEach((header, index) => {
+                    rowData[header] = values[index] || '';
+                });
+                data.push(rowData);
             }
             
             console.log('Parsed Google Sheets data:', data);
