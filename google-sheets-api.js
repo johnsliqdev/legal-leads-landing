@@ -1,6 +1,6 @@
 // Google Sheets API Integration
 const SHEET_ID = '15SwhJnQK5Y9v8A6lpQ2Yxcb-rKwjVSDga5twy6DL7Os';
-const API_URL = 'https://script.google.com/a/macros/sliqbydesign.com/s/AKfycbz_Iw-p83As7xlTi_Jho8X82VPMVzbmiQCqlNAMmuCLhMc3SXag4fSF3fydXuuK08TIUA/exec';
+const API_URL = 'https://script.google.com/a/macros/sliqbydesign.com/s/AKfycbxt-qkBSPmGtBK1RB57DmSjNPbs6UgMDrJinr_l04XJ__oOLfNqq3wNs29V2v5qkc__ug/exec';
 
 // Save submission to Google Sheets
 async function saveToGoogleSheets(submissionData) {

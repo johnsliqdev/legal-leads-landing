@@ -1,0 +1,102 @@
+// Google Apps Script - Fixed Version
+// Replace all code in your script.google.com project with this
+
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    
+    if (data.action === 'append') {
+      appendToSheet(data.data);
+      return ContentService.createTextOutput(JSON.stringify({success: true}))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+  } catch (error) {
+    Logger.log('Error in doPost: ' + error.toString());
+    return ContentService.createTextOutput(JSON.stringify({error: error.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doGet(e) {
+  try {
+    if (e.parameter.action === 'get') {
+      const data = getSheetData();
+      return ContentService.createTextOutput(JSON.stringify(data))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    // Default response
+    return ContentService.createTextOutput(JSON.stringify({status: 'Google Sheets API is working'}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (error) {
+    Logger.log('Error in doGet: ' + error.toString());
+    return ContentService.createTextOutput(JSON.stringify({error: error.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function appendToSheet(submissionData) {
+  try {
+    const sheet = SpreadsheetApp.openById('15SwhJnQK5Y9v8A6lpQ2Yxcb-rKwjVSDga5twy6DL7Os')
+      .getSheetByName('PI Lead Submissions') || 
+      SpreadsheetApp.openById('15SwhJnQK5Y9v8A6lpQ2Yxcb-rKwjVSDga5twy6DL7Os')
+      .getSheets()[0];
+    
+    const timestamp = new Date();
+    const row = [
+      timestamp.toISOString(),
+      timestamp.toLocaleDateString(),
+      timestamp.toLocaleTimeString(),
+      submissionData.firstName || '',
+      submissionData.lastName || '',
+      submissionData.email || '',
+      submissionData.phone || '',
+      submissionData.lawFirm || '',
+      submissionData.currentCpl || '',
+      submissionData.savings || '',
+      submissionData.id || Date.now().toString()
+    ];
+    
+    sheet.appendRow(row);
+    Logger.log('Data appended successfully: ' + JSON.stringify(submissionData));
+  } catch (error) {
+    Logger.log('Error in appendToSheet: ' + error.toString());
+    throw error;
+  }
+}
+
+function getSheetData() {
+  try {
+    const sheet = SpreadsheetApp.openById('15SwhJnQK5Y9v8A6lpQ2Yxcb-rKwjVSDga5twy6DL7Os')
+      .getSheetByName('PI Lead Submissions') || 
+      SpreadsheetApp.openById('15SwhJnQK5Y9v8A6lpQ2Yxcb-rKwjVSDga5twy6DL7Os')
+      .getSheets()[0];
+    
+    const data = sheet.getDataRange().getValues();
+    const headers = data[0];
+    const rows = data.slice(1);
+    
+    return rows.map((row, index) => {
+      const obj = {};
+      headers.forEach((header, i) => {
+        obj[header] = row[i];
+      });
+      return obj;
+    });
+  } catch (error) {
+    Logger.log('Error in getSheetData: ' + error.toString());
+    throw error;
+  }
+}
+
+// Test function - run this to test the connection
+function testConnection() {
+  try {
+    const sheet = SpreadsheetApp.openById('15SwhJnQK5Y9v8A6lpQ2Yxcb-rKwjVSDga5twy6DL7Os');
+    Logger.log('Successfully connected to sheet: ' + sheet.getName());
+    return 'Connection successful';
+  } catch (error) {
+    Logger.log('Connection failed: ' + error.toString());
+    return 'Connection failed: ' + error.toString();
+  }
+}
