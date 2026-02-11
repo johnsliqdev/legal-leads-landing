@@ -185,25 +185,20 @@ document.addEventListener('DOMContentLoaded', function() {
         submissions.push(submission);
         localStorage.setItem('submissions', JSON.stringify(submissions));
         
-        // Simple direct approach - just open the Google Apps Script URL
+        // DEAD SIMPLE APPROACH - Just open the URL directly
         const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbykpFD-LwYU_Osadg2u_fyFKKwCyRGmuT8ILxHqlq-uqgLdwgAuRrtiZjjNiYHwq-WhnA/exec';
         const dataParam = encodeURIComponent(JSON.stringify({
             action: 'append',
             data: submission
         }));
         
-        // Open in hidden iframe to avoid redirect
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = googleScriptUrl + '?data=' + dataParam;
-        document.body.appendChild(iframe);
-        
-        // Clean up after a delay
+        // Open in new window (will close automatically)
+        const newWindow = window.open(googleScriptUrl + '?data=' + dataParam, '_blank', 'width=1,height=1');
         setTimeout(() => {
-            document.body.removeChild(iframe);
-        }, 2000);
+            newWindow.close();
+        }, 1000);
         
-        console.log('Simple approach - Google Sheets submission sent');
+        console.log('DEAD SIMPLE - Google Sheets submission sent');
     }
     
     function showNotification(message, type) {
