@@ -1,29 +1,36 @@
-// Google Sheets API Integration via Proxy Server
-const PROXY_URL = 'https://legal-leads-landing-6v4p7biph-johnsliqdevs-projects.vercel.app/proxy';
+// Google Sheets API Integration - Direct Approach
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx61TEEZuZv8uBgQp_qobhD28QtC8y0C_wvavbZO3lDx6Cth8f5OdZh3oIxL7Jv8kGp0A/exec';
 
 // Save submission to Google Sheets
 async function saveToGoogleSheets(submissionData) {
     try {
-        console.log('Attempting to save to Google Sheets via proxy:', submissionData);
+        console.log('Attempting to save to Google Sheets:', submissionData);
         
-        const response = await fetch(PROXY_URL + '/proxy/google-sheets', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(submissionData)
+        // Create a form submission to Google Apps Script
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = GOOGLE_SCRIPT_URL;
+        form.style.display = 'none';
+        
+        // Add data as hidden fields
+        const dataField = document.createElement('input');
+        dataField.type = 'hidden';
+        dataField.name = 'data';
+        dataField.value = JSON.stringify({
+            action: 'append',
+            data: submissionData
         });
+        form.appendChild(dataField);
         
-        if (response.ok) {
-            const result = await response.json();
-            console.log('Google Sheets response via proxy:', result);
-            return result.success;
-        } else {
-            console.error('Google Sheets error via proxy:', response.status, response.statusText);
-            return false;
-        }
+        // Submit form
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+        
+        console.log('Google Sheets form submitted');
+        return true;
     } catch (error) {
-        console.error('Error saving to Google Sheets via proxy:', error);
+        console.error('Error saving to Google Sheets:', error);
         // Fallback to localStorage
         const submissions = JSON.parse(localStorage.getItem('submissions') || '[]');
         submissions.push(submissionData);
@@ -32,28 +39,61 @@ async function saveToGoogleSheets(submissionData) {
     }
 }
 
-// Load submissions from Google Sheets via Proxy Server
+// Load submissions from Google Sheets via CSV export
 async function loadFromGoogleSheets() {
     try {
-        console.log('Attempting to load from Google Sheets via proxy');
+        console.log('Attempting to load from Google Sheets via CSV export');
         
-        const response = await fetch(PROXY_URL + '/proxy/google-sheets', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
+        // Use Google Sheets public CSV export (no CORS issues)
+        const csvUrl = 'https://docs.google.com/spreadsheets/d/15SwhJnQK5Y9v8A6lpQ2Yxcb-rKwjVSDga5twy6DL7Os/pub?output=csv&gid=0';
+        
+        const response = await fetch(csvUrl);
         
         if (response.ok) {
-            const data = await response.json();
-            console.log('Google Sheets data loaded via proxy:', data);
+            const csvText = await response.text();
+            console.log('Raw CSV text:', csvText);
+            
+            if (!csvText || csvText.trim() === '') {
+                console.log('CSV is empty');
+                return [];
+            }
+            
+            // Parse CSV to JSON with better error handling
+            const rows = csvText.split('\n').filter(row => row.trim() !== '');
+            console.log('CSV rows:', rows);
+            
+            if (rows.length < 2) {
+                console.log('No data rows found');
+                return [];
+            }
+            
+            const headers = rows[0].split(',').map(h => h.trim().replace(/"/g, ''));
+            console.log('CSV headers:', headers);
+            
+            const data = [];
+            
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                if (!row || row.trim() === '') continue;
+                
+                const values = row.split(',').map(v => v.trim().replace(/"/g, ''));
+                console.log(`Row ${i} values:`, values);
+                
+                const rowData = {};
+                headers.forEach((header, index) => {
+                    rowData[header] = values[index] || '';
+                });
+                data.push(rowData);
+            }
+            
+            console.log('Parsed Google Sheets data:', data);
             return data;
         } else {
-            console.error('Google Sheets load error via proxy:', response.status, response.statusText);
+            console.error('Google Sheets CSV error:', response.status, response.statusText);
             return [];
         }
     } catch (error) {
-        console.error('Error loading from Google Sheets via proxy:', error);
+        console.error('Error loading from Google Sheets:', error);
         return [];
     }
 }
