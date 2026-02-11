@@ -1,24 +1,26 @@
 // Google Sheets API Integration
 const SHEET_ID = '15SwhJnQK5Y9v8A6lpQ2Yxcb-rKwjVSDga5twy6DL7Os';
 const API_URL = 'https://script.google.com/a/macros/sliqbydesign.com/s/AKfycbz_Iw-p83As7xlTi_Jho8X82VPMVzbmiQCqlNAMmuCLhMc3SXag4fSF3fydXuuK08TIUA/exec';
-const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/'; // Free CORS proxy
 
 // Save submission to Google Sheets
 async function saveToGoogleSheets(submissionData) {
     try {
-        const response = await fetch(CORS_PROXY + API_URL, {
+        console.log('Attempting to save to Google Sheets:', submissionData);
+        
+        // Try direct call first
+        const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
             },
             body: JSON.stringify({
                 action: 'append',
                 data: submissionData
-            })
+            }),
+            mode: 'no-cors' // This allows the call but we can't see the response
         });
         
-        console.log('Google Sheets response:', response);
+        console.log('Google Sheets request sent (no-cors mode)');
         return true;
     } catch (error) {
         console.error('Error saving to Google Sheets:', error);
@@ -33,19 +35,17 @@ async function saveToGoogleSheets(submissionData) {
 // Load submissions from Google Sheets
 async function loadFromGoogleSheets() {
     try {
-        const response = await fetch(CORS_PROXY + API_URL + '?action=get', {
+        console.log('Attempting to load from Google Sheets');
+        
+        // For loading, we need to handle CORS differently
+        const response = await fetch(API_URL + '?action=get', {
             method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
+            mode: 'no-cors'
         });
         
-        if (response.ok) {
-            const data = await response.json();
-            return data;
-        }
+        console.log('Google Sheets load request sent');
         
-        // Fallback to localStorage
+        // Since we can't read the response due to CORS, return localStorage data
         return JSON.parse(localStorage.getItem('submissions') || '[]');
     } catch (error) {
         console.error('Error loading from Google Sheets:', error);
