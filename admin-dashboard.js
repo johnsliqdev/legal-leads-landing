@@ -25,19 +25,25 @@ function saveCpqlTarget(value) {
     localStorage.setItem('cpqlTarget', value.toString());
 }
 
-// Load submissions from localStorage and Google Sheets
+// Load submissions from Google Sheets (primary source)
 async function loadSubmissions() {
     try {
-        // Try to load from Google Sheets first
+        // Always try to load from Google Sheets first
         const sheetsData = await loadFromGoogleSheets();
+        console.log('Loaded from Google Sheets:', sheetsData);
+        
+        // If Google Sheets has data, use it
         if (sheetsData && sheetsData.length > 0) {
             return sheetsData;
         }
         
-        // Fallback to localStorage
-        return JSON.parse(localStorage.getItem('submissions') || '[]');
+        // If Google Sheets is empty, check localStorage as backup
+        const localData = JSON.parse(localStorage.getItem('submissions') || '[]');
+        console.log('Google Sheets empty, using localStorage:', localData);
+        return localData;
     } catch (error) {
-        console.error('Error loading submissions:', error);
+        console.error('Error loading submissions from Google Sheets:', error);
+        // Fallback to localStorage
         return JSON.parse(localStorage.getItem('submissions') || '[]');
     }
 }
@@ -132,23 +138,38 @@ document.getElementById('clearSubmissions')?.addEventListener('click', async fun
         // Clear localStorage
         localStorage.removeItem('submissions');
         
-        // Clear Google Sheets via proxy
+        // Clear Google Sheets directly
         try {
-            const response = await fetch(PROXY_URL + '/proxy/google-sheets', {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.name = 'clearSheetsFrame';
             
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Google Sheets cleared:', result);
-                showNotification('All submissions cleared from Google Sheets', 'success');
-            } else {
-                console.error('Failed to clear Google Sheets:', response.status);
-                showNotification('Failed to clear Google Sheets', 'error');
-            }
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'https://script.google.com/macros/s/AKfycbykpFD-LwYU_Osadg2u_fyFKKwCyRGmuT8ILxHqlq-uqgLdwgAuRrtiZjjNiYHwq-WhnA/exec';
+            form.target = 'clearSheetsFrame';
+            
+            // Add clear action as hidden field
+            const dataField = document.createElement('input');
+            dataField.type = 'hidden';
+            dataField.name = 'data';
+            dataField.value = JSON.stringify({
+                action: 'clear'
+            });
+            form.appendChild(dataField);
+            
+            // Submit the form
+            document.body.appendChild(iframe);
+            document.body.appendChild(form);
+            form.submit();
+            
+            // Clean up
+            setTimeout(() => {
+                document.body.removeChild(iframe);
+                document.body.removeChild(form);
+            }, 1000);
+            
+            showNotification('Google Sheets cleared successfully', 'success');
         } catch (error) {
             console.error('Error clearing Google Sheets:', error);
             showNotification('Error clearing Google Sheets', 'error');
