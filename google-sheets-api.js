@@ -1,4 +1,4 @@
-// Google Sheets API Integration - Direct Approach v2
+// Google Sheets API Integration - Simple Working Approach
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbykpFD-LwYU_Osadg2u_fyFKKwCyRGmuT8ILxHqlq-uqgLdwgAuRrtiZjjNiYHwq-WhnA/exec';
 
 // Save submission to Google Sheets
@@ -6,33 +6,38 @@ async function saveToGoogleSheets(submissionData) {
     try {
         console.log('Attempting to save to Google Sheets:', submissionData);
         
-        // Create a simple test URL to verify it works
-        const testData = {
+        // Simple approach: Create iframe and submit
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.name = 'googleSheetsFrame';
+        
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = GOOGLE_SCRIPT_URL;
+        form.target = 'googleSheetsFrame';
+        
+        // Add data as hidden field
+        const dataField = document.createElement('input');
+        dataField.type = 'hidden';
+        dataField.name = 'data';
+        dataField.value = JSON.stringify({
             action: 'append',
             data: submissionData
-        };
+        });
+        form.appendChild(dataField);
         
-        const url = GOOGLE_SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(testData));
-        console.log('Full URL being requested:', url);
+        // Submit the form
+        document.body.appendChild(iframe);
+        document.body.appendChild(form);
+        form.submit();
         
-        // Try multiple approaches
-        try {
-            // Approach 1: Direct GET request
-            const response = await fetch(url, {
-                method: 'GET',
-                mode: 'no-cors'
-            });
-            console.log('GET request sent');
-        } catch (error) {
-            console.log('GET approach failed:', error);
-            
-            // Approach 2: Image pixel
-            const img = new Image();
-            img.src = url;
-            console.log('Image approach sent');
-        }
+        // Clean up
+        setTimeout(() => {
+            document.body.removeChild(iframe);
+            document.body.removeChild(form);
+        }, 1000);
         
-        console.log('Google Sheets request sent');
+        console.log('Google Sheets form submitted via iframe');
         return true;
     } catch (error) {
         console.error('Error saving to Google Sheets:', error);
