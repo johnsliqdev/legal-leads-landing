@@ -90,13 +90,19 @@ function getSheetData() {
       .getSheets()[0];
     
     const data = sheet.getDataRange().getValues();
+    Logger.log('Sheet data retrieved: ' + JSON.stringify(data));
+    
+    if (data.length < 2) {
+      return [];
+    }
+    
     const headers = data[0];
     const rows = data.slice(1);
     
     return rows.map((row, index) => {
       const obj = {};
       headers.forEach((header, i) => {
-        obj[header] = row[i];
+        obj[header] = row[i] || '';
       });
       return obj;
     });

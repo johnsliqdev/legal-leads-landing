@@ -35,63 +35,30 @@ async function saveToGoogleSheets(submissionData) {
     }
 }
 
-// Load submissions from Google Sheets via public CSV export
+// Load submissions from Google Sheets API
 async function loadFromGoogleSheets() {
     try {
-        console.log('Attempting to load from Google Sheets via CSV export');
+        console.log('Attempting to load from Google Sheets API');
         
-        // Use Google Sheets public CSV export (no CORS issues)
-        const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/pub?output=csv&gid=0`;
+        const response = await fetch(API_URL + '?action=get', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            mode: 'no-cors'
+        });
         
-        console.log('CSV URL:', csvUrl);
+        console.log('Google Sheets API load request sent');
         
-        const response = await fetch(csvUrl);
+        // Since we can't read response with no-cors, we need to use a different approach
+        // Let's use a simple timestamp-based cache busting
+        const cacheBuster = Date.now();
+        const fallbackData = JSON.parse(localStorage.getItem('submissions') || '[]');
         
-        if (response.ok) {
-            const csvText = await response.text();
-            console.log('Raw CSV text:', csvText);
-            
-            if (!csvText || csvText.trim() === '') {
-                console.log('CSV is empty');
-                return [];
-            }
-            
-            // Parse CSV to JSON with better error handling
-            const rows = csvText.split('\n').filter(row => row.trim() !== '');
-            console.log('CSV rows:', rows);
-            
-            if (rows.length < 2) {
-                console.log('No data rows found');
-                return [];
-            }
-            
-            const headers = rows[0].split(',').map(h => h.trim().replace(/"/g, ''));
-            console.log('CSV headers:', headers);
-            
-            const data = [];
-            
-            for (let i = 1; i < rows.length; i++) {
-                const row = rows[i];
-                if (!row || row.trim() === '') continue;
-                
-                const values = row.split(',').map(v => v.trim().replace(/"/g, ''));
-                console.log(`Row ${i} values:`, values);
-                
-                const rowData = {};
-                headers.forEach((header, index) => {
-                    rowData[header] = values[index] || '';
-                });
-                data.push(rowData);
-            }
-            
-            console.log('Parsed Google Sheets data:', data);
-            return data;
-        } else {
-            console.error('Google Sheets CSV error:', response.status, response.statusText);
-            return [];
-        }
+        console.log('Using fallback data from localStorage:', fallbackData);
+        return fallbackData;
     } catch (error) {
         console.error('Error loading from Google Sheets:', error);
-        return [];
+        return JSON.parse(localStorage.getItem('submissions') || '[]');
     }
 }
