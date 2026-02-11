@@ -35,9 +35,22 @@ function doPost(e) {
 
 function doGet(e) {
   try {
+    // Handle GET requests with data parameter
+    if (e.parameter.data) {
+      const data = JSON.parse(e.parameter.data);
+      Logger.log('GET request with data: ' + JSON.stringify(data));
+      
+      if (data.action === 'append') {
+        appendToSheet(data.data);
+        Logger.log('Data appended via GET request');
+        return ContentService.createTextOutput(JSON.stringify({success: true}))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+    }
+    
     if (e.parameter.action === 'get') {
-      const data = getSheetData();
-      return ContentService.createTextOutput(JSON.stringify(data))
+      const sheetData = getSheetData();
+      return ContentService.createTextOutput(JSON.stringify(sheetData))
         .setMimeType(ContentService.MimeType.JSON);
     }
     
