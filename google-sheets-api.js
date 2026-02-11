@@ -1,5 +1,5 @@
 // Google Sheets API Integration via Proxy Server
-const PROXY_URL = 'https://your-proxy-server-url.com'; // We'll update this after deployment
+const PROXY_URL = 'https://legal-leads-landing-6v4p7biph-johnsliqdevs-projects.vercel.app/proxy';
 
 // Save submission to Google Sheets
 async function saveToGoogleSheets(submissionData) {
