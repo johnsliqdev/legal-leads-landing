@@ -41,13 +41,15 @@ async function loadFromGoogleSheets() {
         console.log('Attempting to load from Google Sheets via CSV export');
         
         // Use Google Sheets public CSV export (no CORS issues)
-        const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
+        const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/pub?output=csv&gid=0`;
+        
+        console.log('CSV URL:', csvUrl);
         
         const response = await fetch(csvUrl);
         
         if (response.ok) {
             const csvText = await response.text();
-            console.log('Google Sheets CSV loaded:', csvText.substring(0, 100));
+            console.log('Google Sheets CSV loaded:', csvText.substring(0, 200));
             
             // Parse CSV to JSON
             const rows = csvText.split('\n').filter(row => row.trim());
@@ -70,7 +72,7 @@ async function loadFromGoogleSheets() {
             console.log('Parsed Google Sheets data:', data);
             return data;
         } else {
-            console.error('Google Sheets CSV error:', response.status);
+            console.error('Google Sheets CSV error:', response.status, response.statusText);
             return [];
         }
     } catch (error) {
