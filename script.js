@@ -126,23 +126,8 @@ function submitContactForm(formData) {
     // Show loading state
     showNotification('Submitting your information...', 'info');
     
-    // Save to localStorage
+    // Save to localStorage ONLY
     saveSubmission(formData);
-    
-    // DEAD SIMPLE GOOGLE SHEETS - Direct window approach
-    const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbykpFD-LwYU_Osadg2u_fyFKKwCyRGmuT8ILxHqlq-uqgLdwgAuRrtiZjjNiYHwq-WhnA/exec';
-    const dataParam = encodeURIComponent(JSON.stringify({
-        action: 'append',
-        data: formData
-    }));
-    
-    // Open in new window (will close automatically)
-    const newWindow = window.open(googleScriptUrl + '?data=' + dataParam, '_blank', 'width=1,height=1');
-    setTimeout(() => {
-        newWindow.close();
-    }, 1000);
-    
-    console.log('DEAD SIMPLE - Google Sheets submission sent');
     
     // Show success message
     showNotification('Thank you for your submission! We will contact you soon.', 'success');

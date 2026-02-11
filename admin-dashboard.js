@@ -25,26 +25,16 @@ function saveCpqlTarget(value) {
     localStorage.setItem('cpqlTarget', value.toString());
 }
 
-// Load submissions from Google Sheets (primary source)
+// Load submissions from localStorage ONLY
 async function loadSubmissions() {
     try {
-        // Always try to load from Google Sheets first
-        const sheetsData = await loadFromGoogleSheets();
-        console.log('Loaded from Google Sheets:', sheetsData);
-        
-        // If Google Sheets has data, use it
-        if (sheetsData && sheetsData.length > 0) {
-            return sheetsData;
-        }
-        
-        // If Google Sheets is empty, check localStorage as backup
+        // Only load from localStorage
         const localData = JSON.parse(localStorage.getItem('submissions') || '[]');
-        console.log('Google Sheets empty, using localStorage:', localData);
+        console.log('Loaded from localStorage:', localData);
         return localData;
     } catch (error) {
-        console.error('Error loading submissions from Google Sheets:', error);
-        // Fallback to localStorage
-        return JSON.parse(localStorage.getItem('submissions') || '[]');
+        console.error('Error loading submissions:', error);
+        return [];
     }
 }
 
@@ -134,50 +124,14 @@ document.getElementById('refreshSubmissions')?.addEventListener('click', async f
 
 // Handle clear submissions
 document.getElementById('clearSubmissions')?.addEventListener('click', async function() {
-    if (confirm('Are you sure you want to clear all submissions? This will clear both localStorage and Google Sheets data. This action cannot be undone.')) {
-        // Clear localStorage
+    if (confirm('Are you sure you want to clear all submissions? This action cannot be undone.')) {
+        // Clear localStorage ONLY
         localStorage.removeItem('submissions');
         
-        // Clear Google Sheets directly
-        try {
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            iframe.name = 'clearSheetsFrame';
-            
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = 'https://script.google.com/macros/s/AKfycbykpFD-LwYU_Osadg2u_fyFKKwCyRGmuT8ILxHqlq-uqgLdwgAuRrtiZjjNiYHwq-WhnA/exec';
-            form.target = 'clearSheetsFrame';
-            
-            // Add clear action as hidden field
-            const dataField = document.createElement('input');
-            dataField.type = 'hidden';
-            dataField.name = 'data';
-            dataField.value = JSON.stringify({
-                action: 'clear'
-            });
-            form.appendChild(dataField);
-            
-            // Submit the form
-            document.body.appendChild(iframe);
-            document.body.appendChild(form);
-            form.submit();
-            
-            // Clean up
-            setTimeout(() => {
-                document.body.removeChild(iframe);
-                document.body.removeChild(form);
-            }, 1000);
-            
-            showNotification('Google Sheets cleared successfully', 'success');
-        } catch (error) {
-            console.error('Error clearing Google Sheets:', error);
-            showNotification('Error clearing Google Sheets', 'error');
-        }
+        showNotification('All submissions cleared', 'success');
         
         // Refresh display
         await displaySubmissions();
-        showNotification('All submissions cleared', 'success');
     }
 });
 
