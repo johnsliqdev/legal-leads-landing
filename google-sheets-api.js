@@ -6,19 +6,21 @@ async function saveToGoogleSheets(submissionData) {
     try {
         console.log('Attempting to save to Google Sheets:', submissionData);
         
-        // Use Image-based approach to bypass CORS
-        const img = new Image();
+        // Use GET request with parameters to bypass CORS
         const data = {
             action: 'append',
             data: submissionData
         };
         
-        img.src = GOOGLE_SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(data));
+        const url = GOOGLE_SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(data));
         
-        // Wait a bit for the request to complete
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Create a simple fetch with no-cors
+        const response = await fetch(url, {
+            method: 'GET',
+            mode: 'no-cors'
+        });
         
-        console.log('Google Sheets request sent via Image');
+        console.log('Google Sheets request sent via GET');
         return true;
     } catch (error) {
         console.error('Error saving to Google Sheets:', error);
