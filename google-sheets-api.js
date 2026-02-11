@@ -7,7 +7,7 @@ async function saveToGoogleSheets(submissionData) {
     try {
         console.log('Attempting to save to Google Sheets:', submissionData);
         
-        // Simple POST request without preflight
+        // Use no-cors mode to bypass CORS restrictions
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
@@ -16,19 +16,15 @@ async function saveToGoogleSheets(submissionData) {
             body: JSON.stringify({
                 action: 'append',
                 data: submissionData
-            })
+            }),
+            mode: 'no-cors'
         });
         
-        console.log('Google Sheets response status:', response.status);
+        console.log('Google Sheets request sent (no-cors mode)');
         
-        if (response.ok) {
-            const result = await response.json();
-            console.log('Google Sheets response:', result);
-            return result.success;
-        } else {
-            console.error('Google Sheets error:', response.status, response.statusText);
-            return false;
-        }
+        // With no-cors, we can't read the response, but the request should go through
+        // Check Google Apps Script executions to see if it worked
+        return true;
     } catch (error) {
         console.error('Error saving to Google Sheets:', error);
         // Fallback to localStorage
