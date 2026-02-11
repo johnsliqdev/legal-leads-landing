@@ -6,28 +6,19 @@ async function saveToGoogleSheets(submissionData) {
     try {
         console.log('Attempting to save to Google Sheets:', submissionData);
         
-        // Create a form submission to Google Apps Script
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = GOOGLE_SCRIPT_URL;
-        form.style.display = 'none';
-        
-        // Add data as hidden fields
-        const dataField = document.createElement('input');
-        dataField.type = 'hidden';
-        dataField.name = 'data';
-        dataField.value = JSON.stringify({
+        // Use Image-based approach to bypass CORS
+        const img = new Image();
+        const data = {
             action: 'append',
             data: submissionData
-        });
-        form.appendChild(dataField);
+        };
         
-        // Submit form
-        document.body.appendChild(form);
-        form.submit();
-        document.body.removeChild(form);
+        img.src = GOOGLE_SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(data));
         
-        console.log('Google Sheets form submitted');
+        // Wait a bit for the request to complete
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        console.log('Google Sheets request sent via Image');
         return true;
     } catch (error) {
         console.error('Error saving to Google Sheets:', error);
