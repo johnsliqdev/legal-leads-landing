@@ -25,14 +25,26 @@ function saveCpqlTarget(value) {
     localStorage.setItem('cpqlTarget', value.toString());
 }
 
-// Load submissions from localStorage
-function loadSubmissions() {
-    return JSON.parse(localStorage.getItem('submissions') || '[]');
+// Load submissions from localStorage and Google Sheets
+async function loadSubmissions() {
+    try {
+        // Try to load from Google Sheets first
+        const sheetsData = await loadFromGoogleSheets();
+        if (sheetsData && sheetsData.length > 0) {
+            return sheetsData;
+        }
+        
+        // Fallback to localStorage
+        return JSON.parse(localStorage.getItem('submissions') || '[]');
+    } catch (error) {
+        console.error('Error loading submissions:', error);
+        return JSON.parse(localStorage.getItem('submissions') || '[]');
+    }
 }
 
 // Display submissions
-function displaySubmissions() {
-    const submissions = loadSubmissions();
+async function displaySubmissions() {
+    const submissions = await loadSubmissions();
     const submissionsList = document.getElementById('submissionsList');
     
     if (submissions.length === 0) {
@@ -46,33 +58,33 @@ function displaySubmissions() {
     submissionsList.innerHTML = sortedSubmissions.map(submission => `
         <div class="submission-item">
             <div class="submission-header">
-                <div class="submission-date">${submission.date} at ${submission.time}</div>
-                <div class="submission-id">ID: ${submission.id}</div>
+                <div class="submission-date">${submission.date || new Date().toLocaleDateString()} at ${submission.time || new Date().toLocaleTimeString()}</div>
+                <div class="submission-id">ID: ${submission.id || Date.now()}</div>
             </div>
             <div class="submission-details">
                 <div class="submission-field">
                     <div class="submission-label">Name:</div>
-                    <div class="submission-value">${submission.firstName} ${submission.lastName}</div>
+                    <div class="submission-value">${submission.firstName || ''} ${submission.lastName || ''}</div>
                 </div>
                 <div class="submission-field">
                     <div class="submission-label">Email:</div>
-                    <div class="submission-value">${submission.email}</div>
+                    <div class="submission-value">${submission.email || ''}</div>
                 </div>
                 <div class="submission-field">
                     <div class="submission-label">Phone:</div>
-                    <div class="submission-value">${submission.phone}</div>
+                    <div class="submission-value">${submission.phone || ''}</div>
                 </div>
                 <div class="submission-field">
                     <div class="submission-label">Law Firm:</div>
-                    <div class="submission-value">${submission.lawFirm}</div>
+                    <div class="submission-value">${submission.lawFirm || ''}</div>
                 </div>
                 <div class="submission-field">
                     <div class="submission-label">Current CPQL:</div>
-                    <div class="submission-value">${submission.currentCpl}</div>
+                    <div class="submission-value">${submission.currentCpl || ''}</div>
                 </div>
                 <div class="submission-field">
                     <div class="submission-label">Potential Savings:</div>
-                    <div class="submission-value">${submission.savings}</div>
+                    <div class="submission-value">${submission.savings || ''}</div>
                 </div>
             </div>
         </div>
@@ -80,11 +92,11 @@ function displaySubmissions() {
 }
 
 // Update display
-function updateDisplay() {
+async function updateDisplay() {
     const target = loadCpqlTarget();
     document.getElementById('cpqlTarget').value = target;
     document.getElementById('currentCpqlDisplay').textContent = target;
-    displaySubmissions();
+    await displaySubmissions();
 }
 
 // Handle CPQL form submission
@@ -109,8 +121,8 @@ document.getElementById('cpqlForm')?.addEventListener('submit', function(e) {
 });
 
 // Handle refresh submissions
-document.getElementById('refreshSubmissions')?.addEventListener('click', function() {
-    displaySubmissions();
+document.getElementById('refreshSubmissions')?.addEventListener('click', async function() {
+    await displaySubmissions();
     showNotification('Submissions refreshed', 'success');
 });
 
