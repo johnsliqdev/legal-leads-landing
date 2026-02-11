@@ -3,10 +3,21 @@
 
 function doPost(e) {
   try {
+    // Log the entire event for debugging
+    Logger.log(' doPost event: ' + JSON.stringify(e));
+    
+    if (!e || !e.postData) {
+      Logger.log('No postData found in event');
+      return ContentService.createTextOutput(JSON.stringify({error: 'No postData found'}))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
     const data = JSON.parse(e.postData.contents);
+    Logger.log('Parsed data: ' + JSON.stringify(data));
     
     if (data.action === 'append') {
       appendToSheet(data.data);
+      Logger.log('Data appended successfully');
       return ContentService.createTextOutput(JSON.stringify({success: true}))
         .setMimeType(ContentService.MimeType.JSON);
     }
