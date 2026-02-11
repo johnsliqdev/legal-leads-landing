@@ -36,6 +36,29 @@ app.post('/proxy/google-sheets', async (req, res) => {
     }
 });
 
+// Delete endpoint to clear Google Sheets
+app.delete('/proxy/google-sheets', async (req, res) => {
+    try {
+        console.log('Delete request received');
+        
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ action: 'clear' })
+        });
+        
+        const result = await response.json();
+        console.log('Google Sheets cleared:', result);
+        
+        res.json(result);
+    } catch (error) {
+        console.error('Delete proxy error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Get endpoint to load from Google Sheets
 app.get('/proxy/google-sheets', async (req, res) => {
     try {

@@ -127,10 +127,35 @@ document.getElementById('refreshSubmissions')?.addEventListener('click', async f
 });
 
 // Handle clear submissions
-document.getElementById('clearSubmissions')?.addEventListener('click', function() {
-    if (confirm('Are you sure you want to clear all submissions? This action cannot be undone.')) {
+document.getElementById('clearSubmissions')?.addEventListener('click', async function() {
+    if (confirm('Are you sure you want to clear all submissions? This will clear both localStorage and Google Sheets data. This action cannot be undone.')) {
+        // Clear localStorage
         localStorage.removeItem('submissions');
-        displaySubmissions();
+        
+        // Clear Google Sheets via proxy
+        try {
+            const response = await fetch(PROXY_URL + '/proxy/google-sheets', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Google Sheets cleared:', result);
+                showNotification('All submissions cleared from Google Sheets', 'success');
+            } else {
+                console.error('Failed to clear Google Sheets:', response.status);
+                showNotification('Failed to clear Google Sheets', 'error');
+            }
+        } catch (error) {
+            console.error('Error clearing Google Sheets:', error);
+            showNotification('Error clearing Google Sheets', 'error');
+        }
+        
+        // Refresh display
+        await displaySubmissions();
         showNotification('All submissions cleared', 'success');
     }
 });

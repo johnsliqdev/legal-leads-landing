@@ -20,6 +20,11 @@ function doPost(e) {
       Logger.log('Data appended successfully');
       return ContentService.createTextOutput(JSON.stringify({success: true}))
         .setMimeType(ContentService.MimeType.JSON);
+    } else if (data.action === 'clear') {
+      clearSheet();
+      Logger.log('Sheet cleared successfully');
+      return ContentService.createTextOutput(JSON.stringify({success: true}))
+        .setMimeType(ContentService.MimeType.JSON);
     }
   } catch (error) {
     Logger.log('Error in doPost: ' + error.toString());
@@ -82,6 +87,24 @@ function appendToSheet(submissionData) {
   }
 }
 
+function clearSheet() {
+  try {
+    const sheet = SpreadsheetApp.openById('15SwhJnQK5Y9v8A6lpQ2Yxcb-rKwjVSDga5twy6DL7Os')
+      .getSheetByName('PI Lead Submissions') || 
+      SpreadsheetApp.openById('15SwhJnQK5Y9v8A6lpQ2Yxcb-rKwjVSDga5twy6DL7Os')
+      .getSheets()[0];
+    
+    // Clear all data except headers
+    sheet.getRange('A2:Z').clearContent();
+    
+    Logger.log('Sheet cleared successfully');
+    return true;
+  } catch (error) {
+    Logger.log('Error in clearSheet: ' + error.toString());
+    return false;
+  }
+}
+
 function getSheetData() {
   try {
     const sheet = SpreadsheetApp.openById('15SwhJnQK5Y9v8A6lpQ2Yxcb-rKwjVSDga5twy6DL7Os')
@@ -109,6 +132,16 @@ function getSheetData() {
   } catch (error) {
     Logger.log('Error in getSheetData: ' + error.toString());
     throw error;
+  }
+}
+
+// Test function - run this to test the connection
+function testConnection() {
+  try {
+    const sheet = SpreadsheetApp.openById('15SwhJnQK5Y9v8A6lpQ2Yxcb-rKwjVSDga5twy6DL7Os');
+    Logger.log('Connection successful: ' + sheet.getName());
+  } catch (error) {
+    Logger.log('Connection failed: ' + error.toString());
   }
 }
 
