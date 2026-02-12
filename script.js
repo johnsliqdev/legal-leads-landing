@@ -43,6 +43,10 @@ function initializeCPLCalculator() {
         const annualSavings = monthlySavings * 12;
         
         console.log('Calculated savings:', { monthlySavings, annualSavings });
+
+        const percentageSavings = currentCpl > 0
+            ? ((currentCpl - guaranteedCpl) / currentCpl) * 100
+            : 0;
         
         // Display results
         displayResults({
@@ -52,7 +56,8 @@ function initializeCPLCalculator() {
             totalMonthlySpend,
             newMonthlySpend,
             monthlySavings,
-            annualSavings
+            annualSavings,
+            percentageSavings
         });
     });
 }
@@ -96,7 +101,7 @@ function displayResults(data) {
             </div>
             <div class="result-item highlight">
                 <span>CPQL Reduction:</span>
-                <span>${data.percentageSavings.toFixed(1)}%</span>
+                <span>${Number.isFinite(data.percentageSavings) ? data.percentageSavings.toFixed(1) : '0.0'}%</span>
             </div>
             <div class="result-item">
                 <span>PI Leads per Month:</span>
