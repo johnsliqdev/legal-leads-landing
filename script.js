@@ -45,13 +45,33 @@ function applyCpqlTargetToUi(target) {
     if (resultGuaranteed) resultGuaranteed.textContent = formatted;
 }
 
+function openContactForm() {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+        contactSection.style.display = 'block';
+        contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    const firstName = document.getElementById('firstName');
+    if (firstName) {
+        setTimeout(() => firstName.focus(), 350);
+    }
+}
+
 function initializeCPLCalculator() {
     const form = document.getElementById('cplForm');
     const resultsDiv = document.getElementById('calculatorResults');
+    const resultsCtaBtn = document.getElementById('resultsCtaBtn');
     
     if (!form || !resultsDiv) {
         console.log('Calculator form or results div not found');
         return;
+    }
+
+    if (resultsCtaBtn) {
+        resultsCtaBtn.addEventListener('click', function() {
+            openContactForm();
+        });
     }
     
     form.addEventListener('submit', function(e) {

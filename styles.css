@@ -268,6 +268,10 @@ input::placeholder {
     margin-top: 30px;
 }
 
+ .results-cta {
+     margin-top: 28px;
+ }
+
 .result-metric {
     background: var(--secondary-bg);
     border: 1px solid var(--border-color);
