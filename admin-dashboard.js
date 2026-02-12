@@ -10,19 +10,46 @@ function checkAuth() {
     return true;
 }
 
-// Load CPQL target from localStorage
-function loadCpqlTarget() {
-    const saved = localStorage.getItem('cpqlTarget');
-    if (saved) {
-        cpqlTarget = parseFloat(saved);
+// Load CPQL target from DB
+async function loadCpqlTarget() {
+    const res = await fetch('/api/settings', { method: 'GET' });
+    if (!res.ok) {
+        throw new Error(`Failed to load CPQL target: ${res.status}`);
+    }
+
+    const data = await res.json();
+    const value = Number(data?.cpqlTarget);
+    if (Number.isFinite(value)) {
+        cpqlTarget = value;
     }
     return cpqlTarget;
 }
 
-// Save CPQL target to localStorage
-function saveCpqlTarget(value) {
-    cpqlTarget = value;
-    localStorage.setItem('cpqlTarget', value.toString());
+// Save CPQL target to DB (admin only)
+async function saveCpqlTarget(value) {
+    const token = sessionStorage.getItem('adminApiToken') || '';
+    const res = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-admin-token': token
+        },
+        body: JSON.stringify({ cpqlTarget: value })
+    });
+
+    if (!res.ok) {
+        throw new Error(`Failed to save CPQL target: ${res.status}`);
+    }
+
+    const data = await res.json();
+    const next = Number(data?.cpqlTarget);
+    if (Number.isFinite(next)) {
+        cpqlTarget = next;
+    } else {
+        cpqlTarget = value;
+    }
+
+    return cpqlTarget;
 }
 
 // Load submissions from localStorage
@@ -99,22 +126,34 @@ async function displaySubmissions() {
 }
 
 // Update display
-function updateDisplay() {
-    const target = loadCpqlTarget();
-    document.getElementById('cpqlTarget').value = target;
-    document.getElementById('currentCpqlDisplay').textContent = target;
-    displaySubmissions();
+async function updateDisplay() {
+    try {
+        const target = await loadCpqlTarget();
+        document.getElementById('cpqlTarget').value = target;
+        document.getElementById('currentCpqlDisplay').textContent = target;
+    } catch (err) {
+        console.error(err);
+        showNotification('Failed to load CPQL target', 'error');
+    }
+
+    await displaySubmissions();
 }
 
 // Handle CPQL form submission
-document.getElementById('cpqlForm')?.addEventListener('submit', function(e) {
+document.getElementById('cpqlForm')?.addEventListener('submit', async function(e) {
     e.preventDefault();
     
     const newTarget = parseFloat(document.getElementById('cpqlTarget').value);
     
     if (newTarget >= 0) {
-        saveCpqlTarget(newTarget);
-        updateDisplay();
+        try {
+            await saveCpqlTarget(newTarget);
+            await updateDisplay();
+        } catch (err) {
+            console.error(err);
+            showNotification('Failed to update CPQL target', 'error');
+            return;
+        }
         
         // Show success message
         const successMsg = document.getElementById('updateSuccess');

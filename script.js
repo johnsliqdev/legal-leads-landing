@@ -1,16 +1,49 @@
 // Main script for legal leads landing page
 
 let lastCalculation = null;
+let cpqlTarget = 700;
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Page loaded');
-    
-    // Initialize CPQL calculator
-    initializeCPLCalculator();
-    
-    // Initialize contact form
-    initializeContactForm();
+
+    loadCpqlTarget()
+        .catch((err) => console.error('Failed to load CPQL target', err))
+        .finally(() => {
+            // Initialize CPQL calculator
+            initializeCPLCalculator();
+
+            // Initialize contact form
+            initializeContactForm();
+        });
 });
+
+async function loadCpqlTarget() {
+    try {
+        const res = await fetch('/api/settings', { method: 'GET' });
+        if (!res.ok) throw new Error(`settings GET failed: ${res.status}`);
+        const data = await res.json();
+        if (Number.isFinite(Number(data?.cpqlTarget))) {
+            cpqlTarget = Number(data.cpqlTarget);
+        }
+    } catch (err) {
+        console.error(err);
+    }
+
+    applyCpqlTargetToUi(cpqlTarget);
+}
+
+function applyCpqlTargetToUi(target) {
+    const formatted = `$${Math.round(target).toLocaleString()}`;
+
+    const hero = document.getElementById('heroCpqlTarget');
+    if (hero) hero.textContent = formatted;
+
+    const targetCpl = document.getElementById('targetCpl');
+    if (targetCpl) targetCpl.textContent = formatted;
+
+    const resultGuaranteed = document.getElementById('resultGuaranteedCpql');
+    if (resultGuaranteed) resultGuaranteed.textContent = formatted;
+}
 
 function initializeCPLCalculator() {
     const form = document.getElementById('cplForm');
@@ -39,7 +72,7 @@ function initializeCPLCalculator() {
         console.log('Calculated current CPL:', currentCpl);
         
         // Calculate savings with guaranteed CPL
-        const guaranteedCpl = 700;
+        const guaranteedCpl = Number.isFinite(cpqlTarget) ? cpqlTarget : 700;
         const newMonthlySpend = guaranteedCpl * leadsCount;
         const monthlySavings = totalMonthlySpend - newMonthlySpend;
         const annualSavings = monthlySavings * 12;
