@@ -68,10 +68,40 @@
             <div class="container">
                 <div class="results-card">
                     <h2>Your PI Case CPQL Savings</h2>
-                    <div id="currentCpl" style="font-size: 2rem; font-weight: bold; color: var(--primary-color); margin-bottom: 20px;">$700</div>
-                    <div id="targetCpl" style="font-size: 2rem; font-weight: bold; color: var(--primary-color); margin-bottom: 20px;">$700</div>
-                    <div id="savingsAmount" style="font-size: 1.5rem; color: var(--text-secondary); margin-bottom: 20px;">0%</div>
-                    <div id="savingsDesc" style="font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 40px;">Contact us</div>
+                    <div class="results-grid">
+                        <div class="result-metric">
+                            <div class="result-label">Current Monthly Spend</div>
+                            <div class="result-value" id="resultCurrentMonthlySpend">$0</div>
+                        </div>
+                        <div class="result-metric">
+                            <div class="result-label">Current CPQL</div>
+                            <div class="result-value" id="resultCurrentCpql">$0</div>
+                        </div>
+                        <div class="result-metric">
+                            <div class="result-label">Guaranteed CPQL</div>
+                            <div class="result-value" id="resultGuaranteedCpql">$700</div>
+                        </div>
+                        <div class="result-metric">
+                            <div class="result-label">New Monthly Spend</div>
+                            <div class="result-value" id="resultNewMonthlySpend">$0</div>
+                        </div>
+                        <div class="result-metric">
+                            <div class="result-label">Monthly Savings</div>
+                            <div class="result-value" id="resultMonthlySavings">$0</div>
+                        </div>
+                        <div class="result-metric">
+                            <div class="result-label">Annual Savings</div>
+                            <div class="result-value" id="resultAnnualSavings">$0</div>
+                        </div>
+                        <div class="result-metric">
+                            <div class="result-label">CPQL Reduction</div>
+                            <div class="result-value" id="resultCpqlReduction">0%</div>
+                        </div>
+                        <div class="result-metric">
+                            <div class="result-label">PI Leads per Month</div>
+                            <div class="result-value" id="resultLeadsCount">0</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

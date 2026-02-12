@@ -59,7 +59,40 @@ function initializeCPLCalculator() {
             annualSavings,
             percentageSavings
         });
+
+        updateResultsSection({
+            currentCpl,
+            guaranteedCpl,
+            leadsCount,
+            totalMonthlySpend,
+            newMonthlySpend,
+            monthlySavings,
+            annualSavings,
+            percentageSavings
+        });
+
+        const resultsSection = document.getElementById('results');
+        if (resultsSection) {
+            resultsSection.style.display = 'block';
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     });
+}
+
+function updateResultsSection(data) {
+    const setText = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+    };
+
+    setText('resultCurrentMonthlySpend', `$${Math.round(data.totalMonthlySpend).toLocaleString()}`);
+    setText('resultCurrentCpql', `$${Math.round(data.currentCpl).toLocaleString()}`);
+    setText('resultGuaranteedCpql', `$${Math.round(data.guaranteedCpl).toLocaleString()}`);
+    setText('resultNewMonthlySpend', `$${Math.round(data.newMonthlySpend).toLocaleString()}`);
+    setText('resultMonthlySavings', `$${Math.round(data.monthlySavings).toLocaleString()}`);
+    setText('resultAnnualSavings', `$${Math.round(data.annualSavings).toLocaleString()}`);
+    setText('resultCpqlReduction', `${(Number.isFinite(data.percentageSavings) ? data.percentageSavings : 0).toFixed(1)}%`);
+    setText('resultLeadsCount', `${Math.round(data.leadsCount).toLocaleString()}`);
 }
 
 function displayResults(data) {
