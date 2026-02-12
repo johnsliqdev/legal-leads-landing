@@ -60,11 +60,10 @@ function openContactForm() {
 
 function initializeCPLCalculator() {
     const form = document.getElementById('cplForm');
-    const resultsDiv = document.getElementById('calculatorResults');
     const resultsCtaBtn = document.getElementById('resultsCtaBtn');
     
-    if (!form || !resultsDiv) {
-        console.log('Calculator form or results div not found');
+    if (!form) {
+        console.log('Calculator form not found');
         return;
     }
 
@@ -114,18 +113,6 @@ function initializeCPLCalculator() {
             percentageSavings
         };
         
-        // Display results
-        displayResults({
-            currentCpl,
-            guaranteedCpl,
-            leadsCount,
-            totalMonthlySpend,
-            newMonthlySpend,
-            monthlySavings,
-            annualSavings,
-            percentageSavings
-        });
-
         updateResultsSection({
             currentCpl,
             guaranteedCpl,
@@ -195,58 +182,6 @@ function populateHiddenCalculationFields(calc) {
     setHidden('calcAnnualSavings', String(Math.round(calc.annualSavings)));
     setHidden('calcCpqlReduction', (Number.isFinite(calc.percentageSavings) ? calc.percentageSavings : 0).toFixed(1));
     setHidden('calcLeadsCount', String(Math.round(calc.leadsCount)));
-}
-
-function displayResults(data) {
-    const resultsDiv = document.getElementById('calculatorResults');
-    
-    if (!resultsDiv) {
-        console.log('Results div not found');
-        return;
-    }
-    
-    console.log('Displaying results:', data);
-    
-    resultsDiv.innerHTML = `
-        <div class="calculator-results">
-            <h3>Your PI Case CPQL Savings</h3>
-            <div class="result-item">
-                <span>Current Monthly Spend:</span>
-                <span>$${data.totalMonthlySpend.toLocaleString()}</span>
-            </div>
-            <div class="result-item">
-                <span>Current CPQL:</span>
-                <span>$${data.currentCpl.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
-            </div>
-            <div class="result-item">
-                <span>Guaranteed CPQL:</span>
-                <span>$${data.guaranteedCpl.toLocaleString()}</span>
-            </div>
-            <div class="result-item">
-                <span>New Monthly Spend:</span>
-                <span>$${data.newMonthlySpend.toLocaleString()}</span>
-            </div>
-            <div class="result-item highlight">
-                <span>Monthly Savings:</span>
-                <span>$${data.monthlySavings.toLocaleString()}</span>
-            </div>
-            <div class="result-item highlight">
-                <span>Annual Savings:</span>
-                <span>$${data.annualSavings.toLocaleString()}</span>
-            </div>
-            <div class="result-item highlight">
-                <span>CPQL Reduction:</span>
-                <span>${Number.isFinite(data.percentageSavings) ? data.percentageSavings.toFixed(1) : '0.0'}%</span>
-            </div>
-            <div class="result-item">
-                <span>PI Leads per Month:</span>
-                <span>${data.leadsCount}</span>
-            </div>
-        </div>
-    `;
-    
-    resultsDiv.style.display = 'block';
-    console.log('Results displayed successfully');
 }
 
 function initializeContactForm() {
