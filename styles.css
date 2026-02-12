@@ -290,6 +290,18 @@ input::placeholder {
     color: var(--text-primary);
 }
 
+ .result-metric.is-primary .result-value {
+     color: var(--success-color);
+ }
+
+ .result-value.is-positive {
+     color: var(--success-color);
+ }
+
+ .result-value.is-negative {
+     color: #ff006e;
+ }
+
 @media (max-width: 768px) {
     .results-grid {
         grid-template-columns: 1fr;

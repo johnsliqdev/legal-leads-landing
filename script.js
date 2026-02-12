@@ -1,5 +1,7 @@
 // Main script for legal leads landing page
 
+let lastCalculation = null;
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Page loaded');
     
@@ -47,6 +49,17 @@ function initializeCPLCalculator() {
         const percentageSavings = currentCpl > 0
             ? ((currentCpl - guaranteedCpl) / currentCpl) * 100
             : 0;
+
+        lastCalculation = {
+            currentCpl,
+            guaranteedCpl,
+            leadsCount,
+            totalMonthlySpend,
+            newMonthlySpend,
+            monthlySavings,
+            annualSavings,
+            percentageSavings
+        };
         
         // Display results
         displayResults({
@@ -71,10 +84,17 @@ function initializeCPLCalculator() {
             percentageSavings
         });
 
+        populateHiddenCalculationFields(lastCalculation);
+
         const resultsSection = document.getElementById('results');
         if (resultsSection) {
             resultsSection.style.display = 'block';
             resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        const contactSection = document.getElementById('contact');
+        if (contactSection) {
+            contactSection.style.display = 'block';
         }
     });
 }
@@ -85,6 +105,13 @@ function updateResultsSection(data) {
         if (el) el.textContent = text;
     };
 
+    const setValueClass = (id, kind) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.remove('is-positive', 'is-negative');
+        if (kind) el.classList.add(kind);
+    };
+
     setText('resultCurrentMonthlySpend', `$${Math.round(data.totalMonthlySpend).toLocaleString()}`);
     setText('resultCurrentCpql', `$${Math.round(data.currentCpl).toLocaleString()}`);
     setText('resultGuaranteedCpql', `$${Math.round(data.guaranteedCpl).toLocaleString()}`);
@@ -93,6 +120,28 @@ function updateResultsSection(data) {
     setText('resultAnnualSavings', `$${Math.round(data.annualSavings).toLocaleString()}`);
     setText('resultCpqlReduction', `${(Number.isFinite(data.percentageSavings) ? data.percentageSavings : 0).toFixed(1)}%`);
     setText('resultLeadsCount', `${Math.round(data.leadsCount).toLocaleString()}`);
+
+    setValueClass('resultMonthlySavings', data.monthlySavings >= 0 ? 'is-positive' : 'is-negative');
+    setValueClass('resultAnnualSavings', data.annualSavings >= 0 ? 'is-positive' : 'is-negative');
+    setValueClass('resultCpqlReduction', data.percentageSavings >= 0 ? 'is-positive' : 'is-negative');
+}
+
+function populateHiddenCalculationFields(calc) {
+    if (!calc) return;
+
+    const setHidden = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.value = value;
+    };
+
+    setHidden('calcCurrentMonthlySpend', String(Math.round(calc.totalMonthlySpend)));
+    setHidden('calcCurrentCpql', String(Math.round(calc.currentCpl)));
+    setHidden('calcGuaranteedCpql', String(Math.round(calc.guaranteedCpl)));
+    setHidden('calcNewMonthlySpend', String(Math.round(calc.newMonthlySpend)));
+    setHidden('calcMonthlySavings', String(Math.round(calc.monthlySavings)));
+    setHidden('calcAnnualSavings', String(Math.round(calc.annualSavings)));
+    setHidden('calcCpqlReduction', (Number.isFinite(calc.percentageSavings) ? calc.percentageSavings : 0).toFixed(1));
+    setHidden('calcLeadsCount', String(Math.round(calc.leadsCount)));
 }
 
 function displayResults(data) {
@@ -166,8 +215,14 @@ function initializeContactForm() {
             email: document.getElementById('email').value,
             phone: document.getElementById('phone').value,
             lawFirm: document.getElementById('lawFirm').value,
-            currentCpl: document.getElementById('currentCpl').value,
-            savings: document.getElementById('savings').value
+            calcCurrentMonthlySpend: document.getElementById('calcCurrentMonthlySpend')?.value || '',
+            calcCurrentCpql: document.getElementById('calcCurrentCpql')?.value || '',
+            calcGuaranteedCpql: document.getElementById('calcGuaranteedCpql')?.value || '',
+            calcNewMonthlySpend: document.getElementById('calcNewMonthlySpend')?.value || '',
+            calcMonthlySavings: document.getElementById('calcMonthlySavings')?.value || '',
+            calcAnnualSavings: document.getElementById('calcAnnualSavings')?.value || '',
+            calcCpqlReduction: document.getElementById('calcCpqlReduction')?.value || '',
+            calcLeadsCount: document.getElementById('calcLeadsCount')?.value || ''
         };
         
         console.log('Form data:', formData);
