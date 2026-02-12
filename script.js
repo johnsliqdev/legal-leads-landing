@@ -263,17 +263,33 @@ function validateForm(data) {
 
 function submitContactForm(formData) {
     console.log('Processing form submission...');
-    
-    // Save to localStorage
+
+    // Save to localStorage (fallback)
     saveSubmission(formData);
-    
-    // Show success message
-    showNotification('Thank you for your submission! We will contact you soon.', 'success');
-    
-    // Reset form
-    document.getElementById('contactForm').reset();
-    
-    console.log('Form submitted successfully');
+
+    fetch('/api/leads', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+        .then(async (res) => {
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(`DB write failed: ${res.status} ${text}`);
+            }
+            return res.json();
+        })
+        .then(() => {
+            showNotification('Thank you! Your info was submitted successfully.', 'success');
+            document.getElementById('contactForm').reset();
+            console.log('Form submitted successfully (DB)');
+        })
+        .catch((err) => {
+            console.error(err);
+            showNotification('Submission saved locally, but failed to save to database.', 'error');
+        });
 }
 
 function saveSubmission(formData) {

@@ -21,6 +21,7 @@ document.getElementById('adminLoginForm')?.addEventListener('submit', function(e
     
     if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
         sessionStorage.setItem('adminLoggedIn', 'true');
+        sessionStorage.setItem('adminApiToken', password);
         window.location.href = 'admin-dashboard.html';
     } else {
         document.getElementById('loginError').style.display = 'block';
