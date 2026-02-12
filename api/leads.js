@@ -1,4 +1,4 @@
-import { createClient } from '@vercel/postgres';
+import { createPool } from '@vercel/postgres';
 
 function getConnectionString() {
   return (
@@ -13,7 +13,9 @@ function getConnectionString() {
   );
 }
 
-async function getClient() {
+let pool;
+
+function getPool() {
   const connectionString = getConnectionString();
   if (!connectionString) {
     const present = Object.keys(process.env)
@@ -24,9 +26,11 @@ async function getClient() {
     );
   }
 
-  const client = createClient({ connectionString });
-  await client.connect();
-  return client;
+  if (!pool) {
+    pool = createPool({ connectionString });
+  }
+
+  return pool;
 }
 
 function json(res, status, data) {
@@ -41,8 +45,8 @@ function getAdminToken(req) {
   return header;
 }
 
-async function ensureSchema(client) {
-  await client.sql`
+async function ensureSchema(poolInstance) {
+  await poolInstance.sql`
     CREATE TABLE IF NOT EXISTS leads (
       id SERIAL PRIMARY KEY,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -64,15 +68,14 @@ async function ensureSchema(client) {
 }
 
 export default async function handler(req, res) {
-  let client;
   try {
-    client = await getClient();
-    await ensureSchema(client);
+    const poolInstance = getPool();
+    await ensureSchema(poolInstance);
 
     if (req.method === 'POST') {
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
 
-      await client.sql`
+      await poolInstance.sql`
         INSERT INTO leads (
           first_name,
           last_name,
@@ -114,7 +117,7 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
       if (!authorized) return json(res, 401, { error: 'unauthorized' });
 
-      const { rows } = await client.sql`
+      const { rows } = await poolInstance.sql`
         SELECT * FROM leads
         ORDER BY created_at DESC;
       `;
@@ -128,11 +131,11 @@ export default async function handler(req, res) {
       const id = url.searchParams.get('id');
 
       if (id) {
-        await client.sql`DELETE FROM leads WHERE id = ${id};`;
+        await poolInstance.sql`DELETE FROM leads WHERE id = ${id};`;
         return json(res, 200, { success: true });
       }
 
-      await client.sql`TRUNCATE TABLE leads RESTART IDENTITY;`;
+      await poolInstance.sql`TRUNCATE TABLE leads RESTART IDENTITY;`;
       return json(res, 200, { success: true });
     }
 
@@ -140,11 +143,5 @@ export default async function handler(req, res) {
     return json(res, 405, { error: 'method_not_allowed' });
   } catch (err) {
     return json(res, 500, { error: String(err?.message || err) });
-  } finally {
-    try {
-      await client?.end();
-    } catch {
-      // ignore
-    }
   }
 }
