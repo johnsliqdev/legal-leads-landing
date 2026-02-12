@@ -1,4 +1,33 @@
-import { sql } from '@vercel/postgres';
+import { createClient } from '@vercel/postgres';
+
+function getConnectionString() {
+  return (
+    process.env.POSTGRES_URL ||
+    process.env.DATABASE_URL ||
+    process.env.POSTGRES_PRISMA_URL ||
+    process.env.POSTGRES_URL_NON_POOLING ||
+    process.env.DATABASE_URL_NON_POOLING ||
+    process.env.POSTGRES_URL_NO_SSL ||
+    process.env.DATABASE_URL_UNPOOLED ||
+    ''
+  );
+}
+
+async function getClient() {
+  const connectionString = getConnectionString();
+  if (!connectionString) {
+    const present = Object.keys(process.env)
+      .filter((k) => k.includes('POSTGRES') || k.includes('DATABASE'))
+      .sort();
+    throw new Error(
+      `Missing Postgres connection string env var. Present keys: ${present.join(', ')}`
+    );
+  }
+
+  const client = createClient({ connectionString });
+  await client.connect();
+  return client;
+}
 
 function json(res, status, data) {
   res.statusCode = status;
@@ -12,8 +41,8 @@ function getAdminToken(req) {
   return header;
 }
 
-async function ensureSchema() {
-  await sql`
+async function ensureSchema(client) {
+  await client.sql`
     CREATE TABLE IF NOT EXISTS leads (
       id SERIAL PRIMARY KEY,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -35,13 +64,15 @@ async function ensureSchema() {
 }
 
 export default async function handler(req, res) {
+  let client;
   try {
-    await ensureSchema();
+    client = await getClient();
+    await ensureSchema(client);
 
     if (req.method === 'POST') {
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
 
-      await sql`
+      await client.sql`
         INSERT INTO leads (
           first_name,
           last_name,
@@ -83,7 +114,7 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
       if (!authorized) return json(res, 401, { error: 'unauthorized' });
 
-      const { rows } = await sql`
+      const { rows } = await client.sql`
         SELECT * FROM leads
         ORDER BY created_at DESC;
       `;
@@ -97,11 +128,11 @@ export default async function handler(req, res) {
       const id = url.searchParams.get('id');
 
       if (id) {
-        await sql`DELETE FROM leads WHERE id = ${id};`;
+        await client.sql`DELETE FROM leads WHERE id = ${id};`;
         return json(res, 200, { success: true });
       }
 
-      await sql`TRUNCATE TABLE leads RESTART IDENTITY;`;
+      await client.sql`TRUNCATE TABLE leads RESTART IDENTITY;`;
       return json(res, 200, { success: true });
     }
 
@@ -109,5 +140,11 @@ export default async function handler(req, res) {
     return json(res, 405, { error: 'method_not_allowed' });
   } catch (err) {
     return json(res, 500, { error: String(err?.message || err) });
+  } finally {
+    try {
+      await client?.end();
+    } catch {
+      // ignore
+    }
   }
 }
