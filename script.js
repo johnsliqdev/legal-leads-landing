@@ -2,6 +2,7 @@
 
 let lastCalculation = null;
 let cpqlTarget = 700;
+let contactFormData = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Page loaded');
@@ -106,6 +107,24 @@ function initializeCPLCalculator() {
 
         populateHiddenCalculationFields(lastCalculation);
 
+        // Combine contact form data with calculator data and submit to database
+        if (contactFormData) {
+            const completeFormData = {
+                ...contactFormData,
+                calcCurrentMonthlySpend: String(Math.round(totalMonthlySpend)),
+                calcCurrentCpql: String(Math.round(currentCpl)),
+                calcGuaranteedCpql: String(Math.round(guaranteedCpl)),
+                calcNewMonthlySpend: String(Math.round(newMonthlySpend)),
+                calcMonthlySavings: String(Math.round(monthlySavings)),
+                calcAnnualSavings: String(Math.round(annualSavings)),
+                calcCpqlReduction: (Number.isFinite(percentageSavings) ? percentageSavings : 0).toFixed(1),
+                calcLeadsCount: String(Math.round(leadsCount))
+            };
+
+            console.log('Submitting complete form data:', completeFormData);
+            submitToDatabase(completeFormData);
+        }
+
         const resultsSection = document.getElementById('results');
         if (resultsSection) {
             resultsSection.style.display = 'block';
@@ -170,40 +189,46 @@ function initializeContactForm() {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         console.log('Contact form submitted');
-        
+
         // Get form data
-        const formData = {
+        contactFormData = {
             firstName: document.getElementById('firstName').value,
             lastName: document.getElementById('lastName').value,
             email: document.getElementById('email').value,
             phone: document.getElementById('phone').value,
-            lawFirm: document.getElementById('lawFirm').value,
-            calcCurrentMonthlySpend: document.getElementById('calcCurrentMonthlySpend')?.value || '',
-            calcCurrentCpql: document.getElementById('calcCurrentCpql')?.value || '',
-            calcGuaranteedCpql: document.getElementById('calcGuaranteedCpql')?.value || '',
-            calcNewMonthlySpend: document.getElementById('calcNewMonthlySpend')?.value || '',
-            calcMonthlySavings: document.getElementById('calcMonthlySavings')?.value || '',
-            calcAnnualSavings: document.getElementById('calcAnnualSavings')?.value || '',
-            calcCpqlReduction: document.getElementById('calcCpqlReduction')?.value || '',
-            calcLeadsCount: document.getElementById('calcLeadsCount')?.value || ''
+            lawFirm: document.getElementById('lawFirm').value
         };
-        
-        console.log('Form data:', formData);
-        
+
+        console.log('Contact form data stored:', contactFormData);
+
         // Validate form
-        if (!validateForm(formData)) {
+        if (!validateContactForm(contactFormData)) {
             console.log('Form validation failed');
             return;
         }
-        
-        // Submit form
-        submitContactForm(formData);
+
+        // Show calculator without submitting to database yet
+        showNotification('Thank you! Access your calculator below.', 'success');
+
+        const calculatorSection = document.getElementById('calculator');
+        if (calculatorSection) {
+            calculatorSection.style.display = 'block';
+            setTimeout(() => {
+                calculatorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                // Focus on first input
+                const adSpendInput = document.getElementById('adSpend');
+                if (adSpendInput) {
+                    setTimeout(() => adSpendInput.focus(), 350);
+                }
+            }, 300);
+        }
     });
 }
 
-function validateForm(data) {
+function validateContactForm(data) {
     const required = ['firstName', 'lastName', 'email', 'phone', 'lawFirm'];
-    
+
     for (const field of required) {
         if (!data[field] || data[field].trim() === '') {
             console.log('Validation failed - missing field:', field);
@@ -211,7 +236,7 @@ function validateForm(data) {
             return false;
         }
     }
-    
+
     // Validate email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(data.email)) {
@@ -219,13 +244,13 @@ function validateForm(data) {
         showNotification('Please enter a valid email address', 'error');
         return false;
     }
-    
-    console.log('Form validation passed');
+
+    console.log('Contact form validation passed');
     return true;
 }
 
-function submitContactForm(formData) {
-    console.log('Processing form submission...');
+function submitToDatabase(formData) {
+    console.log('Submitting to database...');
 
     // Save to localStorage (fallback)
     saveSubmission(formData);
@@ -245,42 +270,12 @@ function submitContactForm(formData) {
             return res.json();
         })
         .then(() => {
-            showNotification('Thank you! Access your calculator below.', 'success');
-            console.log('Form submitted successfully (DB)');
-
-            // Show calculator section
-            const calculatorSection = document.getElementById('calculator');
-            if (calculatorSection) {
-                calculatorSection.style.display = 'block';
-                setTimeout(() => {
-                    calculatorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-                    // Focus on first input
-                    const adSpendInput = document.getElementById('adSpend');
-                    if (adSpendInput) {
-                        setTimeout(() => adSpendInput.focus(), 350);
-                    }
-                }, 300);
-            }
+            console.log('Complete data submitted successfully to database');
+            showNotification('Thank you! Your results are ready.', 'success');
         })
         .catch((err) => {
             console.error(err);
-            showNotification('Submission saved locally. Access your calculator below.', 'success');
-
-            // Show calculator section even if DB save fails
-            const calculatorSection = document.getElementById('calculator');
-            if (calculatorSection) {
-                calculatorSection.style.display = 'block';
-                setTimeout(() => {
-                    calculatorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-                    // Focus on first input
-                    const adSpendInput = document.getElementById('adSpend');
-                    if (adSpendInput) {
-                        setTimeout(() => adSpendInput.focus(), 350);
-                    }
-                }, 300);
-            }
+            showNotification('Data saved locally but failed to save to database.', 'error');
         });
 }
 
