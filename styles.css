@@ -663,6 +663,18 @@ input::placeholder {
     font-size: 14px;
 }
 
+.overspend-cta {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.overspend-cta .calculate-btn {
+    display: inline-block;
+    width: auto;
+    min-width: 300px;
+    text-decoration: none;
+}
+
 /* How We Do It Section */
 .how-we-do-it {
     margin-top: 50px;
