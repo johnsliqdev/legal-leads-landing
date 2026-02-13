@@ -62,8 +62,15 @@ async function ensureSchema(poolInstance) {
       calc_monthly_savings TEXT,
       calc_annual_savings TEXT,
       calc_cpql_reduction TEXT,
-      calc_leads_count TEXT
+      calc_leads_count TEXT,
+      requested_callback BOOLEAN DEFAULT FALSE
     );
+  `;
+
+  // Add requested_callback column if it doesn't exist (for existing databases)
+  await poolInstance.sql`
+    ALTER TABLE leads
+    ADD COLUMN IF NOT EXISTS requested_callback BOOLEAN DEFAULT FALSE;
   `;
 }
 
@@ -89,7 +96,8 @@ export default async function handler(req, res) {
           calc_monthly_savings,
           calc_annual_savings,
           calc_cpql_reduction,
-          calc_leads_count
+          calc_leads_count,
+          requested_callback
         ) VALUES (
           ${body.firstName || ''},
           ${body.lastName || ''},
@@ -103,7 +111,8 @@ export default async function handler(req, res) {
           ${body.calcMonthlySavings || ''},
           ${body.calcAnnualSavings || ''},
           ${body.calcCpqlReduction || ''},
-          ${body.calcLeadsCount || ''}
+          ${body.calcLeadsCount || ''},
+          ${body.requestedCallback || false}
         );
       `;
 

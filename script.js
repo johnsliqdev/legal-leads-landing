@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Initialize contact form
             initializeContactForm();
+
+            // Initialize callback button
+            initializeCallbackButton();
         });
 });
 
@@ -296,9 +299,81 @@ function saveSubmission(formData) {
     console.log('Submission saved:', submission);
 }
 
+function initializeCallbackButton() {
+    const callbackBtn = document.getElementById('requestCallbackBtn');
+
+    if (!callbackBtn) {
+        console.log('Callback button not found');
+        return;
+    }
+
+    callbackBtn.addEventListener('click', function() {
+        if (!contactFormData) {
+            showNotification('Contact information not found. Please refresh and try again.', 'error');
+            return;
+        }
+
+        // Disable button to prevent multiple clicks
+        callbackBtn.disabled = true;
+        callbackBtn.textContent = 'Requesting...';
+
+        // Send callback request
+        requestCallback();
+    });
+}
+
+function requestCallback() {
+    const callbackBtn = document.getElementById('requestCallbackBtn');
+
+    if (!contactFormData || !contactFormData.email) {
+        showNotification('Unable to process callback request.', 'error');
+        if (callbackBtn) {
+            callbackBtn.disabled = false;
+            callbackBtn.textContent = 'Request a Callback';
+        }
+        return;
+    }
+
+    const callbackData = {
+        email: contactFormData.email,
+        requestedCallback: true
+    };
+
+    fetch('/api/leads/callback', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(callbackData)
+    })
+        .then(async (res) => {
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(`Callback request failed: ${res.status} ${text}`);
+            }
+            return res.json();
+        })
+        .then(() => {
+            console.log('Callback request successful');
+            showNotification('Callback requested! We\'ll contact you within 24 hours.', 'success');
+            if (callbackBtn) {
+                callbackBtn.textContent = 'Callback Requested ✓';
+                callbackBtn.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            showNotification('Unable to process callback request. Please try again.', 'error');
+            if (callbackBtn) {
+                callbackBtn.disabled = false;
+                callbackBtn.textContent = 'Request a Callback';
+            }
+        });
+}
+
 function showNotification(message, type) {
     console.log('Showing notification:', message, type);
-    
+
     // Create notification element
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
