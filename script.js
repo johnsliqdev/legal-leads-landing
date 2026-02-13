@@ -45,34 +45,14 @@ function applyCpqlTargetToUi(target) {
     if (resultGuaranteed) resultGuaranteed.textContent = formatted;
 }
 
-function openContactForm() {
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-        contactSection.style.display = 'block';
-        contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    const firstName = document.getElementById('firstName');
-    if (firstName) {
-        setTimeout(() => firstName.focus(), 350);
-    }
-}
-
 function initializeCPLCalculator() {
     const form = document.getElementById('cplForm');
-    const resultsCtaBtn = document.getElementById('resultsCtaBtn');
-    
+
     if (!form) {
         console.log('Calculator form not found');
         return;
     }
 
-    if (resultsCtaBtn) {
-        resultsCtaBtn.addEventListener('click', function() {
-            openContactForm();
-        });
-    }
-    
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         console.log('Calculator form submitted');
@@ -130,11 +110,6 @@ function initializeCPLCalculator() {
         if (resultsSection) {
             resultsSection.style.display = 'block';
             resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        const contactSection = document.getElementById('contact');
-        if (contactSection) {
-            contactSection.style.display = 'block';
         }
     });
 }
@@ -270,13 +245,42 @@ function submitContactForm(formData) {
             return res.json();
         })
         .then(() => {
-            showNotification('Thank you! Your info was submitted successfully.', 'success');
-            document.getElementById('contactForm').reset();
+            showNotification('Thank you! Access your calculator below.', 'success');
             console.log('Form submitted successfully (DB)');
+
+            // Show calculator section
+            const calculatorSection = document.getElementById('calculator');
+            if (calculatorSection) {
+                calculatorSection.style.display = 'block';
+                setTimeout(() => {
+                    calculatorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                    // Focus on first input
+                    const adSpendInput = document.getElementById('adSpend');
+                    if (adSpendInput) {
+                        setTimeout(() => adSpendInput.focus(), 350);
+                    }
+                }, 300);
+            }
         })
         .catch((err) => {
             console.error(err);
-            showNotification('Submission saved locally, but failed to save to database.', 'error');
+            showNotification('Submission saved locally. Access your calculator below.', 'success');
+
+            // Show calculator section even if DB save fails
+            const calculatorSection = document.getElementById('calculator');
+            if (calculatorSection) {
+                calculatorSection.style.display = 'block';
+                setTimeout(() => {
+                    calculatorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                    // Focus on first input
+                    const adSpendInput = document.getElementById('adSpend');
+                    if (adSpendInput) {
+                        setTimeout(() => adSpendInput.focus(), 350);
+                    }
+                }, 300);
+            }
         });
 }
 

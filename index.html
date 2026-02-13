@@ -17,8 +17,7 @@
                     <img src="images/sliq-logo.png" alt="Sliq By Design" class="logo-img">
                 </div>
                 <div class="nav-links">
-                    <a href="#calculator">Calculator</a>
-                    <a href="#contact">Contact</a>
+                    <a href="#contact">Get Started</a>
                 </div>
             </div>
         </div>
@@ -83,13 +82,60 @@
                     </div>
 
                     <div class="overspend-cta">
-                        <a href="#calculator" class="calculate-btn">Calculate Your Current CPQL</a>
+                        <a href="#contact" class="calculate-btn">Get Your Free CPQL Analysis</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="calculator" class="calculator-section">
+        <section id="contact" class="contact-section">
+            <div class="container">
+                <div class="contact-card">
+                    <h3>Get Your Free CPQL Analysis</h3>
+                    <p class="calculator-desc">Enter your information to access our exclusive PI Case CPQL Calculator</p>
+                    <form id="contactForm" class="contact-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lawFirm">Law Firm Name</label>
+                            <input type="text" id="lawFirm" name="lawFirm" required>
+                        </div>
+
+                        <input type="hidden" id="calcCurrentMonthlySpend" name="calcCurrentMonthlySpend">
+                        <input type="hidden" id="calcCurrentCpql" name="calcCurrentCpql">
+                        <input type="hidden" id="calcGuaranteedCpql" name="calcGuaranteedCpql">
+                        <input type="hidden" id="calcNewMonthlySpend" name="calcNewMonthlySpend">
+                        <input type="hidden" id="calcMonthlySavings" name="calcMonthlySavings">
+                        <input type="hidden" id="calcAnnualSavings" name="calcAnnualSavings">
+                        <input type="hidden" id="calcCpqlReduction" name="calcCpqlReduction">
+                        <input type="hidden" id="calcLeadsCount" name="calcLeadsCount">
+
+                        <button type="submit" class="submit-btn">Access Calculator</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="calculator" class="calculator-section" style="display: none;">
             <div class="container">
                 <div class="calculator-card">
                     <h3>PI Case CPQL Calculator</h3>
@@ -154,10 +200,6 @@
                             <div class="result-label">PI Leads per Month</div>
                             <div class="result-value" id="resultLeadsCount">0</div>
                         </div>
-                    </div>
-
-                    <div class="results-cta">
-                        <button type="button" class="submit-btn" id="resultsCtaBtn">Get Your Lower PI Case CPQL</button>
                     </div>
                 </div>
             </div>
@@ -228,52 +270,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="contact-section" style="display: none;">
-            <div class="container">
-                <div class="contact-card">
-                    <h3>Get Started Today</h3>
-                    <form id="contactForm" class="contact-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="firstName">First Name</label>
-                                <input type="text" id="firstName" name="firstName" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="lastName">Last Name</label>
-                                <input type="text" id="lastName" name="lastName" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="lawFirm">Law Firm Name</label>
-                            <input type="text" id="lawFirm" name="lawFirm" required>
-                        </div>
-
-                        <input type="hidden" id="calcCurrentMonthlySpend" name="calcCurrentMonthlySpend">
-                        <input type="hidden" id="calcCurrentCpql" name="calcCurrentCpql">
-                        <input type="hidden" id="calcGuaranteedCpql" name="calcGuaranteedCpql">
-                        <input type="hidden" id="calcNewMonthlySpend" name="calcNewMonthlySpend">
-                        <input type="hidden" id="calcMonthlySavings" name="calcMonthlySavings">
-                        <input type="hidden" id="calcAnnualSavings" name="calcAnnualSavings">
-                        <input type="hidden" id="calcCpqlReduction" name="calcCpqlReduction">
-                        <input type="hidden" id="calcLeadsCount" name="calcLeadsCount">
-                        
-                        <button type="submit" class="submit-btn">Get Your Lower PI Case CPQL</button>
-                    </form>
                 </div>
             </div>
         </section>
