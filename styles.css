@@ -33,7 +33,7 @@ body {
     width: 100%;
     height: 100%;
     z-index: -1;
-    background: 
+    background:
         radial-gradient(circle at 20% 20%, rgba(255, 0, 110, 0.1) 0%, transparent 50%),
         radial-gradient(circle at 80% 80%, rgba(255, 0, 110, 0.05) 0%, transparent 50%),
         radial-gradient(circle at 40% 60%, rgba(255, 64, 129, 0.08) 0%, transparent 50%);
@@ -47,16 +47,61 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: 
+    background-image:
         linear-gradient(45deg, transparent 48%, rgba(255, 0, 110, 0.03) 50%, transparent 52%),
         linear-gradient(-45deg, transparent 48%, rgba(255, 0, 110, 0.03) 50%, transparent 52%);
     background-size: 60px 60px;
     animation: float 20s ease-in-out infinite;
 }
 
+.geometric-bg::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(255, 0, 110, 0.03) 50%,
+        transparent 100%
+    );
+    animation: scan 8s linear infinite;
+}
+
 @keyframes float {
     0%, 100% { transform: translateY(0px) rotate(0deg); }
     50% { transform: translateY(-20px) rotate(1deg); }
+}
+
+@keyframes scan {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(200%); }
+}
+
+@keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+}
+
+.calculator-card::after,
+.contact-card::after,
+.results-card::after,
+.overspend-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.03),
+        transparent
+    );
+    animation: shimmer 3s infinite;
 }
 
 .container {
@@ -115,7 +160,7 @@ body {
 
 /* Hero Section */
 .hero {
-    padding: 80px 0;
+    padding: 50px 0 40px;
     text-align: center;
 }
 
@@ -178,30 +223,31 @@ body {
 }
 
 .form-group {
-    margin-bottom: 25px;
+    margin-bottom: 16px;
 }
 
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 12px;
 }
 
 label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     font-weight: 500;
+    font-size: 14px;
     color: var(--text-primary);
 }
 
 input {
     width: 100%;
-    padding: 15px;
+    padding: 12px;
     background: var(--secondary-bg);
     border: 2px solid var(--border-color);
     border-radius: 10px;
     color: var(--text-primary);
-    font-size: 16px;
+    font-size: 15px;
     transition: all 0.3s ease;
 }
 
@@ -218,12 +264,12 @@ input::placeholder {
 
 .calculate-btn, .submit-btn {
     width: 100%;
-    padding: 18px;
+    padding: 14px;
     background: var(--gradient-1);
     border: none;
     border-radius: 10px;
     color: white;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -411,13 +457,13 @@ input::placeholder {
 
 /* Contact Section */
 .contact-section {
-    padding: 60px 0;
+    padding: 40px 0;
 }
 
 .contact-card {
     background: var(--card-bg);
     border-radius: 20px;
-    padding: 40px;
+    padding: 30px 25px;
     max-width: 500px;
     margin: 0 auto;
     border: 1px solid var(--border-color);
@@ -425,10 +471,15 @@ input::placeholder {
 }
 
 .contact-card h3 {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 700;
-    margin-bottom: 30px;
+    margin-bottom: 8px;
     text-align: center;
+}
+
+.contact-card .calculator-desc {
+    margin-bottom: 20px;
+    font-size: 14px;
 }
 
 /* Admin Login Styles */
@@ -609,24 +660,26 @@ input::placeholder {
 
 /* Why Overspend Section */
 .why-overspend-section {
-    padding: 80px 0;
+    padding: 40px 0;
     background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
 }
 
 .overspend-card {
     background: var(--card-bg);
     border-radius: 20px;
-    padding: 50px;
+    padding: 35px 30px;
     max-width: 900px;
     margin: 0 auto;
     border: 1px solid var(--border-color);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
 }
 
 .overspend-card h3 {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 700;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     text-align: center;
     background: var(--gradient-1);
     -webkit-background-clip: text;
@@ -637,23 +690,22 @@ input::placeholder {
 .section-desc {
     text-align: center;
     color: var(--text-secondary);
-    margin-bottom: 40px;
-    font-size: 18px;
+    margin-bottom: 25px;
+    font-size: 16px;
 }
 
 .qualified-lead-callout {
     display: flex;
     align-items: flex-start;
     gap: 15px;
-    padding: 25px;
+    padding: 20px;
     background: linear-gradient(135deg, rgba(255, 0, 110, 0.1) 0%, rgba(255, 64, 129, 0.05) 100%);
     border-radius: 15px;
     border: 2px solid var(--accent-color);
-    margin-bottom: 40px;
+    margin-bottom: 25px;
 }
 
 .callout-icon {
-    font-size: 32px;
     flex-shrink: 0;
     width: 50px;
     height: 50px;
@@ -662,6 +714,29 @@ input::placeholder {
     justify-content: center;
     background: var(--gradient-1);
     border-radius: 50%;
+    position: relative;
+}
+
+.callout-icon svg {
+    width: 24px;
+    height: 24px;
+    color: white;
+}
+
+.callout-icon.icon-spark::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--gradient-1);
+    opacity: 0.3;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.3; }
+    50% { transform: scale(1.2); opacity: 0; }
 }
 
 .callout-content h4 {
@@ -705,7 +780,6 @@ input::placeholder {
 }
 
 .point-icon {
-    font-size: 32px;
     flex-shrink: 0;
     width: 50px;
     height: 50px;
@@ -714,6 +788,95 @@ input::placeholder {
     justify-content: center;
     background: var(--gradient-1);
     border-radius: 50%;
+    position: relative;
+}
+
+/* Target icon */
+.point-icon.icon-target::before {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 3px solid white;
+    border-radius: 50%;
+}
+
+.point-icon.icon-target::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+}
+
+/* Money icon */
+.point-icon.icon-money::before {
+    content: '$';
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+/* Creative icon */
+.point-icon.icon-creative::before {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border: 3px solid white;
+    border-radius: 4px;
+}
+
+.point-icon.icon-creative::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 2px;
+    background: white;
+    box-shadow: 0 6px 0 white, 0 -6px 0 white;
+}
+
+/* Nurture icon */
+.point-icon.icon-nurture::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border: 3px solid white;
+    border-radius: 50%;
+    border-top-color: transparent;
+    transform: rotate(45deg);
+}
+
+.point-icon.icon-nurture::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 8px solid white;
+    transform: rotate(45deg) translateY(-8px);
+}
+
+/* Metrics icon */
+.point-icon.icon-metrics::before {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 12px;
+    background: white;
+    transform: translateX(-8px);
+}
+
+.point-icon.icon-metrics::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 4px;
+    background: white;
+    box-shadow: -8px 4px 0 white, 0 8px 0 white;
 }
 
 .point-content h4 {
