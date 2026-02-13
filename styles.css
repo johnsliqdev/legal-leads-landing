@@ -24,6 +24,38 @@ body {
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background-image:
+        radial-gradient(circle at 10% 20%, rgba(255, 0, 110, 0.3) 0%, transparent 2%),
+        radial-gradient(circle at 80% 50%, rgba(255, 64, 129, 0.3) 0%, transparent 2%),
+        radial-gradient(circle at 30% 80%, rgba(255, 0, 110, 0.25) 0%, transparent 2%),
+        radial-gradient(circle at 70% 10%, rgba(255, 64, 129, 0.25) 0%, transparent 2%),
+        radial-gradient(circle at 50% 50%, rgba(255, 0, 110, 0.2) 0%, transparent 2%);
+    background-size: 100% 100%;
+    animation: floatOrbs 20s ease-in-out infinite;
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes floatOrbs {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    33% {
+        transform: translate(50px, -100px) rotate(120deg);
+    }
+    66% {
+        transform: translate(-50px, 50px) rotate(240deg);
+    }
 }
 
 .geometric-bg {
@@ -34,10 +66,20 @@ body {
     height: 100%;
     z-index: -1;
     background:
-        radial-gradient(circle at 20% 20%, rgba(255, 0, 110, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(255, 0, 110, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 40% 60%, rgba(255, 64, 129, 0.08) 0%, transparent 50%);
+        radial-gradient(circle at 20% 20%, rgba(255, 0, 110, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 0, 110, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 40% 60%, rgba(255, 64, 129, 0.1) 0%, transparent 50%);
     pointer-events: none;
+    animation: bgShift 15s ease-in-out infinite;
+}
+
+@keyframes bgShift {
+    0%, 100% {
+        background-position: 0% 0%, 100% 100%, 50% 50%;
+    }
+    50% {
+        background-position: 100% 0%, 0% 100%, 25% 75%;
+    }
 }
 
 .geometric-bg::before {
@@ -48,10 +90,19 @@ body {
     width: 100%;
     height: 100%;
     background-image:
-        linear-gradient(45deg, transparent 48%, rgba(255, 0, 110, 0.03) 50%, transparent 52%),
-        linear-gradient(-45deg, transparent 48%, rgba(255, 0, 110, 0.03) 50%, transparent 52%);
-    background-size: 60px 60px;
-    animation: float 20s ease-in-out infinite;
+        linear-gradient(0deg, transparent 49%, rgba(255, 0, 110, 0.08) 50%, transparent 51%),
+        linear-gradient(90deg, transparent 49%, rgba(255, 0, 110, 0.08) 50%, transparent 51%);
+    background-size: 80px 80px;
+    animation: float 20s ease-in-out infinite, gridPulse 3s ease-in-out infinite;
+}
+
+@keyframes gridPulse {
+    0%, 100% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 1;
+    }
 }
 
 .geometric-bg::after {
@@ -60,14 +111,15 @@ body {
     top: -100%;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 200px;
     background: linear-gradient(
         to bottom,
         transparent 0%,
-        rgba(255, 0, 110, 0.03) 50%,
+        rgba(255, 0, 110, 0.15) 50%,
         transparent 100%
     );
-    animation: scan 8s linear infinite;
+    box-shadow: 0 0 80px rgba(255, 0, 110, 0.3);
+    animation: scan 6s linear infinite;
 }
 
 @keyframes float {
@@ -98,10 +150,11 @@ body {
     background: linear-gradient(
         90deg,
         transparent,
-        rgba(255, 255, 255, 0.03),
+        rgba(255, 255, 255, 0.08),
         transparent
     );
-    animation: shimmer 3s infinite;
+    animation: shimmer 4s infinite;
+    pointer-events: none;
 }
 
 .container {
