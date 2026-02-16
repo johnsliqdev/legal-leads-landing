@@ -418,6 +418,14 @@ input::placeholder {
     color: var(--text-primary);
 }
 
+.result-sublabel {
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 5px;
+    text-transform: lowercase;
+}
+
  .result-metric.is-primary .result-value {
      color: var(--success-color);
  }

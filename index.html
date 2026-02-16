@@ -29,7 +29,7 @@
             <div class="container">
                 <div class="hero-content">
                     <h2 class="hero-title">Stop Overpaying for Personal Injury Leads</h2>
-                    <p class="hero-subtitle">Calculate your current Cost per Qualified Lead and discover how you can save thousands with our guaranteed <span id="heroCpqlTarget">$700</span> CPQL for PI cases</p>
+                    <p class="hero-subtitle">Calculate your current Cost per Qualified Lead and discover how you can save thousands on your PI case marketing</p>
                 </div>
             </div>
         </section>
@@ -141,6 +141,7 @@
                         <input type="hidden" id="calcAnnualSavings" name="calcAnnualSavings">
                         <input type="hidden" id="calcCpqlReduction" name="calcCpqlReduction">
                         <input type="hidden" id="calcLeadsCount" name="calcLeadsCount">
+                        <input type="hidden" id="calcSameBudgetLeads" name="calcSameBudgetLeads">
 
                         <button type="submit" class="submit-btn">Access Calculator</button>
                     </form>
@@ -157,17 +158,17 @@
                     <form id="cplForm" class="calculator-form">
                         <div class="form-group">
                             <label for="adSpend">Monthly Ad Spend ($)</label>
-                            <input type="number" id="adSpend" name="adSpend" placeholder="5000" required min="0" step="100">
+                            <input type="number" id="adSpend" name="adSpend" placeholder="5000" required min="0" step="0.01">
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="marketingFees">Monthly Marketing Fees ($)</label>
-                            <input type="number" id="marketingFees" name="marketingFees" placeholder="2000" required min="0" step="100">
+                            <input type="number" id="marketingFees" name="marketingFees" placeholder="2000" required min="0" step="0.01">
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="leadsCount">Number of PI Leads per Month</label>
-                            <input type="number" id="leadsCount" name="leadsCount" placeholder="50" required min="1" step="1">
+                            <input type="number" id="leadsCount" name="leadsCount" placeholder="50" required min="0.01" step="0.01">
                         </div>
                         
                         <button type="submit" class="calculate-btn">Calculate My PI Case CPQL</button>
@@ -179,39 +180,40 @@
         <section id="results" class="results-section" style="display: none;">
             <div class="container">
                 <div class="results-card">
-                    <h2>Your PI Case CPQL Savings</h2>
+                    <h2>Your Potential Savings</h2>
                     <div class="results-grid">
                         <div class="result-metric">
-                            <div class="result-label">Current Monthly Spend</div>
+                            <div class="result-label">You're Currently Spending on Marketing</div>
                             <div class="result-value" id="resultCurrentMonthlySpend">$0</div>
                         </div>
                         <div class="result-metric">
-                            <div class="result-label">Current CPQL</div>
+                            <div class="result-label">Your Current CPQL</div>
                             <div class="result-value" id="resultCurrentCpql">$0</div>
                         </div>
                         <div class="result-metric">
-                            <div class="result-label">Guaranteed CPQL</div>
-                            <div class="result-value" id="resultGuaranteedCpql">$700</div>
+                            <div class="result-label">You're Getting This Many Leads</div>
+                            <div class="result-value" id="resultLeadsCount">0</div>
                         </div>
                         <div class="result-metric">
-                            <div class="result-label">New Monthly Spend</div>
+                            <div class="result-label">With Us, You'll Spend</div>
                             <div class="result-value" id="resultNewMonthlySpend">$0</div>
                         </div>
                         <div class="result-metric">
-                            <div class="result-label">Monthly Savings</div>
+                            <div class="result-label">You'll Be Saving Monthly</div>
                             <div class="result-value" id="resultMonthlySavings">$0</div>
                         </div>
                         <div class="result-metric">
-                            <div class="result-label">Annual Savings</div>
+                            <div class="result-label">You'll Be Saving Annually</div>
                             <div class="result-value" id="resultAnnualSavings">$0</div>
                         </div>
                         <div class="result-metric">
-                            <div class="result-label">CPQL Reduction</div>
+                            <div class="result-label">Your CPQL Reduction</div>
                             <div class="result-value" id="resultCpqlReduction">0%</div>
                         </div>
                         <div class="result-metric">
-                            <div class="result-label">PI Leads per Month</div>
-                            <div class="result-value" id="resultLeadsCount">0</div>
+                            <div class="result-label">With the Same Budget, You'll Get</div>
+                            <div class="result-value" id="resultSameBudgetLeads">0</div>
+                            <div class="result-sublabel">qualified leads</div>
                         </div>
                     </div>
 

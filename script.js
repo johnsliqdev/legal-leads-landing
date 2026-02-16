@@ -39,14 +39,8 @@ async function loadCpqlTarget() {
 function applyCpqlTargetToUi(target) {
     const formatted = `$${Math.round(target).toLocaleString()}`;
 
-    const hero = document.getElementById('heroCpqlTarget');
-    if (hero) hero.textContent = formatted;
-
     const targetCpl = document.getElementById('targetCpl');
     if (targetCpl) targetCpl.textContent = formatted;
-
-    const resultGuaranteed = document.getElementById('resultGuaranteedCpql');
-    if (resultGuaranteed) resultGuaranteed.textContent = formatted;
 }
 
 function initializeCPLCalculator() {
@@ -79,8 +73,9 @@ function initializeCPLCalculator() {
         const newMonthlySpend = guaranteedCpl * leadsCount;
         const monthlySavings = totalMonthlySpend - newMonthlySpend;
         const annualSavings = monthlySavings * 12;
-        
-        console.log('Calculated savings:', { monthlySavings, annualSavings });
+        const sameBudgetLeads = guaranteedCpl > 0 ? totalMonthlySpend / guaranteedCpl : 0;
+
+        console.log('Calculated savings:', { monthlySavings, annualSavings, sameBudgetLeads });
 
         const percentageSavings = currentCpl > 0
             ? ((currentCpl - guaranteedCpl) / currentCpl) * 100
@@ -94,7 +89,8 @@ function initializeCPLCalculator() {
             newMonthlySpend,
             monthlySavings,
             annualSavings,
-            percentageSavings
+            percentageSavings,
+            sameBudgetLeads
         };
         
         updateResultsSection({
@@ -105,7 +101,8 @@ function initializeCPLCalculator() {
             newMonthlySpend,
             monthlySavings,
             annualSavings,
-            percentageSavings
+            percentageSavings,
+            sameBudgetLeads
         });
 
         populateHiddenCalculationFields(lastCalculation);
@@ -121,7 +118,8 @@ function initializeCPLCalculator() {
                 calcMonthlySavings: String(Math.round(monthlySavings)),
                 calcAnnualSavings: String(Math.round(annualSavings)),
                 calcCpqlReduction: (Number.isFinite(percentageSavings) ? percentageSavings : 0).toFixed(1),
-                calcLeadsCount: String(Math.round(leadsCount))
+                calcLeadsCount: String(Math.round(leadsCount)),
+                calcSameBudgetLeads: String(Math.round(sameBudgetLeads))
             };
 
             console.log('Submitting complete form data:', completeFormData);
@@ -151,16 +149,17 @@ function updateResultsSection(data) {
 
     setText('resultCurrentMonthlySpend', `$${Math.round(data.totalMonthlySpend).toLocaleString()}`);
     setText('resultCurrentCpql', `$${Math.round(data.currentCpl).toLocaleString()}`);
-    setText('resultGuaranteedCpql', `$${Math.round(data.guaranteedCpl).toLocaleString()}`);
     setText('resultNewMonthlySpend', `$${Math.round(data.newMonthlySpend).toLocaleString()}`);
     setText('resultMonthlySavings', `$${Math.round(data.monthlySavings).toLocaleString()}`);
     setText('resultAnnualSavings', `$${Math.round(data.annualSavings).toLocaleString()}`);
     setText('resultCpqlReduction', `${(Number.isFinite(data.percentageSavings) ? data.percentageSavings : 0).toFixed(1)}%`);
     setText('resultLeadsCount', `${Math.round(data.leadsCount).toLocaleString()}`);
+    setText('resultSameBudgetLeads', `${Math.round(data.sameBudgetLeads).toLocaleString()}`);
 
     setValueClass('resultMonthlySavings', data.monthlySavings >= 0 ? 'is-positive' : 'is-negative');
     setValueClass('resultAnnualSavings', data.annualSavings >= 0 ? 'is-positive' : 'is-negative');
     setValueClass('resultCpqlReduction', data.percentageSavings >= 0 ? 'is-positive' : 'is-negative');
+    setValueClass('resultSameBudgetLeads', 'is-positive');
 }
 
 function populateHiddenCalculationFields(calc) {
@@ -179,6 +178,7 @@ function populateHiddenCalculationFields(calc) {
     setHidden('calcAnnualSavings', String(Math.round(calc.annualSavings)));
     setHidden('calcCpqlReduction', (Number.isFinite(calc.percentageSavings) ? calc.percentageSavings : 0).toFixed(1));
     setHidden('calcLeadsCount', String(Math.round(calc.leadsCount)));
+    setHidden('calcSameBudgetLeads', String(Math.round(calc.sameBudgetLeads)));
 }
 
 function initializeContactForm() {
