@@ -168,16 +168,22 @@ function updateResultsSection(data) {
     setText('resultLeadsCount', `${Math.round(data.leadsCount).toLocaleString()}`);
 
     // Savings metrics (shown in savings view)
-    setText('resultNewMonthlySpend', `$${Math.round(data.newMonthlySpend).toLocaleString()}`);
+    const sameBudgetLow = Math.round(data.sameBudgetLeads * 0.8);
+    const sameBudgetHigh = Math.round(data.sameBudgetLeads * 1.2);
+    setText('resultSameBudgetLeads', `${sameBudgetLow.toLocaleString()}–${sameBudgetHigh.toLocaleString()}`);
+
+    const additionalLeads = Math.round(data.sameBudgetLeads - data.leadsCount);
+    const additionalLeadsSign = additionalLeads > 0 ? '+' : '';
+    setText('resultAdditionalLeads', `${additionalLeadsSign}${additionalLeads.toLocaleString()}`);
+    setValueClass('resultAdditionalLeads', additionalLeads >= 0 ? 'is-positive' : 'is-negative');
+
     setText('resultMonthlySavings', `$${Math.round(data.monthlySavings).toLocaleString()}`);
     setText('resultAnnualSavings', `$${Math.round(data.annualSavings).toLocaleString()}`);
     setText('resultCpqlReduction', `${(Number.isFinite(data.percentageSavings) ? data.percentageSavings : 0).toFixed(1)}%`);
-    setText('resultSameBudgetLeads', `${Math.round(data.sameBudgetLeads).toLocaleString()}`);
 
     setValueClass('resultMonthlySavings', data.monthlySavings >= 0 ? 'is-positive' : 'is-negative');
     setValueClass('resultAnnualSavings', data.annualSavings >= 0 ? 'is-positive' : 'is-negative');
     setValueClass('resultCpqlReduction', data.percentageSavings >= 0 ? 'is-positive' : 'is-negative');
-    setValueClass('resultSameBudgetLeads', 'is-positive');
 
     // Toggle views based on whether they're outperforming our target
     const isOutstanding = data.currentCpl > 0 && data.currentCpl <= data.guaranteedCpl;
