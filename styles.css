@@ -543,6 +543,105 @@ input::placeholder {
     font-size: 14px;
 }
 
+/* Multi-step form */
+.form-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    gap: 0;
+}
+
+.step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+    background: var(--secondary-bg);
+}
+
+.step-item.active .step-circle,
+.step-item.done .step-circle {
+    border-color: var(--accent-color);
+    background: var(--gradient-1);
+    color: white;
+    box-shadow: 0 0 10px rgba(255, 0, 110, 0.3);
+}
+
+.step-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+}
+
+.step-item.active .step-label,
+.step-item.done .step-label {
+    color: var(--accent-color);
+}
+
+.step-line {
+    height: 2px;
+    width: 50px;
+    background: var(--border-color);
+    margin-bottom: 18px;
+    transition: background 0.3s ease;
+}
+
+.step-line.done {
+    background: var(--accent-color);
+}
+
+.form-nav {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.form-nav .submit-btn,
+.form-nav .step-next-btn {
+    flex: 1;
+}
+
+.back-btn {
+    padding: 14px 20px;
+    background: transparent;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-secondary);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.back-btn:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.field-hint {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    margin-left: 4px;
+}
+
 /* Admin Login Styles */
 .admin-login-container {
     display: flex;

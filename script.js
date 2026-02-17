@@ -110,7 +110,12 @@ function initializeCPLCalculator() {
         // Combine contact form data with calculator data and submit to database
         if (contactFormData) {
             const completeFormData = {
-                ...contactFormData,
+                firstName: contactFormData.firstName,
+                lastName: contactFormData.lastName,
+                email: contactFormData.email,
+                phone: contactFormData.phone,
+                lawFirm: contactFormData.lawFirm,
+                website: contactFormData.website || '',
                 calcCurrentMonthlySpend: String(Math.round(totalMonthlySpend)),
                 calcCurrentCpql: String(Math.round(currentCpl)),
                 calcGuaranteedCpql: String(Math.round(guaranteedCpl)),
@@ -183,34 +188,102 @@ function populateHiddenCalculationFields(calc) {
 
 function initializeContactForm() {
     const form = document.getElementById('contactForm');
-    
-    if (!form) {
-        console.log('Contact form not found');
-        return;
+    if (!form) return;
+
+    // US phone masking: (XXX) XXX-XXXX
+    const phoneInput = document.getElementById('phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            let val = e.target.value.replace(/\D/g, '').substring(0, 10);
+            if (val.length >= 6) {
+                val = `(${val.substring(0,3)}) ${val.substring(3,6)}-${val.substring(6)}`;
+            } else if (val.length >= 3) {
+                val = `(${val.substring(0,3)}) ${val.substring(3)}`;
+            } else if (val.length > 0) {
+                val = `(${val}`;
+            }
+            e.target.value = val;
+        });
     }
-    
+
+    // Step navigation
+    const goToStep = (step) => {
+        [1, 2, 3].forEach(n => {
+            const el = document.getElementById(`formStep${n}`);
+            if (el) el.style.display = n === step ? 'block' : 'none';
+
+            const stepItem = document.querySelector(`.step-item[data-step="${n}"]`);
+            if (stepItem) {
+                stepItem.classList.remove('active', 'done');
+                if (n < step) stepItem.classList.add('done');
+                if (n === step) stepItem.classList.add('active');
+            }
+        });
+
+        // Update step lines
+        document.querySelectorAll('.step-line').forEach((line, i) => {
+            line.classList.toggle('done', step > i + 1);
+        });
+    };
+
+    // Step 1 → 2
+    document.getElementById('step1Next')?.addEventListener('click', () => {
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        if (!firstName || !lastName) {
+            showNotification('Please enter your first and last name.', 'error');
+            return;
+        }
+        goToStep(2);
+        document.getElementById('email')?.focus();
+    });
+
+    // Step 2 → 1
+    document.getElementById('step2Back')?.addEventListener('click', () => goToStep(1));
+
+    // Step 2 → 3
+    document.getElementById('step2Next')?.addEventListener('click', () => {
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneDigits = phone.replace(/\D/g, '');
+
+        if (!email || !emailRegex.test(email)) {
+            showNotification('Please enter a valid email address.', 'error');
+            return;
+        }
+        if (phoneDigits.length !== 10) {
+            showNotification('Please enter a valid 10-digit US phone number.', 'error');
+            return;
+        }
+        goToStep(3);
+        document.getElementById('lawFirm')?.focus();
+    });
+
+    // Step 3 → 2
+    document.getElementById('step3Back')?.addEventListener('click', () => goToStep(2));
+
+    // Final submit
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        console.log('Contact form submitted');
 
-        // Get form data
+        const lawFirm = document.getElementById('lawFirm').value.trim();
+        if (!lawFirm) {
+            showNotification('Please enter your law firm name.', 'error');
+            return;
+        }
+
         contactFormData = {
-            firstName: document.getElementById('firstName').value,
-            lastName: document.getElementById('lastName').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            lawFirm: document.getElementById('lawFirm').value
+            firstName: document.getElementById('firstName').value.trim(),
+            lastName: document.getElementById('lastName').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            phone: document.getElementById('phone').value.trim(),
+            lawFirm,
+            website: document.getElementById('website').value.trim()
         };
 
         console.log('Contact form data stored:', contactFormData);
 
-        // Validate form
-        if (!validateContactForm(contactFormData)) {
-            console.log('Form validation failed');
-            return;
-        }
-
-        // Show calculator without submitting to database yet
         showNotification('Thank you! Access your calculator below.', 'success');
 
         const calculatorSection = document.getElementById('calculator');
@@ -218,38 +291,11 @@ function initializeContactForm() {
             calculatorSection.style.display = 'block';
             setTimeout(() => {
                 calculatorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-                // Focus on first input
                 const adSpendInput = document.getElementById('adSpend');
-                if (adSpendInput) {
-                    setTimeout(() => adSpendInput.focus(), 350);
-                }
+                if (adSpendInput) setTimeout(() => adSpendInput.focus(), 350);
             }, 300);
         }
     });
-}
-
-function validateContactForm(data) {
-    const required = ['firstName', 'lastName', 'email', 'phone', 'lawFirm'];
-
-    for (const field of required) {
-        if (!data[field] || data[field].trim() === '') {
-            console.log('Validation failed - missing field:', field);
-            showNotification(`Please fill in all required fields`, 'error');
-            return false;
-        }
-    }
-
-    // Validate email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(data.email)) {
-        console.log('Validation failed - invalid email:', data.email);
-        showNotification('Please enter a valid email address', 'error');
-        return false;
-    }
-
-    console.log('Contact form validation passed');
-    return true;
 }
 
 function submitToDatabase(formData) {

@@ -55,6 +55,7 @@ async function ensureSchema(poolInstance) {
       email TEXT,
       phone TEXT,
       law_firm TEXT,
+      website TEXT,
       calc_current_monthly_spend TEXT,
       calc_current_cpql TEXT,
       calc_guaranteed_cpql TEXT,
@@ -78,6 +79,11 @@ async function ensureSchema(poolInstance) {
     ALTER TABLE leads
     ADD COLUMN IF NOT EXISTS calc_same_budget_leads TEXT;
   `;
+
+  await poolInstance.sql`
+    ALTER TABLE leads
+    ADD COLUMN IF NOT EXISTS website TEXT;
+  `;
 }
 
 export default async function handler(req, res) {
@@ -95,6 +101,7 @@ export default async function handler(req, res) {
           email,
           phone,
           law_firm,
+          website,
           calc_current_monthly_spend,
           calc_current_cpql,
           calc_guaranteed_cpql,
@@ -111,6 +118,7 @@ export default async function handler(req, res) {
           ${body.email || ''},
           ${body.phone || ''},
           ${body.lawFirm || ''},
+          ${body.website || ''},
           ${body.calcCurrentMonthlySpend || ''},
           ${body.calcCurrentCpql || ''},
           ${body.calcGuaranteedCpql || ''},

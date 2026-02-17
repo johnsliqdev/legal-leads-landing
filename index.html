@@ -115,31 +115,72 @@
                 <div class="contact-card">
                     <h3>Get Your Free CPQL Analysis</h3>
                     <p class="calculator-desc">Enter your information to access our exclusive PI Case CPQL Calculator</p>
+
+                    <!-- Step Progress -->
+                    <div class="form-steps">
+                        <div class="step-item active" data-step="1">
+                            <div class="step-circle">1</div>
+                            <div class="step-label">You</div>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step-item" data-step="2">
+                            <div class="step-circle">2</div>
+                            <div class="step-label">Contact</div>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step-item" data-step="3">
+                            <div class="step-circle">3</div>
+                            <div class="step-label">Firm</div>
+                        </div>
+                    </div>
+
                     <form id="contactForm" class="contact-form">
-                        <div class="form-row">
+
+                        <!-- Step 1: Name -->
+                        <div class="form-step" id="formStep1">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" id="firstName" name="firstName" placeholder="John" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" id="lastName" name="lastName" placeholder="Smith" required>
+                                </div>
+                            </div>
+                            <button type="button" class="submit-btn" id="step1Next">Next →</button>
+                        </div>
+
+                        <!-- Step 2: Contact Info -->
+                        <div class="form-step" id="formStep2" style="display:none;">
                             <div class="form-group">
-                                <label for="firstName">First Name</label>
-                                <input type="text" id="firstName" name="firstName" required>
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" placeholder="john@smithlaw.com" required>
                             </div>
                             <div class="form-group">
-                                <label for="lastName">Last Name</label>
-                                <input type="text" id="lastName" name="lastName" required>
+                                <label for="phone">Phone Number <span class="field-hint">(US)</span></label>
+                                <input type="tel" id="phone" name="phone" placeholder="(555) 000-0000" maxlength="14" required>
+                            </div>
+                            <div class="form-nav">
+                                <button type="button" class="back-btn" id="step2Back">← Back</button>
+                                <button type="button" class="submit-btn step-next-btn" id="step2Next">Next →</button>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="lawFirm">Law Firm Name</label>
-                            <input type="text" id="lawFirm" name="lawFirm" required>
+                        <!-- Step 3: Firm Info -->
+                        <div class="form-step" id="formStep3" style="display:none;">
+                            <div class="form-group">
+                                <label for="lawFirm">Law Firm Name</label>
+                                <input type="text" id="lawFirm" name="lawFirm" placeholder="Smith & Associates" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="website">Website <span class="field-hint">(optional)</span></label>
+                                <input type="url" id="website" name="website" placeholder="https://yourfirm.com">
+                            </div>
+                            <div class="form-nav">
+                                <button type="button" class="back-btn" id="step3Back">← Back</button>
+                                <button type="submit" class="submit-btn step-next-btn">Access Calculator</button>
+                            </div>
                         </div>
 
                         <input type="hidden" id="calcCurrentMonthlySpend" name="calcCurrentMonthlySpend">
@@ -151,8 +192,6 @@
                         <input type="hidden" id="calcCpqlReduction" name="calcCpqlReduction">
                         <input type="hidden" id="calcLeadsCount" name="calcLeadsCount">
                         <input type="hidden" id="calcSameBudgetLeads" name="calcSameBudgetLeads">
-
-                        <button type="submit" class="submit-btn">Access Calculator</button>
                     </form>
                 </div>
             </div>
