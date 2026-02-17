@@ -177,12 +177,7 @@ function updateResultsSection(data) {
     setText('resultAdditionalLeads', `${additionalLeadsSign}${additionalLeads.toLocaleString()}`);
     setValueClass('resultAdditionalLeads', additionalLeads >= 0 ? 'is-positive' : 'is-negative');
 
-    setText('resultMonthlySavings', `$${Math.round(data.monthlySavings).toLocaleString()}`);
-    setText('resultAnnualSavings', `$${Math.round(data.annualSavings).toLocaleString()}`);
     setText('resultCpqlReduction', `${(Number.isFinite(data.percentageSavings) ? data.percentageSavings : 0).toFixed(1)}%`);
-
-    setValueClass('resultMonthlySavings', data.monthlySavings >= 0 ? 'is-positive' : 'is-negative');
-    setValueClass('resultAnnualSavings', data.annualSavings >= 0 ? 'is-positive' : 'is-negative');
     setValueClass('resultCpqlReduction', data.percentageSavings >= 0 ? 'is-positive' : 'is-negative');
 
     // Toggle views based on whether they're outperforming our target
