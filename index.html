@@ -199,28 +199,68 @@
 
         <section id="calculator" class="calculator-section" style="display: none;">
             <div class="container">
-                <div class="calculator-card">
-                    <h3>PI Case CPQL Calculator</h3>
-                    <p class="calculator-desc">Find out your current Cost per Qualified Lead for Personal Injury cases in seconds</p>
-                    
-                    <form id="cplForm" class="calculator-form">
-                        <div class="form-group">
-                            <label for="adSpend">Monthly Ad Spend ($)</label>
-                            <input type="number" id="adSpend" name="adSpend" placeholder="5000" required min="0" step="0.01">
+                <div class="calculator-layout">
+                    <div class="calculator-card">
+                        <h3>PI Case CPQL Calculator</h3>
+                        <p class="calculator-desc">Find out your current Cost per Qualified Lead for Personal Injury cases in seconds</p>
+
+                        <form id="cplForm" class="calculator-form">
+                            <div class="form-group">
+                                <label for="adSpend">Monthly Ad Spend ($)</label>
+                                <input type="number" id="adSpend" name="adSpend" placeholder="5000" required min="0" step="0.01">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="marketingFees">Monthly Marketing Fees ($)</label>
+                                <input type="number" id="marketingFees" name="marketingFees" placeholder="2000" required min="0" step="0.01">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="leadsCount">Number of PI Leads per Month</label>
+                                <input type="number" id="leadsCount" name="leadsCount" placeholder="50" required min="0.01" step="0.01">
+                            </div>
+
+                            <button type="submit" class="calculate-btn">Calculate My PI Case CPQL</button>
+                        </form>
+                    </div>
+
+                    <div class="calculator-legend">
+                        <div class="legend-card floating-1" id="legend-adSpend" data-field="adSpend">
+                            <div class="legend-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" fill="currentColor"/>
+                                </svg>
+                            </div>
+                            <div class="legend-content">
+                                <h4>Monthly Ad Spend</h4>
+                                <p>The budget you're paying directly to platforms — <strong>Meta, Google, LinkedIn, TikTok, lead aggregators</strong> and any other paid channel. This is media spend only, before any fees.</p>
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="marketingFees">Monthly Marketing Fees ($)</label>
-                            <input type="number" id="marketingFees" name="marketingFees" placeholder="2000" required min="0" step="0.01">
+                        <div class="legend-card floating-2" id="legend-marketingFees" data-field="marketingFees">
+                            <div class="legend-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 6h-2.18c.07-.44.18-.88.18-1.34C18 2.54 15.96.5 13.5.5c-1.32 0-2.5.54-3.36 1.4L9 3l-1.14-1.1C6.96 1.04 5.78.5 4.5.5 2.04.5 0 2.54 0 5c0 .48.11.9.18 1.34H0v14h20V6zm-8.5 12H3.5V8h8v10zm8.5 0h-6.5V8H20v10zM4.5 3c.9 0 1.63.73 1.63 1.63 0 .9-.73 1.63-1.63 1.63S2.87 5.53 2.87 4.63C2.87 3.73 3.6 3 4.5 3zm9 0c.9 0 1.63.73 1.63 1.63 0 .9-.73 1.63-1.63 1.63s-1.63-.73-1.63-1.63C11.87 3.73 12.6 3 13.5 3z" fill="currentColor"/>
+                                </svg>
+                            </div>
+                            <div class="legend-content">
+                                <h4>Monthly Marketing Fees</h4>
+                                <p>Your acquisition overhead — <strong>agency retainers, in-house team salaries, CRM tools, landing page software, analytics platforms</strong> and any other cost tied to running your marketing operation.</p>
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="leadsCount">Number of PI Leads per Month</label>
-                            <input type="number" id="leadsCount" name="leadsCount" placeholder="50" required min="0.01" step="0.01">
+                        <div class="legend-card floating-3" id="legend-leadsCount" data-field="leadsCount">
+                            <div class="legend-icon">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
+                                </svg>
+                            </div>
+                            <div class="legend-content">
+                                <h4>Qualified Lead</h4>
+                                <p>Not every inquiry is a lead. A <strong>qualified lead</strong> is a prospect who has confirmed intent, a viable case, and a high probability to retain — someone with an <strong>extremely high chance to close</strong>, not just a name on a list.</p>
+                            </div>
                         </div>
-                        
-                        <button type="submit" class="calculate-btn">Calculate My PI Case CPQL</button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </section>

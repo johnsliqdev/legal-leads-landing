@@ -51,6 +51,16 @@ function initializeCPLCalculator() {
         return;
     }
 
+    // Legend card highlight on input focus
+    ['adSpend', 'marketingFees', 'leadsCount'].forEach(fieldId => {
+        const input = document.getElementById(fieldId);
+        const card = document.getElementById(`legend-${fieldId}`);
+        if (!input || !card) return;
+
+        input.addEventListener('focus', () => card.classList.add('is-active'));
+        input.addEventListener('blur', () => card.classList.remove('is-active'));
+    });
+
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         console.log('Calculator form submitted');
