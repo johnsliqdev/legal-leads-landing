@@ -499,6 +499,66 @@ input::placeholder {
      margin-top: 28px;
  }
 
+.results-grid-top {
+    margin-bottom: 10px;
+}
+
+.results-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 28px 0 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-secondary);
+}
+
+.results-divider::before,
+.results-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-color);
+}
+
+.results-outstanding-msg {
+    text-align: center;
+    padding: 32px 24px;
+    background: linear-gradient(135deg, rgba(255, 0, 110, 0.06) 0%, rgba(255, 64, 129, 0.03) 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 0, 110, 0.25);
+    margin: 20px 0;
+}
+
+.outstanding-icon {
+    font-size: 36px;
+    color: var(--accent-color);
+    margin-bottom: 14px;
+    display: block;
+}
+
+.results-outstanding-msg h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+}
+
+.results-outstanding-msg p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.65;
+    max-width: 520px;
+    margin: 0 auto 10px;
+}
+
+.outstanding-sub {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
 .callback-cta {
     margin-top: 40px;
     padding-top: 30px;

@@ -268,8 +268,10 @@
         <section id="results" class="results-section" style="display: none;">
             <div class="container">
                 <div class="results-card">
-                    <h2>Your Potential Savings</h2>
-                    <div class="results-grid">
+                    <h2 id="resultsHeading">Your PI Case CPQL Analysis</h2>
+
+                    <!-- Always visible: their current numbers -->
+                    <div class="results-grid results-grid-top">
                         <div class="result-metric">
                             <div class="result-label">You're Currently Spending on Marketing</div>
                             <div class="result-value" id="resultCurrentMonthlySpend">$0</div>
@@ -282,32 +284,49 @@
                             <div class="result-label">You're Getting This Many Leads</div>
                             <div class="result-value" id="resultLeadsCount">0</div>
                         </div>
-                        <div class="result-metric">
-                            <div class="result-label">With Us, You'll Spend</div>
-                            <div class="result-value" id="resultNewMonthlySpend">$0</div>
+                    </div>
+
+                    <!-- Savings view: shown when their CPQL > our guaranteed rate -->
+                    <div id="resultsSavingsView">
+                        <div class="results-divider"><span>Your Potential with Sliq</span></div>
+                        <div class="results-grid">
+                            <div class="result-metric">
+                                <div class="result-label">With Us, You'll Spend</div>
+                                <div class="result-value" id="resultNewMonthlySpend">$0</div>
+                            </div>
+                            <div class="result-metric">
+                                <div class="result-label">You'll Be Saving Monthly</div>
+                                <div class="result-value" id="resultMonthlySavings">$0</div>
+                            </div>
+                            <div class="result-metric">
+                                <div class="result-label">You'll Be Saving Annually</div>
+                                <div class="result-value" id="resultAnnualSavings">$0</div>
+                            </div>
+                            <div class="result-metric">
+                                <div class="result-label">Your CPQL Reduction</div>
+                                <div class="result-value" id="resultCpqlReduction">0%</div>
+                            </div>
+                            <div class="result-metric">
+                                <div class="result-label">With the Same Budget, You'll Get</div>
+                                <div class="result-value" id="resultSameBudgetLeads">0</div>
+                                <div class="result-sublabel">qualified leads</div>
+                            </div>
                         </div>
-                        <div class="result-metric">
-                            <div class="result-label">You'll Be Saving Monthly</div>
-                            <div class="result-value" id="resultMonthlySavings">$0</div>
-                        </div>
-                        <div class="result-metric">
-                            <div class="result-label">You'll Be Saving Annually</div>
-                            <div class="result-value" id="resultAnnualSavings">$0</div>
-                        </div>
-                        <div class="result-metric">
-                            <div class="result-label">Your CPQL Reduction</div>
-                            <div class="result-value" id="resultCpqlReduction">0%</div>
-                        </div>
-                        <div class="result-metric">
-                            <div class="result-label">With the Same Budget, You'll Get</div>
-                            <div class="result-value" id="resultSameBudgetLeads">0</div>
-                            <div class="result-sublabel">qualified leads</div>
+                    </div>
+
+                    <!-- Outstanding view: shown when their CPQL is already <= our guaranteed rate -->
+                    <div id="resultsOutstandingView" style="display: none;">
+                        <div class="results-outstanding-msg">
+                            <div class="outstanding-icon">&#9733;</div>
+                            <h3>You're Already Performing at an Outstanding CPQL</h3>
+                            <p>Your current CPQL of <strong id="outstandingCurrentCpql">$0</strong> is already below our standard guaranteed rate — you're operating at an elite level for PI case acquisition.</p>
+                            <p class="outstanding-sub">If you're considering optimizing your numbers further, scaling without sacrificing lead quality, or exploring what's possible beyond your current ceiling — we'd love to talk.</p>
                         </div>
                     </div>
 
                     <div class="callback-cta">
-                        <h4>Want to discuss these savings?</h4>
-                        <p>Let's talk about how we can achieve these results for your firm</p>
+                        <h4 id="callbackCtaHeading">Want to discuss these savings?</h4>
+                        <p id="callbackCtaText">Let's talk about how we can achieve these results for your firm</p>
                         <button type="button" class="submit-btn" id="requestCallbackBtn">Request a Callback</button>
                     </div>
                 </div>

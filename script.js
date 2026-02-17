@@ -162,19 +162,46 @@ function updateResultsSection(data) {
         if (kind) el.classList.add(kind);
     };
 
+    // Always-visible metrics
     setText('resultCurrentMonthlySpend', `$${Math.round(data.totalMonthlySpend).toLocaleString()}`);
     setText('resultCurrentCpql', `$${Math.round(data.currentCpl).toLocaleString()}`);
+    setText('resultLeadsCount', `${Math.round(data.leadsCount).toLocaleString()}`);
+
+    // Savings metrics (shown in savings view)
     setText('resultNewMonthlySpend', `$${Math.round(data.newMonthlySpend).toLocaleString()}`);
     setText('resultMonthlySavings', `$${Math.round(data.monthlySavings).toLocaleString()}`);
     setText('resultAnnualSavings', `$${Math.round(data.annualSavings).toLocaleString()}`);
     setText('resultCpqlReduction', `${(Number.isFinite(data.percentageSavings) ? data.percentageSavings : 0).toFixed(1)}%`);
-    setText('resultLeadsCount', `${Math.round(data.leadsCount).toLocaleString()}`);
     setText('resultSameBudgetLeads', `${Math.round(data.sameBudgetLeads).toLocaleString()}`);
 
     setValueClass('resultMonthlySavings', data.monthlySavings >= 0 ? 'is-positive' : 'is-negative');
     setValueClass('resultAnnualSavings', data.annualSavings >= 0 ? 'is-positive' : 'is-negative');
     setValueClass('resultCpqlReduction', data.percentageSavings >= 0 ? 'is-positive' : 'is-negative');
     setValueClass('resultSameBudgetLeads', 'is-positive');
+
+    // Toggle views based on whether they're outperforming our target
+    const isOutstanding = data.currentCpl > 0 && data.currentCpl <= data.guaranteedCpl;
+
+    const savingsView = document.getElementById('resultsSavingsView');
+    const outstandingView = document.getElementById('resultsOutstandingView');
+    const callbackCtaHeading = document.getElementById('callbackCtaHeading');
+    const callbackCtaText = document.getElementById('callbackCtaText');
+    const callbackBtn = document.getElementById('requestCallbackBtn');
+
+    if (isOutstanding) {
+        if (savingsView) savingsView.style.display = 'none';
+        if (outstandingView) outstandingView.style.display = 'block';
+        setText('outstandingCurrentCpql', `$${Math.round(data.currentCpl).toLocaleString()}`);
+        if (callbackCtaHeading) callbackCtaHeading.textContent = 'Interested in going even further?';
+        if (callbackCtaText) callbackCtaText.textContent = "Your CPQL is already exceptional. Let's talk about scaling your results without sacrificing quality.";
+        if (callbackBtn) callbackBtn.textContent = 'Discuss My Growth Strategy';
+    } else {
+        if (savingsView) savingsView.style.display = 'block';
+        if (outstandingView) outstandingView.style.display = 'none';
+        if (callbackCtaHeading) callbackCtaHeading.textContent = 'Want to discuss these savings?';
+        if (callbackCtaText) callbackCtaText.textContent = "Let's talk about how we can achieve these results for your firm";
+        if (callbackBtn) callbackBtn.textContent = 'Request a Callback';
+    }
 }
 
 function populateHiddenCalculationFields(calc) {
