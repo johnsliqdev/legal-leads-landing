@@ -719,6 +719,92 @@ input::placeholder {
     color: var(--text-secondary);
 }
 
+/* Scroll Indicator */
+.scroll-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 40px;
+    opacity: 0.7;
+    animation: fadeInScroll 1s ease 0.5s both;
+}
+
+@keyframes fadeInScroll {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 0.7; transform: translateY(0); }
+}
+
+.scroll-mouse {
+    width: 26px;
+    height: 40px;
+    border: 2px solid rgba(255, 0, 110, 0.8);
+    border-radius: 13px;
+    display: flex;
+    justify-content: center;
+    padding-top: 6px;
+    box-shadow: 0 0 12px rgba(255, 0, 110, 0.4), inset 0 0 8px rgba(255, 0, 110, 0.1);
+    position: relative;
+}
+
+.scroll-mouse::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 17px;
+    border: 1px solid rgba(255, 0, 110, 0.2);
+    animation: mousePulse 2s ease-in-out infinite;
+}
+
+@keyframes mousePulse {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0; transform: scale(1.15); }
+}
+
+.scroll-dot {
+    width: 4px;
+    height: 8px;
+    background: var(--accent-color);
+    border-radius: 2px;
+    animation: scrollDot 1.8s ease-in-out infinite;
+    box-shadow: 0 0 6px var(--accent-color);
+}
+
+@keyframes scrollDot {
+    0% { transform: translateY(0); opacity: 1; }
+    60% { transform: translateY(12px); opacity: 0; }
+    61% { transform: translateY(0); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.scroll-arrows {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.scroll-arrows span {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--accent-color);
+    border-bottom: 2px solid var(--accent-color);
+    transform: rotate(45deg);
+    animation: arrowFade 1.8s ease-in-out infinite;
+    box-shadow: 2px 2px 4px rgba(255, 0, 110, 0.3);
+}
+
+.scroll-arrows span:nth-child(2) {
+    animation-delay: 0.2s;
+    opacity: 0.5;
+}
+
+@keyframes arrowFade {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+}
+
 /* Why Overspend Section */
 .why-overspend-section {
     padding: 40px 0;
