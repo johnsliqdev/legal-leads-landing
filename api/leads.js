@@ -45,6 +45,20 @@ function getAdminToken(req) {
   return header;
 }
 
+async function fireGhlWebhook(payload) {
+  const ghlWebhookUrl = process.env.GHL_WEBHOOK_URL;
+  if (!ghlWebhookUrl) return;
+  try {
+    await fetch(ghlWebhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch (err) {
+    console.error('GHL webhook error:', err);
+  }
+}
+
 async function ensureSchema(poolInstance) {
   await poolInstance.sql`
     CREATE TABLE IF NOT EXISTS leads (
@@ -94,68 +108,89 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
 
-      await poolInstance.sql`
+      const { rows } = await poolInstance.sql`
         INSERT INTO leads (
-          first_name,
-          last_name,
-          email,
-          phone,
-          law_firm,
-          website,
-          calc_current_monthly_spend,
-          calc_current_cpql,
-          calc_guaranteed_cpql,
-          calc_new_monthly_spend,
-          calc_monthly_savings,
-          calc_annual_savings,
-          calc_cpql_reduction,
-          calc_leads_count,
-          calc_same_budget_leads,
+          first_name, last_name, email, phone, law_firm, website,
+          calc_current_monthly_spend, calc_current_cpql, calc_guaranteed_cpql,
+          calc_new_monthly_spend, calc_monthly_savings, calc_annual_savings,
+          calc_cpql_reduction, calc_leads_count, calc_same_budget_leads,
           requested_callback
         ) VALUES (
-          ${body.firstName || ''},
-          ${body.lastName || ''},
-          ${body.email || ''},
-          ${body.phone || ''},
-          ${body.lawFirm || ''},
-          ${body.website || ''},
-          ${body.calcCurrentMonthlySpend || ''},
-          ${body.calcCurrentCpql || ''},
-          ${body.calcGuaranteedCpql || ''},
-          ${body.calcNewMonthlySpend || ''},
-          ${body.calcMonthlySavings || ''},
-          ${body.calcAnnualSavings || ''},
-          ${body.calcCpqlReduction || ''},
-          ${body.calcLeadsCount || ''},
-          ${body.calcSameBudgetLeads || ''},
-          ${body.requestedCallback || false}
-        );
+          ${body.firstName || null}, ${body.lastName || null},
+          ${body.email || null}, ${body.phone || null},
+          ${body.lawFirm || null}, ${body.website === '' ? '' : (body.website || null)},
+          ${body.calcCurrentMonthlySpend || null}, ${body.calcCurrentCpql || null},
+          ${body.calcGuaranteedCpql || null}, ${body.calcNewMonthlySpend || null},
+          ${body.calcMonthlySavings || null}, ${body.calcAnnualSavings || null},
+          ${body.calcCpqlReduction || null}, ${body.calcLeadsCount || null},
+          ${body.calcSameBudgetLeads || null}, ${body.requestedCallback || false}
+        )
+        RETURNING id;
       `;
 
-      // Fire GHL webhook (awaited so it completes before the function exits)
-      const ghlWebhookUrl = process.env.GHL_WEBHOOK_URL;
-      if (ghlWebhookUrl) {
-        try {
-          await fetch(ghlWebhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              first_name: body.firstName || '',
-              last_name: body.lastName || '',
-              email: body.email || '',
-              phone: body.phone || '',
-              company_name: body.lawFirm || '',
-              website: body.website || '',
-              current_monthly_spend: body.calcCurrentMonthlySpend || '',
-              current_cpql: body.calcCurrentCpql || '',
-              guaranteed_cpql: body.calcGuaranteedCpql || '',
-              cpql_reduction: body.calcCpqlReduction || '',
-              leads_count: body.calcLeadsCount || '',
-              same_budget_leads: body.calcSameBudgetLeads || '',
-            }),
+      const insertedId = rows[0].id;
+
+      // Fire GHL webhook only if calc data is present (full-insert fallback)
+      if (body.calcCurrentCpql) {
+        await fireGhlWebhook({
+          first_name: body.firstName || '', last_name: body.lastName || '',
+          email: body.email || '', phone: body.phone || '',
+          company_name: body.lawFirm || '', website: body.website || '',
+          current_monthly_spend: body.calcCurrentMonthlySpend || '',
+          current_cpql: body.calcCurrentCpql || '',
+          guaranteed_cpql: body.calcGuaranteedCpql || '',
+          cpql_reduction: body.calcCpqlReduction || '',
+          leads_count: body.calcLeadsCount || '',
+          same_budget_leads: body.calcSameBudgetLeads || '',
+        });
+      }
+
+      return json(res, 200, { success: true, id: insertedId });
+    }
+
+    if (req.method === 'PATCH') {
+      const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+      if (!body.id) return json(res, 400, { error: 'id is required for PATCH' });
+
+      const id = Number(body.id);
+      const toVal = (v) => (v === undefined || v === '' ? null : v);
+      const websiteVal = body.website === undefined ? null : body.website;
+
+      await poolInstance.sql`
+        UPDATE leads SET
+          email = COALESCE(${toVal(body.email)}, email),
+          phone = COALESCE(${toVal(body.phone)}, phone),
+          law_firm = COALESCE(${toVal(body.lawFirm)}, law_firm),
+          website = COALESCE(${websiteVal}, website),
+          calc_current_monthly_spend = COALESCE(${toVal(body.calcCurrentMonthlySpend)}, calc_current_monthly_spend),
+          calc_current_cpql = COALESCE(${toVal(body.calcCurrentCpql)}, calc_current_cpql),
+          calc_guaranteed_cpql = COALESCE(${toVal(body.calcGuaranteedCpql)}, calc_guaranteed_cpql),
+          calc_new_monthly_spend = COALESCE(${toVal(body.calcNewMonthlySpend)}, calc_new_monthly_spend),
+          calc_monthly_savings = COALESCE(${toVal(body.calcMonthlySavings)}, calc_monthly_savings),
+          calc_annual_savings = COALESCE(${toVal(body.calcAnnualSavings)}, calc_annual_savings),
+          calc_cpql_reduction = COALESCE(${toVal(body.calcCpqlReduction)}, calc_cpql_reduction),
+          calc_leads_count = COALESCE(${toVal(body.calcLeadsCount)}, calc_leads_count),
+          calc_same_budget_leads = COALESCE(${toVal(body.calcSameBudgetLeads)}, calc_same_budget_leads),
+          requested_callback = COALESCE(${body.requestedCallback === undefined ? null : body.requestedCallback}, requested_callback)
+        WHERE id = ${id};
+      `;
+
+      // Fire GHL webhook when calc data is included — SELECT full row for complete payload
+      if (body.calcCurrentCpql) {
+        const { rows } = await poolInstance.sql`SELECT * FROM leads WHERE id = ${id} LIMIT 1;`;
+        if (rows.length > 0) {
+          const row = rows[0];
+          await fireGhlWebhook({
+            first_name: row.first_name || '', last_name: row.last_name || '',
+            email: row.email || '', phone: row.phone || '',
+            company_name: row.law_firm || '', website: row.website || '',
+            current_monthly_spend: row.calc_current_monthly_spend || '',
+            current_cpql: row.calc_current_cpql || '',
+            guaranteed_cpql: row.calc_guaranteed_cpql || '',
+            cpql_reduction: row.calc_cpql_reduction || '',
+            leads_count: row.calc_leads_count || '',
+            same_budget_leads: row.calc_same_budget_leads || '',
           });
-        } catch (err) {
-          console.error('GHL webhook error:', err);
         }
       }
 
@@ -191,7 +226,7 @@ export default async function handler(req, res) {
       return json(res, 200, { success: true });
     }
 
-    res.setHeader('Allow', 'GET,POST,DELETE');
+    res.setHeader('Allow', 'GET,POST,PATCH,DELETE');
     return json(res, 405, { error: 'method_not_allowed' });
   } catch (err) {
     return json(res, 500, { error: String(err?.message || err) });

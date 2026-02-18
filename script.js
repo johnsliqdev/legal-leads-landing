@@ -3,6 +3,7 @@
 let lastCalculation = null;
 let cpqlTarget = 700;
 let contactFormData = null;
+let leadId = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Page loaded');
@@ -117,15 +118,9 @@ function initializeCPLCalculator() {
 
         populateHiddenCalculationFields(lastCalculation);
 
-        // Combine contact form data with calculator data and submit to database
+        // Submit calculator data to database
         if (contactFormData) {
-            const completeFormData = {
-                firstName: contactFormData.firstName,
-                lastName: contactFormData.lastName,
-                email: contactFormData.email,
-                phone: contactFormData.phone,
-                lawFirm: contactFormData.lawFirm,
-                website: contactFormData.website || '',
+            const calcFields = {
                 calcCurrentMonthlySpend: String(Math.round(totalMonthlySpend)),
                 calcCurrentCpql: String(Math.round(currentCpl)),
                 calcGuaranteedCpql: String(Math.round(guaranteedCpl)),
@@ -137,8 +132,30 @@ function initializeCPLCalculator() {
                 calcSameBudgetLeads: String(Math.round(sameBudgetLeads))
             };
 
-            console.log('Submitting complete form data:', completeFormData);
-            submitToDatabase(completeFormData);
+            if (leadId) {
+                // Incremental path: PATCH calc fields + re-send contact as safety net
+                console.log('PATCHing calc data to lead:', leadId);
+                patchLead({
+                    email: contactFormData.email,
+                    phone: contactFormData.phone,
+                    lawFirm: contactFormData.lawFirm,
+                    website: contactFormData.website,
+                    ...calcFields
+                }).then(() => showNotification('Thank you! Your results are ready.', 'success'));
+            } else {
+                // Fallback: full insert (step 1 POST failed)
+                const completeFormData = {
+                    firstName: contactFormData.firstName,
+                    lastName: contactFormData.lastName,
+                    email: contactFormData.email,
+                    phone: contactFormData.phone,
+                    lawFirm: contactFormData.lawFirm,
+                    website: contactFormData.website || '',
+                    ...calcFields
+                };
+                console.log('Fallback: full insert:', completeFormData);
+                submitToDatabase(completeFormData);
+            }
         }
 
         const resultsSection = document.getElementById('results');
@@ -264,7 +281,7 @@ function initializeContactForm() {
         });
     };
 
-    // Step 1 → 2
+    // Step 1 → 2 (POST to create lead row)
     document.getElementById('step1Next')?.addEventListener('click', () => {
         const firstName = document.getElementById('firstName').value.trim();
         const lastName = document.getElementById('lastName').value.trim();
@@ -274,12 +291,28 @@ function initializeContactForm() {
         }
         goToStep(2);
         document.getElementById('email')?.focus();
+
+        // Create the lead row in the background
+        fetch('/api/leads', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ firstName, lastName })
+        })
+            .then(async (res) => {
+                if (!res.ok) throw new Error(`POST failed: ${res.status}`);
+                return res.json();
+            })
+            .then((data) => {
+                leadId = data.id;
+                console.log('Lead created with id:', leadId);
+            })
+            .catch((err) => console.error('Step 1 POST failed:', err));
     });
 
     // Step 2 → 1
     document.getElementById('step2Back')?.addEventListener('click', () => goToStep(1));
 
-    // Step 2 → 3
+    // Step 2 → 3 (PATCH contact info)
     document.getElementById('step2Next')?.addEventListener('click', () => {
         const email = document.getElementById('email').value.trim();
         const phone = document.getElementById('phone').value.trim();
@@ -296,6 +329,8 @@ function initializeContactForm() {
         }
         goToStep(3);
         document.getElementById('lawFirm')?.focus();
+
+        patchLead({ email, phone });
     });
 
     // Step 3 → 2
@@ -323,6 +358,9 @@ function initializeContactForm() {
         console.log('Contact form data stored:', contactFormData);
 
         showNotification('Thank you! Access your calculator below.', 'success');
+
+        // PATCH firm info
+        patchLead({ lawFirm, website: document.getElementById('website').value.trim() });
 
         const calculatorSection = document.getElementById('calculator');
         if (calculatorSection) {
@@ -356,8 +394,9 @@ function submitToDatabase(formData) {
             }
             return res.json();
         })
-        .then(() => {
+        .then((data) => {
             console.log('Complete data submitted successfully to database');
+            if (data.id) leadId = data.id;
             showNotification('Thank you! Your results are ready.', 'success');
         })
         .catch((err) => {
@@ -381,6 +420,29 @@ function saveSubmission(formData) {
     localStorage.setItem('submissions', JSON.stringify(submissions));
     
     console.log('Submission saved:', submission);
+}
+
+function patchLead(fields) {
+    if (!leadId) {
+        console.warn('patchLead called without leadId; skipping');
+        return Promise.resolve(null);
+    }
+    return fetch('/api/leads', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: leadId, ...fields })
+    })
+        .then(async (res) => {
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(`PATCH failed: ${res.status} ${text}`);
+            }
+            return res.json();
+        })
+        .catch((err) => {
+            console.error('patchLead error:', err);
+            return null;
+        });
 }
 
 function initializeCallbackButton() {
@@ -418,41 +480,40 @@ function requestCallback() {
         return;
     }
 
-    const callbackData = {
-        email: contactFormData.email,
-        requestedCallback: true
+    const onSuccess = () => {
+        console.log('Callback request successful');
+        showNotification('Callback requested! We\'ll contact you within 24 hours.', 'success');
+        if (callbackBtn) {
+            callbackBtn.textContent = 'Callback Requested \u2713';
+            callbackBtn.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+        }
     };
 
-    fetch('/api/leads/callback', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(callbackData)
-    })
-        .then(async (res) => {
-            if (!res.ok) {
-                const text = await res.text();
-                throw new Error(`Callback request failed: ${res.status} ${text}`);
-            }
-            return res.json();
+    const onError = (err) => {
+        console.error(err);
+        showNotification('Unable to process callback request. Please try again.', 'error');
+        if (callbackBtn) {
+            callbackBtn.disabled = false;
+            callbackBtn.textContent = 'Request a Callback';
+        }
+    };
+
+    if (leadId) {
+        patchLead({ requestedCallback: true })
+            .then((result) => { if (result) onSuccess(); else onError(new Error('PATCH returned null')); });
+    } else {
+        fetch('/api/leads/callback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: contactFormData.email, requestedCallback: true })
         })
-        .then(() => {
-            console.log('Callback request successful');
-            showNotification('Callback requested! We\'ll contact you within 24 hours.', 'success');
-            if (callbackBtn) {
-                callbackBtn.textContent = 'Callback Requested ✓';
-                callbackBtn.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
-            }
-        })
-        .catch((err) => {
-            console.error(err);
-            showNotification('Unable to process callback request. Please try again.', 'error');
-            if (callbackBtn) {
-                callbackBtn.disabled = false;
-                callbackBtn.textContent = 'Request a Callback';
-            }
-        });
+            .then(async (res) => {
+                if (!res.ok) throw new Error(`Callback failed: ${res.status}`);
+                return res.json();
+            })
+            .then(onSuccess)
+            .catch(onError);
+    }
 }
 
 function showNotification(message, type) {
