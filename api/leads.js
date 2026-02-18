@@ -132,27 +132,31 @@ export default async function handler(req, res) {
         );
       `;
 
-      // Fire GHL webhook (non-blocking — lead is already saved)
+      // Fire GHL webhook (awaited so it completes before the function exits)
       const ghlWebhookUrl = process.env.GHL_WEBHOOK_URL;
       if (ghlWebhookUrl) {
-        fetch(ghlWebhookUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            first_name: body.firstName || '',
-            last_name: body.lastName || '',
-            email: body.email || '',
-            phone: body.phone || '',
-            company_name: body.lawFirm || '',
-            website: body.website || '',
-            current_monthly_spend: body.calcCurrentMonthlySpend || '',
-            current_cpql: body.calcCurrentCpql || '',
-            guaranteed_cpql: body.calcGuaranteedCpql || '',
-            cpql_reduction: body.calcCpqlReduction || '',
-            leads_count: body.calcLeadsCount || '',
-            same_budget_leads: body.calcSameBudgetLeads || '',
-          }),
-        }).catch((err) => console.error('GHL webhook error:', err));
+        try {
+          await fetch(ghlWebhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              first_name: body.firstName || '',
+              last_name: body.lastName || '',
+              email: body.email || '',
+              phone: body.phone || '',
+              company_name: body.lawFirm || '',
+              website: body.website || '',
+              current_monthly_spend: body.calcCurrentMonthlySpend || '',
+              current_cpql: body.calcCurrentCpql || '',
+              guaranteed_cpql: body.calcGuaranteedCpql || '',
+              cpql_reduction: body.calcCpqlReduction || '',
+              leads_count: body.calcLeadsCount || '',
+              same_budget_leads: body.calcSameBudgetLeads || '',
+            }),
+          });
+        } catch (err) {
+          console.error('GHL webhook error:', err);
+        }
       }
 
       return json(res, 200, { success: true });
