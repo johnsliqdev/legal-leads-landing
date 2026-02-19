@@ -357,20 +357,33 @@ function initializeContactForm() {
 
         console.log('Contact form data stored:', contactFormData);
 
-        showNotification('Thank you! Access your calculator below.', 'success');
+        showNotification('Calculator unlocked! Enter your numbers below.', 'success');
 
         // PATCH firm info
         patchLead({ lawFirm, website: document.getElementById('website').value.trim() });
 
-        const calculatorSection = document.getElementById('calculator');
-        if (calculatorSection) {
-            calculatorSection.style.display = 'block';
-            setTimeout(() => {
-                calculatorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                const adSpendInput = document.getElementById('adSpend');
-                if (adSpendInput) setTimeout(() => adSpendInput.focus(), 350);
-            }, 300);
-        }
+        // Unlock the hero calculator
+        const heroCalcCard = document.querySelector('.hero-calculator-card');
+        const lockOverlay = document.querySelector('.calculator-lock-overlay');
+        const calcInputs = document.querySelectorAll('#cplForm input');
+        const calcButton = document.querySelector('#cplForm button[type="submit"]');
+        const heroLegend = document.getElementById('heroLegend');
+
+        if (heroCalcCard) heroCalcCard.classList.remove('locked');
+        if (lockOverlay) lockOverlay.style.display = 'none';
+
+        // Enable calculator inputs
+        calcInputs.forEach(input => input.removeAttribute('disabled'));
+        if (calcButton) calcButton.removeAttribute('disabled');
+
+        // Show legend cards
+        if (heroLegend) heroLegend.style.display = 'grid';
+
+        // Focus first calculator input
+        setTimeout(() => {
+            const adSpendInput = document.getElementById('adSpend');
+            if (adSpendInput) adSpendInput.focus();
+        }, 300);
     });
 }
 
