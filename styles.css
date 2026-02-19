@@ -214,15 +214,15 @@ body::before {
 
 /* Hero Section */
 .hero {
-    padding: 50px 0 40px;
+    padding: 30px 0 30px;
 }
 
 .hero-grid {
     display: grid;
     grid-template-columns: 1.1fr 1fr;
-    gap: 50px;
+    gap: 35px;
     align-items: start;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .hero-left {
@@ -230,35 +230,35 @@ body::before {
 }
 
 .hero-title {
-    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
     font-weight: 800;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
     background: linear-gradient(135deg, #ffffff 0%, #ff006e 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    line-height: 1.1;
+    line-height: 1.15;
 }
 
 .hero-subtitle {
-    font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+    font-size: clamp(0.85rem, 1.3vw, 0.95rem);
     color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 30px;
+    line-height: 1.5;
+    margin-bottom: 20px;
 }
 
 .hero-form-container {
     background: var(--card-bg);
-    border-radius: 16px;
-    padding: 28px 24px;
+    border-radius: 14px;
+    padding: 20px 18px;
     border: 1px solid var(--border-color);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .hero-form-heading {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
     text-align: center;
     color: var(--text-primary);
 }
@@ -269,8 +269,8 @@ body::before {
 
 .hero-calculator-card {
     background: var(--card-bg);
-    border-radius: 16px;
-    padding: 28px 24px;
+    border-radius: 14px;
+    padding: 20px 18px;
     border: 1px solid var(--border-color);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     position: relative;
@@ -288,17 +288,17 @@ body::before {
 }
 
 .hero-calculator-card h3 {
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     text-align: center;
 }
 
 .hero-calculator-card .calculator-desc {
     text-align: center;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-secondary);
-    margin-bottom: 24px;
+    margin-bottom: 18px;
 }
 
 .hero-calculator-card.locked {
@@ -343,9 +343,9 @@ body::before {
 .hero-legend {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-top: 30px;
-    padding-top: 30px;
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 24px;
     border-top: 1px solid var(--border-color);
 }
 
@@ -1125,9 +1125,9 @@ input::placeholder {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    margin-top: 40px;
-    opacity: 0.7;
+    gap: 6px;
+    margin-top: 20px;
+    opacity: 0.5;
     animation: fadeInScroll 1s ease 0.5s both;
 }
 
@@ -1721,9 +1721,14 @@ input::placeholder {
         display: none;
     }
 
+    .hero {
+        padding: 20px 0 20px;
+    }
+
     .hero-grid {
         grid-template-columns: 1fr;
-        gap: 30px;
+        gap: 20px;
+        margin-bottom: 20px;
     }
 
     .hero-left {
@@ -1731,16 +1736,30 @@ input::placeholder {
     }
 
     .hero-title {
-        font-size: 2rem;
+        font-size: 1.4rem;
+        margin-bottom: 8px;
     }
 
     .hero-subtitle {
-        font-size: 1rem;
+        font-size: 0.85rem;
+        margin-bottom: 16px;
+    }
+
+    .hero-form-container,
+    .hero-calculator-card {
+        padding: 16px 14px;
+    }
+
+    .hero-form-heading {
+        font-size: 15px;
+        margin-bottom: 12px;
     }
 
     .hero-legend {
         grid-template-columns: 1fr;
-        gap: 14px;
+        gap: 12px;
+        margin-top: 20px;
+        padding-top: 20px;
     }
     
     .calculator-card, .results-card, .contact-card {
@@ -1824,15 +1843,28 @@ input::placeholder {
 
 @media (max-width: 480px) {
     .container {
-        padding: 0 15px;
+        padding: 0 12px;
     }
 
     .hero {
-        padding: 60px 0;
+        padding: 15px 0 15px;
+    }
+
+    .hero-title {
+        font-size: 1.3rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.8rem;
+    }
+
+    .scroll-indicator {
+        margin-top: 15px;
+        transform: scale(0.85);
     }
 
     .calculator-section, .results-section, .contact-section,
     .case-study-section, .testimonials-section {
-        padding: 40px 0;
+        padding: 30px 0;
     }
 }
