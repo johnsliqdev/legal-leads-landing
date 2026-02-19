@@ -140,7 +140,8 @@ body::before {
 .calculator-card::after,
 .contact-card::after,
 .results-card::after,
-.overspend-card::after {
+.overspend-card::after,
+.case-study-card::after {
     content: '';
     position: absolute;
     top: 0;
@@ -1092,7 +1093,8 @@ input::placeholder {
     50% { opacity: 1; }
 }
 
-/* Why Overspend Section */
+/* How It Works / Why Overspend Section */
+.how-it-works-section,
 .why-overspend-section {
     padding: 40px 0;
     background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
@@ -1400,6 +1402,206 @@ input::placeholder {
     font-size: 13px;
 }
 
+/* Hero CTA */
+.hero-cta {
+    margin-top: 30px;
+}
+
+.hero-cta .calculate-btn {
+    display: inline-block;
+    width: auto;
+    min-width: 320px;
+    text-decoration: none;
+    font-size: 17px;
+    padding: 16px 32px;
+}
+
+/* Step Number Icons (How It Works) */
+.point-icon.icon-step-num {
+    font-size: 20px;
+    font-weight: 800;
+    color: white;
+}
+
+.point-icon.icon-step-num span {
+    position: relative;
+    z-index: 1;
+}
+
+/* Section Headings (shared) */
+.section-heading {
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 10px;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Case Study Section */
+.case-study-section {
+    padding: 60px 0;
+}
+
+.case-study-card {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 40px;
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 900px;
+    margin: 0 auto;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.case-study-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.case-stat {
+    text-align: center;
+    padding: 16px;
+    background: var(--secondary-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.case-stat-value {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent-color);
+    line-height: 1.1;
+    margin-bottom: 4px;
+}
+
+.case-stat-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.case-study-narrative h4 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+}
+
+.case-study-block {
+    margin-bottom: 18px;
+}
+
+.case-study-block h5 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.case-study-block p {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+.case-study-disclaimer {
+    font-size: 12px;
+    color: var(--text-secondary);
+    opacity: 0.7;
+    margin-top: 16px;
+    font-style: italic;
+}
+
+/* Testimonials Section */
+.testimonials-section {
+    padding: 60px 0;
+    background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.testimonial-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 28px 24px;
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--accent-color);
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(255, 0, 110, 0.1);
+}
+
+.testimonial-card::before {
+    content: '\201C';
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--accent-color);
+    opacity: 0.15;
+    line-height: 1;
+}
+
+.testimonial-quote {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.testimonial-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.testimonial-role {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* Disclaimer Banner */
+.disclaimer-banner {
+    padding: 20px 0;
+    background: var(--secondary-bg);
+    border-top: 2px solid var(--accent-color);
+}
+
+.disclaimer-banner p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: center;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+    opacity: 0.8;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .nav-links {
@@ -1459,18 +1661,51 @@ input::placeholder {
     .savings-amount {
         font-size: 28px;
     }
+
+    .case-study-card {
+        grid-template-columns: 1fr;
+        padding: 30px 20px;
+        margin: 0 10px;
+    }
+
+    .case-study-stats {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .case-stat {
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .case-stat-value {
+        font-size: 24px;
+    }
+
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-cta .calculate-btn {
+        min-width: unset;
+        width: 100%;
+        max-width: 340px;
+    }
 }
 
 @media (max-width: 480px) {
     .container {
         padding: 0 15px;
     }
-    
+
     .hero {
         padding: 60px 0;
     }
-    
-    .calculator-section, .results-section, .contact-section {
+
+    .calculator-section, .results-section, .contact-section,
+    .case-study-section, .testimonials-section {
         padding: 40px 0;
     }
 }

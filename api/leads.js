@@ -130,8 +130,8 @@ export default async function handler(req, res) {
 
       const insertedId = rows[0].id;
 
-      // Fire GHL webhook only if calc data is present (full-insert fallback)
-      if (body.calcCurrentCpql) {
+      // Fire GHL webhook only when the client requests a callback
+      if (body.requestedCallback) {
         await fireGhlWebhook({
           first_name: body.firstName || '', last_name: body.lastName || '',
           email: body.email || '', phone: body.phone || '',
@@ -175,8 +175,8 @@ export default async function handler(req, res) {
         WHERE id = ${id};
       `;
 
-      // Fire GHL webhook when calc data is included — SELECT full row for complete payload
-      if (body.calcCurrentCpql) {
+      // Fire GHL webhook only when the client requests a callback — SELECT full row for complete payload
+      if (body.requestedCallback) {
         const { rows } = await poolInstance.sql`SELECT * FROM leads WHERE id = ${id} LIMIT 1;`;
         if (rows.length > 0) {
           const row = rows[0];

@@ -210,14 +210,14 @@ function updateResultsSection(data) {
         if (savingsView) savingsView.style.display = 'none';
         if (outstandingView) outstandingView.style.display = 'block';
         setText('outstandingCurrentCpql', `$${Math.round(data.currentCpl).toLocaleString()}`);
-        if (callbackCtaHeading) callbackCtaHeading.textContent = 'Interested in going even further?';
-        if (callbackCtaText) callbackCtaText.textContent = "Your CPQL is already exceptional. Let's talk about scaling your results without sacrificing quality.";
+        if (callbackCtaHeading) callbackCtaHeading.textContent = 'Want to Scale Even Further?';
+        if (callbackCtaText) callbackCtaText.textContent = "Even at your elite CPQL, we can help you increase volume with our guarantee.";
         if (callbackBtn) callbackBtn.textContent = 'Discuss My Growth Strategy';
     } else {
         if (savingsView) savingsView.style.display = 'block';
         if (outstandingView) outstandingView.style.display = 'none';
-        if (callbackCtaHeading) callbackCtaHeading.textContent = 'Want to discuss these savings?';
-        if (callbackCtaText) callbackCtaText.textContent = "Let's talk about how we can achieve these results for your firm";
+        if (callbackCtaHeading) callbackCtaHeading.textContent = 'Ready to Get 30 Qualified Leads in 90 Days?';
+        if (callbackCtaText) callbackCtaText.textContent = "Let's talk about how the guarantee works for your firm";
         if (callbackBtn) callbackBtn.textContent = 'Request a Callback';
     }
 }
