@@ -18,163 +18,177 @@
                     <img src="images/sliq-logo.png" alt="Sliq By Design" class="logo-img">
                 </div>
                 <div class="nav-links">
-                    <a href="#contact">Get Started</a>
+                    <a href="#hero">Get Started</a>
                 </div>
             </div>
         </div>
     </header>
 
     <main>
-        <section class="hero">
+        <section id="hero" class="hero">
             <div class="container">
-                <div class="hero-grid">
-                    <!-- Centered: Headline + Multi-Step Qualification Form -->
-                    <div class="hero-centered">
-                        <h2 class="hero-title">30 Qualified PI Leads in 90 Days — Or Free Until You Do</h2>
-                        <p class="hero-subtitle">We build and optimize your Meta + funnel system. You fund the ad spend. We guarantee 30 qualified personal injury leads within 90 days — if we miss, we keep working at zero management fee until you hit 30.</p>
+                <div class="hero-flow">
+                    <h2 class="hero-title">30 Qualified PI Leads in 90 Days — Or Free Until You Do</h2>
+                    <p class="hero-subtitle">We build and optimize your Meta + funnel system. You fund the ad spend. We guarantee 30 qualified personal injury leads within 90 days — if we miss, we keep working at zero management fee until you hit 30.</p>
 
-                        <div class="hero-form-container">
-                            <h3 class="hero-form-heading">See If You Qualify</h3>
-
-                            <!-- Step Progress -->
-                            <div class="form-steps">
-                                <div class="step-item active" data-step="1">
-                                    <div class="step-circle">1</div>
-                                    <div class="step-label">Contact</div>
-                                </div>
-                                <div class="step-line"></div>
-                                <div class="step-item" data-step="2">
-                                    <div class="step-circle">2</div>
-                                    <div class="step-label">Qualify</div>
-                                </div>
-                                <div class="step-line"></div>
-                                <div class="step-item" data-step="3">
-                                    <div class="step-circle">3</div>
-                                    <div class="step-label">Video</div>
-                                </div>
-                                <div class="step-line"></div>
-                                <div class="step-item" data-step="4">
-                                    <div class="step-circle">4</div>
-                                    <div class="step-label">Book</div>
-                                </div>
-                            </div>
-
-                            <form id="qualificationForm" class="contact-form">
-                                <!-- Step 1: Contact Info -->
-                                <div class="form-step" id="formStep1">
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label for="firstName">First Name</label>
-                                            <input type="text" id="firstName" name="firstName" placeholder="John" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="lastName">Last Name</label>
-                                            <input type="text" id="lastName" name="lastName" placeholder="Smith" required>
-                                        </div>
+                    <!-- Step 1: Contact Info -->
+                    <div class="flow-section" id="contactSection">
+                        <div class="flow-card">
+                            <h3>Get Your Free CPQL Analysis</h3>
+                            <p class="flow-desc">Enter your information to access the calculator</p>
+                            <form id="contactForm" class="flow-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="firstName">First Name</label>
+                                        <input type="text" id="firstName" name="firstName" placeholder="John" required>
                                     </div>
-                                    <div class="form-row">
-                                        <div class="form-group">
-                                            <label for="email">Email Address</label>
-                                            <input type="email" id="email" name="email" placeholder="john@smithlaw.com" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="phone">Phone Number <span class="field-hint">(US)</span></label>
-                                            <input type="tel" id="phone" name="phone" placeholder="(555) 000-0000" maxlength="14" required>
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="lastName">Last Name</label>
+                                        <input type="text" id="lastName" name="lastName" placeholder="Smith" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email Address</label>
+                                        <input type="email" id="email" name="email" placeholder="john@smithlaw.com" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">Phone Number</label>
+                                        <input type="tel" id="phone" name="phone" placeholder="(555) 000-0000" maxlength="14" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="state">State</label>
                                         <input type="text" id="state" name="state" placeholder="Florida" required>
                                     </div>
-                                    <button type="button" class="submit-btn" id="step1Next">Next →</button>
                                 </div>
-
-                                <!-- Step 2: Qualification Questions -->
-                                <div class="form-step" id="formStep2" style="display:none;">
-                                    <div class="form-group">
-                                        <label>Can you commit at least $5,000/month to Meta ads for 90 days?</label>
-                                        <div class="radio-group">
-                                            <label class="radio-label">
-                                                <input type="radio" name="metaBudgetCommitment" value="yes" required> Yes
-                                            </label>
-                                            <label class="radio-label">
-                                                <input type="radio" name="metaBudgetCommitment" value="no" required> No
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="avgCaseValue">What's your average case value?</label>
-                                        <input type="text" id="avgCaseValue" name="avgCaseValue" placeholder="e.g., $50,000" required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Do you have dedicated intake staff?</label>
-                                        <div class="radio-group">
-                                            <label class="radio-label">
-                                                <input type="radio" name="dedicatedIntake" value="yes" required> Yes
-                                            </label>
-                                            <label class="radio-label">
-                                                <input type="radio" name="dedicatedIntake" value="no" required> No
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="responseTime">What's your average response time to new leads?</label>
-                                        <input type="text" id="responseTime" name="responseTime" placeholder="e.g., Within 5 minutes" required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label>Do you use a CRM or structured intake tracking system?</label>
-                                        <div class="radio-group">
-                                            <label class="radio-label">
-                                                <input type="radio" name="usesCRM" value="yes" required> Yes
-                                            </label>
-                                            <label class="radio-label">
-                                                <input type="radio" name="usesCRM" value="no" required> No
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="firmDifferentiator">What makes your firm different from other PI firms in your market? <span class="field-hint">(Optional)</span></label>
-                                        <textarea id="firmDifferentiator" name="firmDifferentiator" rows="3" placeholder="What sets you apart..."></textarea>
-                                    </div>
-
-                                    <div class="form-nav">
-                                        <button type="button" class="back-btn" id="step2Back">← Back</button>
-                                        <button type="button" class="submit-btn step-next-btn" id="step2Next">Next →</button>
-                                    </div>
-                                </div>
-
-                                <!-- Step 3: Video -->
-                                <div class="form-step" id="formStep3" style="display:none;">
-                                    <div class="video-container">
-                                        <h4>Watch This Quick 2-Minute Overview</h4>
-                                        <div class="video-placeholder">
-                                            <p>📺 Video will be embedded here</p>
-                                            <p class="video-note">Add your video URL in the code</p>
-                                        </div>
-                                    </div>
-                                    <div class="form-nav">
-                                        <button type="button" class="back-btn" id="step3Back">← Back</button>
-                                        <button type="button" class="submit-btn step-next-btn" id="step3Next">Continue to Booking →</button>
-                                    </div>
-                                </div>
-
-                                <!-- Step 4: Booking Iframe -->
-                                <div class="form-step" id="formStep4" style="display:none;">
-                                    <div class="booking-container">
-                                        <h4>Book Your Strategy Call</h4>
-                                        <iframe src="https://api.leadconnectorhq.com/widget/booking/swe1lSedf4hVYFTLSTIc" style="width: 100%;border:none;overflow: hidden;min-height:600px;" scrolling="no" id="swe1lSedf4hVYFTLSTIc_1771618491437"></iframe>
-                                        <script src="https://link.msgsndr.com/js/form_embed.js" type="text/javascript"></script>
-                                    </div>
-                                    <div class="form-nav">
-                                        <button type="button" class="back-btn" id="step4Back">← Back</button>
-                                    </div>
-                                </div>
+                                <button type="submit" class="submit-btn">Access Calculator →</button>
                             </form>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Calculator (hidden until contact submitted) -->
+                    <div class="flow-section" id="calculatorSection" style="display:none;">
+                        <div class="flow-card">
+                            <h3>PI Case CPQL Calculator</h3>
+                            <p class="flow-desc">Calculate your current Cost per Qualified Lead</p>
+                            <form id="cplForm" class="flow-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="adSpend">Monthly Ad Spend ($)</label>
+                                        <input type="number" id="adSpend" name="adSpend" placeholder="5000" required min="0" step="0.01">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="marketingFees">Monthly Marketing Fees ($)</label>
+                                        <input type="number" id="marketingFees" name="marketingFees" placeholder="2000" required min="0" step="0.01">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="leadsCount">Number of PI Leads per Month</label>
+                                        <input type="number" id="leadsCount" name="leadsCount" placeholder="50" required min="0.01" step="0.01">
+                                    </div>
+                                </div>
+                                <button type="submit" class="submit-btn">Calculate My CPQL →</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Results with CTA (hidden until calculated) -->
+                    <div class="flow-section" id="resultsSection" style="display:none;">
+                        <div class="flow-card">
+                            <h3>Your PI Case CPQL Analysis</h3>
+                            <div class="results-grid">
+                                <div class="result-item">
+                                    <div class="result-label">Current Monthly Spend</div>
+                                    <div class="result-value" id="resultCurrentSpend">$0</div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="result-label">Current CPQL</div>
+                                    <div class="result-value" id="resultCurrentCpql">$0</div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="result-label">Monthly Leads</div>
+                                    <div class="result-value" id="resultLeadsCount">0</div>
+                                </div>
+                            </div>
+                            <div class="results-cta">
+                                <h4>Ready to Get 30 Qualified Leads in 90 Days?</h4>
+                                <p>Answer a few quick questions to see if you qualify</p>
+                                <button type="button" class="submit-btn" id="showQualificationBtn">Continue to Qualify →</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Qualification Questions (hidden until CTA clicked) -->
+                    <div class="flow-section" id="qualificationSection" style="display:none;">
+                        <div class="flow-card">
+                            <h3>Qualification Questions</h3>
+                            <p class="flow-desc">Help us determine if we're a good fit</p>
+                            <form id="qualificationForm" class="flow-form">
+                                <div class="form-group">
+                                    <label>Can you commit at least $5,000/month to Meta ads for 90 days?</label>
+                                    <div class="radio-group">
+                                        <label class="radio-label">
+                                            <input type="radio" name="metaBudgetCommitment" value="yes" required> Yes
+                                        </label>
+                                        <label class="radio-label">
+                                            <input type="radio" name="metaBudgetCommitment" value="no" required> No
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="avgCaseValue">What's your average case value?</label>
+                                    <input type="text" id="avgCaseValue" name="avgCaseValue" placeholder="e.g., $50,000" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Do you have dedicated intake staff?</label>
+                                    <div class="radio-group">
+                                        <label class="radio-label">
+                                            <input type="radio" name="dedicatedIntake" value="yes" required> Yes
+                                        </label>
+                                        <label class="radio-label">
+                                            <input type="radio" name="dedicatedIntake" value="no" required> No
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="responseTime">What's your average response time to new leads?</label>
+                                    <input type="text" id="responseTime" name="responseTime" placeholder="e.g., Within 5 minutes" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Do you use a CRM or structured intake tracking system?</label>
+                                    <div class="radio-group">
+                                        <label class="radio-label">
+                                            <input type="radio" name="usesCRM" value="yes" required> Yes
+                                        </label>
+                                        <label class="radio-label">
+                                            <input type="radio" name="usesCRM" value="no" required> No
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="firmDifferentiator">What makes your firm different? <span class="field-hint">(Optional)</span></label>
+                                    <textarea id="firmDifferentiator" name="firmDifferentiator" rows="3" placeholder="What sets you apart..."></textarea>
+                                </div>
+                                <button type="submit" class="submit-btn">Submit & Continue →</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Video (hidden until qualification submitted) -->
+                    <div class="flow-section" id="videoSection" style="display:none;">
+                        <div class="flow-card">
+                            <h3>Watch This Quick 2-Minute Overview</h3>
+                            <div class="video-placeholder">
+                                <p>📺 Video will be embedded here</p>
+                                <p class="video-note">Add your video URL</p>
+                            </div>
+                            <button type="button" class="submit-btn" id="showBookingBtn">Continue to Booking →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: Booking Iframe (hidden until video viewed) -->
+                    <div class="flow-section" id="bookingSection" style="display:none;">
+                        <div class="flow-card">
+                            <h3>Book Your Strategy Call</h3>
+                            <iframe src="https://api.leadconnectorhq.com/widget/booking/swe1lSedf4hVYFTLSTIc" style="width: 100%;border:none;overflow: hidden;min-height:600px;" scrolling="no" id="swe1lSedf4hVYFTLSTIc_1771618491437"></iframe>
+                            <script src="https://link.msgsndr.com/js/form_embed.js" type="text/javascript"></script>
                         </div>
                     </div>
                 </div>
@@ -244,7 +258,7 @@
                     </div>
 
                     <div class="overspend-cta">
-                        <a href="#contact" class="calculate-btn">Calculate Your Current CPQL</a>
+                        <a href="#hero" class="calculate-btn">Calculate Your Current CPQL</a>
                     </div>
                 </div>
             </div>
@@ -318,222 +332,6 @@
                             <div class="testimonial-name">Michael T.</div>
                             <div class="testimonial-role">Founding Attorney — Personal Injury Practice, Georgia</div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="contact-section" style="display: none;">
-            <div class="container">
-                <div class="contact-card">
-                    <h3>Calculate Your Current CPQL — Then Let Us Beat It</h3>
-                    <p class="calculator-desc">Enter your information to access our PI Case CPQL Calculator and see how the 30-lead guarantee applies to your firm</p>
-
-                    <!-- Step Progress -->
-                    <div class="form-steps">
-                        <div class="step-item active" data-step="1">
-                            <div class="step-circle">1</div>
-                            <div class="step-label">You</div>
-                        </div>
-                        <div class="step-line"></div>
-                        <div class="step-item" data-step="2">
-                            <div class="step-circle">2</div>
-                            <div class="step-label">Contact</div>
-                        </div>
-                        <div class="step-line"></div>
-                        <div class="step-item" data-step="3">
-                            <div class="step-circle">3</div>
-                            <div class="step-label">Firm</div>
-                        </div>
-                    </div>
-
-                    <form id="contactForm" class="contact-form">
-
-                        <!-- Step 1: Name -->
-                        <div class="form-step" id="formStep1">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="firstName">First Name</label>
-                                    <input type="text" id="firstName" name="firstName" placeholder="John" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lastName">Last Name</label>
-                                    <input type="text" id="lastName" name="lastName" placeholder="Smith" required>
-                                </div>
-                            </div>
-                            <button type="button" class="submit-btn" id="step1Next">Next →</button>
-                        </div>
-
-                        <!-- Step 2: Contact Info -->
-                        <div class="form-step" id="formStep2" style="display:none;">
-                            <div class="form-group">
-                                <label for="email">Email Address</label>
-                                <input type="email" id="email" name="email" placeholder="john@smithlaw.com" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Phone Number <span class="field-hint">(US)</span></label>
-                                <input type="tel" id="phone" name="phone" placeholder="(555) 000-0000" maxlength="14" required>
-                            </div>
-                            <div class="form-nav">
-                                <button type="button" class="back-btn" id="step2Back">← Back</button>
-                                <button type="button" class="submit-btn step-next-btn" id="step2Next">Next →</button>
-                            </div>
-                        </div>
-
-                        <!-- Step 3: Firm Info -->
-                        <div class="form-step" id="formStep3" style="display:none;">
-                            <div class="form-group">
-                                <label for="lawFirm">Law Firm Name</label>
-                                <input type="text" id="lawFirm" name="lawFirm" placeholder="Smith & Associates" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="website">Website <span class="field-hint">(optional)</span></label>
-                                <input type="text" id="website" name="website" placeholder="yourfirm.com">
-                            </div>
-                            <div class="form-nav">
-                                <button type="button" class="back-btn" id="step3Back">← Back</button>
-                                <button type="submit" class="submit-btn step-next-btn">Access Calculator</button>
-                            </div>
-                        </div>
-
-                        <input type="hidden" id="calcCurrentMonthlySpend" name="calcCurrentMonthlySpend">
-                        <input type="hidden" id="calcCurrentCpql" name="calcCurrentCpql">
-                        <input type="hidden" id="calcGuaranteedCpql" name="calcGuaranteedCpql">
-                        <input type="hidden" id="calcNewMonthlySpend" name="calcNewMonthlySpend">
-                        <input type="hidden" id="calcMonthlySavings" name="calcMonthlySavings">
-                        <input type="hidden" id="calcAnnualSavings" name="calcAnnualSavings">
-                        <input type="hidden" id="calcCpqlReduction" name="calcCpqlReduction">
-                        <input type="hidden" id="calcLeadsCount" name="calcLeadsCount">
-                        <input type="hidden" id="calcSameBudgetLeads" name="calcSameBudgetLeads">
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <section id="calculator" class="calculator-section" style="display: none;">
-            <div class="container">
-                <div class="calculator-layout">
-                    <div class="calculator-card">
-                        <h3>PI Case CPQL Calculator</h3>
-                        <p class="calculator-desc">See your current Cost per Qualified Lead — and what 30 guaranteed leads would mean for your firm</p>
-
-                        <form id="cplForm" class="calculator-form">
-                            <div class="form-group">
-                                <label for="adSpend">Monthly Ad Spend ($)</label>
-                                <input type="number" id="adSpend" name="adSpend" placeholder="5000" required min="0" step="0.01">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="marketingFees">Monthly Marketing Fees ($)</label>
-                                <input type="number" id="marketingFees" name="marketingFees" placeholder="2000" required min="0" step="0.01">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="leadsCount">Number of PI Leads per Month</label>
-                                <input type="number" id="leadsCount" name="leadsCount" placeholder="50" required min="0.01" step="0.01">
-                            </div>
-
-                            <button type="submit" class="calculate-btn">Calculate My PI Case CPQL</button>
-                        </form>
-                    </div>
-
-                    <div class="calculator-legend">
-                        <div class="legend-card floating-1" id="legend-adSpend" data-field="adSpend">
-                            <div class="legend-icon">
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" fill="currentColor"/>
-                                </svg>
-                            </div>
-                            <div class="legend-content">
-                                <h4>Monthly Ad Spend</h4>
-                                <p>The budget you're paying directly to platforms — <strong>Meta, Google, LinkedIn, TikTok, lead aggregators</strong> and any other paid channel. This is media spend only, before any fees.</p>
-                            </div>
-                        </div>
-
-                        <div class="legend-card floating-2" id="legend-marketingFees" data-field="marketingFees">
-                            <div class="legend-icon">
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M20 6h-2.18c.07-.44.18-.88.18-1.34C18 2.54 15.96.5 13.5.5c-1.32 0-2.5.54-3.36 1.4L9 3l-1.14-1.1C6.96 1.04 5.78.5 4.5.5 2.04.5 0 2.54 0 5c0 .48.11.9.18 1.34H0v14h20V6zm-8.5 12H3.5V8h8v10zm8.5 0h-6.5V8H20v10zM4.5 3c.9 0 1.63.73 1.63 1.63 0 .9-.73 1.63-1.63 1.63S2.87 5.53 2.87 4.63C2.87 3.73 3.6 3 4.5 3zm9 0c.9 0 1.63.73 1.63 1.63 0 .9-.73 1.63-1.63 1.63s-1.63-.73-1.63-1.63C11.87 3.73 12.6 3 13.5 3z" fill="currentColor"/>
-                                </svg>
-                            </div>
-                            <div class="legend-content">
-                                <h4>Monthly Marketing Fees</h4>
-                                <p>Your acquisition overhead — <strong>agency retainers, in-house team salaries, CRM tools, landing page software, analytics platforms</strong> and any other cost tied to running your marketing operation.</p>
-                            </div>
-                        </div>
-
-                        <div class="legend-card floating-3" id="legend-leadsCount" data-field="leadsCount">
-                            <div class="legend-icon">
-                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
-                                </svg>
-                            </div>
-                            <div class="legend-content">
-                                <h4>Qualified Lead</h4>
-                                <p>Not every inquiry is a lead. A <strong>qualified lead</strong> is a prospect who has confirmed intent, a viable case, and a high probability to retain — someone with an <strong>extremely high chance to close</strong>, not just a name on a list.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <section id="results" class="results-section" style="display: none;">
-            <div class="container">
-                <div class="results-card">
-                    <h2 id="resultsHeading">Your PI Case CPQL Analysis</h2>
-
-                    <!-- Always visible: their current numbers -->
-                    <div class="results-grid results-grid-top">
-                        <div class="result-metric">
-                            <div class="result-label">You're Currently Spending on Marketing</div>
-                            <div class="result-value" id="resultCurrentMonthlySpend">$0</div>
-                        </div>
-                        <div class="result-metric">
-                            <div class="result-label">Your Current CPQL</div>
-                            <div class="result-value" id="resultCurrentCpql">$0</div>
-                        </div>
-                        <div class="result-metric">
-                            <div class="result-label">You're Getting This Many Leads</div>
-                            <div class="result-value" id="resultLeadsCount">0</div>
-                        </div>
-                    </div>
-
-                    <!-- Savings view: shown when their CPQL > our guaranteed rate -->
-                    <div id="resultsSavingsView">
-                        <div class="results-divider"><span>Your Potential with Sliq</span></div>
-                        <div class="results-grid">
-                            <div class="result-metric">
-                                <div class="result-label">Same Budget → Approx. Qualified Leads</div>
-                                <div class="result-value" id="resultSameBudgetLeads">0</div>
-                                <div class="result-sublabel">per month (±20% range)</div>
-                            </div>
-                            <div class="result-metric">
-                                <div class="result-label">More Leads per Month vs. Now</div>
-                                <div class="result-value is-positive" id="resultAdditionalLeads">+0</div>
-                                <div class="result-sublabel">additional qualified leads</div>
-                            </div>
-                            <div class="result-metric">
-                                <div class="result-label">Your CPQL Reduction</div>
-                                <div class="result-value" id="resultCpqlReduction">0%</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Outstanding view: shown when their CPQL is already <= our guaranteed rate -->
-                    <div id="resultsOutstandingView" style="display: none;">
-                        <div class="results-outstanding-msg">
-                            <div class="outstanding-icon">&#9733;</div>
-                            <h3>You're Already Performing at an Outstanding CPQL</h3>
-                            <p>Your current CPQL of <strong id="outstandingCurrentCpql">$0</strong> is already below our standard guaranteed rate — you're operating at an elite level for PI case acquisition.</p>
-                            <p class="outstanding-sub">If you're considering optimizing your numbers further, scaling without sacrificing lead quality, or exploring what's possible beyond your current ceiling — we'd love to talk.</p>
-                        </div>
-                    </div>
-
-                    <div class="callback-cta">
-                        <h4 id="callbackCtaHeading">Ready to Get 30 Qualified Leads in 90 Days?</h4>
-                        <p id="callbackCtaText">Let's talk about how the guarantee works for your firm</p>
-                        <button type="button" class="submit-btn" id="requestCallbackBtn">Request a Callback</button>
                     </div>
                 </div>
             </div>

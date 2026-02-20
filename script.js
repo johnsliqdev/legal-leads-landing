@@ -157,12 +157,6 @@ function initializeCPLCalculator() {
                 submitToDatabase(completeFormData);
             }
         }
-
-        const resultsSection = document.getElementById('results');
-        if (resultsSection) {
-            resultsSection.style.display = 'block';
-            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
     });
 }
 
@@ -172,32 +166,19 @@ function updateResultsSection(data) {
         if (el) el.textContent = text;
     };
 
-    const setValueClass = (id, kind) => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.classList.remove('is-positive', 'is-negative');
-        if (kind) el.classList.add(kind);
-    };
-
-    // Always-visible metrics
-    setText('resultCurrentMonthlySpend', `$${Math.round(data.totalMonthlySpend).toLocaleString()}`);
+    // Populate results in the flow
+    setText('resultCurrentSpend', `$${Math.round(data.totalMonthlySpend).toLocaleString()}`);
     setText('resultCurrentCpql', `$${Math.round(data.currentCpl).toLocaleString()}`);
     setText('resultLeadsCount', `${Math.round(data.leadsCount).toLocaleString()}`);
 
-    // Savings metrics (shown in savings view)
-    const sameBudgetLow = Math.round(data.sameBudgetLeads * 0.8);
-    const sameBudgetHigh = Math.round(data.sameBudgetLeads * 1.2);
-    setText('resultSameBudgetLeads', `${sameBudgetLow.toLocaleString()}–${sameBudgetHigh.toLocaleString()}`);
+    // Show results section and scroll to it
+    const resultsSection = document.getElementById('resultsSection');
+    if (resultsSection) {
+        resultsSection.style.display = 'block';
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 
-    const additionalLeads = Math.round(data.sameBudgetLeads - data.leadsCount);
-    const additionalLeadsSign = additionalLeads > 0 ? '+' : '';
-    setText('resultAdditionalLeads', `${additionalLeadsSign}${additionalLeads.toLocaleString()}`);
-    setValueClass('resultAdditionalLeads', additionalLeads >= 0 ? 'is-positive' : 'is-negative');
-
-    setText('resultCpqlReduction', `${(Number.isFinite(data.percentageSavings) ? data.percentageSavings : 0).toFixed(1)}%`);
-    setValueClass('resultCpqlReduction', data.percentageSavings >= 0 ? 'is-positive' : 'is-negative');
-
-    // Toggle views based on whether they're outperforming our target
+    // Legacy code for old results section (if it exists)
     const isOutstanding = data.currentCpl > 0 && data.currentCpl <= data.guaranteedCpl;
 
     const savingsView = document.getElementById('resultsSavingsView');
@@ -206,7 +187,7 @@ function updateResultsSection(data) {
     const callbackCtaText = document.getElementById('callbackCtaText');
     const callbackBtn = document.getElementById('requestCallbackBtn');
 
-    if (isOutstanding) {
+    if (isOutstanding && savingsView && outstandingView) {
         if (savingsView) savingsView.style.display = 'none';
         if (outstandingView) outstandingView.style.display = 'block';
         setText('outstandingCurrentCpql', `$${Math.round(data.currentCpl).toLocaleString()}`);
@@ -242,9 +223,6 @@ function populateHiddenCalculationFields(calc) {
 }
 
 function initializeContactForm() {
-    const form = document.getElementById('qualificationForm');
-    if (!form) return;
-
     // US phone masking: (XXX) XXX-XXXX
     const phoneInput = document.getElementById('phone');
     if (phoneInput) {
@@ -261,129 +239,106 @@ function initializeContactForm() {
         });
     }
 
-    // Step navigation (now 4 steps)
-    const goToStep = (step) => {
-        [1, 2, 3, 4].forEach(n => {
-            const el = document.getElementById(`formStep${n}`);
-            if (el) el.style.display = n === step ? 'block' : 'none';
+    // 1. Contact Form → Show Calculator
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
 
-            const stepItem = document.querySelector(`.step-item[data-step="${n}"]`);
-            if (stepItem) {
-                stepItem.classList.remove('active', 'done');
-                if (n < step) stepItem.classList.add('done');
-                if (n === step) stepItem.classList.add('active');
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const state = document.getElementById('state').value.trim();
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const phoneDigits = phone.replace(/\D/g, '');
+
+            if (!email || !emailRegex.test(email)) {
+                showNotification('Please enter a valid email address.', 'error');
+                return;
             }
-        });
+            if (phoneDigits.length !== 10) {
+                showNotification('Please enter a valid 10-digit US phone number.', 'error');
+                return;
+            }
 
-        // Update step lines
-        document.querySelectorAll('.step-line').forEach((line, i) => {
-            line.classList.toggle('done', step > i + 1);
-        });
-    };
+            // Store contact data for later use
+            contactFormData = { firstName, lastName, email, phone, state };
 
-    // Step 1 → 2 (POST to create lead row with contact info)
-    document.getElementById('step1Next')?.addEventListener('click', () => {
-        const firstName = document.getElementById('firstName').value.trim();
-        const lastName = document.getElementById('lastName').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const state = document.getElementById('state').value.trim();
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phoneDigits = phone.replace(/\D/g, '');
-
-        if (!firstName || !lastName) {
-            showNotification('Please enter your first and last name.', 'error');
-            return;
-        }
-        if (!email || !emailRegex.test(email)) {
-            showNotification('Please enter a valid email address.', 'error');
-            return;
-        }
-        if (phoneDigits.length !== 10) {
-            showNotification('Please enter a valid 10-digit US phone number.', 'error');
-            return;
-        }
-        if (!state) {
-            showNotification('Please enter your state.', 'error');
-            return;
-        }
-
-        goToStep(2);
-
-        // Create the lead row with all contact info
-        fetch('/api/leads', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ firstName, lastName, email, phone, state })
-        })
-            .then(async (res) => {
-                if (!res.ok) throw new Error(`POST failed: ${res.status}`);
-                return res.json();
+            // Save to database
+            fetch('/api/leads', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ firstName, lastName, email, phone, state })
             })
-            .then((data) => {
-                leadId = data.id;
-                console.log('Lead created with id:', leadId);
-            })
-            .catch((err) => console.error('Step 1 POST failed:', err));
-    });
+                .then(async (res) => {
+                    if (!res.ok) throw new Error(`POST failed: ${res.status}`);
+                    return res.json();
+                })
+                .then((data) => {
+                    leadId = data.id;
+                    console.log('Lead created with id:', leadId);
+                })
+                .catch((err) => console.error('Contact POST failed:', err));
 
-    // Step 2 → 1
-    document.getElementById('step2Back')?.addEventListener('click', () => goToStep(1));
-
-    // Step 2 → 3 (PATCH qualification answers)
-    document.getElementById('step2Next')?.addEventListener('click', () => {
-        const metaBudgetCommitment = document.querySelector('input[name="metaBudgetCommitment"]:checked');
-        const avgCaseValue = document.getElementById('avgCaseValue').value.trim();
-        const dedicatedIntake = document.querySelector('input[name="dedicatedIntake"]:checked');
-        const responseTime = document.getElementById('responseTime').value.trim();
-        const usesCRM = document.querySelector('input[name="usesCRM"]:checked');
-        const firmDifferentiator = document.getElementById('firmDifferentiator').value.trim();
-
-        if (!metaBudgetCommitment) {
-            showNotification('Please answer the Meta ads budget question.', 'error');
-            return;
-        }
-        if (!avgCaseValue) {
-            showNotification('Please enter your average case value.', 'error');
-            return;
-        }
-        if (!dedicatedIntake) {
-            showNotification('Please answer the dedicated intake question.', 'error');
-            return;
-        }
-        if (!responseTime) {
-            showNotification('Please enter your response time.', 'error');
-            return;
-        }
-        if (!usesCRM) {
-            showNotification('Please answer the CRM question.', 'error');
-            return;
-        }
-
-        goToStep(3);
-
-        // PATCH qualification data
-        patchLead({
-            metaBudgetCommitment: metaBudgetCommitment.value,
-            avgCaseValue,
-            dedicatedIntake: dedicatedIntake.value,
-            responseTime,
-            usesCRM: usesCRM.value,
-            firmDifferentiator: firmDifferentiator || null
+            // Show calculator
+            document.getElementById('calculatorSection').style.display = 'block';
+            document.getElementById('calculatorSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
-    });
+    }
 
-    // Step 3 → 2
-    document.getElementById('step3Back')?.addEventListener('click', () => goToStep(2));
+    // 2. Results CTA → Show Qualification
+    const showQualificationBtn = document.getElementById('showQualificationBtn');
+    if (showQualificationBtn) {
+        showQualificationBtn.addEventListener('click', function() {
+            document.getElementById('qualificationSection').style.display = 'block';
+            document.getElementById('qualificationSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
 
-    // Step 3 → 4 (Video to Booking)
-    document.getElementById('step3Next')?.addEventListener('click', () => {
-        goToStep(4);
-    });
+    // 3. Qualification Form → Show Video
+    const qualificationForm = document.getElementById('qualificationForm');
+    if (qualificationForm) {
+        qualificationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
 
-    // Step 4 → 3
-    document.getElementById('step4Back')?.addEventListener('click', () => goToStep(3));
+            const metaBudgetCommitment = document.querySelector('input[name="metaBudgetCommitment"]:checked');
+            const avgCaseValue = document.getElementById('avgCaseValue').value.trim();
+            const dedicatedIntake = document.querySelector('input[name="dedicatedIntake"]:checked');
+            const responseTime = document.getElementById('responseTime').value.trim();
+            const usesCRM = document.querySelector('input[name="usesCRM"]:checked');
+            const firmDifferentiator = document.getElementById('firmDifferentiator').value.trim();
+
+            if (!metaBudgetCommitment || !dedicatedIntake || !usesCRM) {
+                showNotification('Please answer all questions.', 'error');
+                return;
+            }
+
+            // Save qualification data
+            patchLead({
+                metaBudgetCommitment: metaBudgetCommitment.value,
+                avgCaseValue,
+                dedicatedIntake: dedicatedIntake.value,
+                responseTime,
+                usesCRM: usesCRM.value,
+                firmDifferentiator: firmDifferentiator || null
+            });
+
+            // Show video
+            document.getElementById('videoSection').style.display = 'block';
+            document.getElementById('videoSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
+
+    // 4. Video → Show Booking
+    const showBookingBtn = document.getElementById('showBookingBtn');
+    if (showBookingBtn) {
+        showBookingBtn.addEventListener('click', function() {
+            document.getElementById('bookingSection').style.display = 'block';
+            document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
 }
 
 function submitToDatabase(formData) {
