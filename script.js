@@ -242,7 +242,7 @@ function populateHiddenCalculationFields(calc) {
 }
 
 function initializeContactForm() {
-    const form = document.getElementById('contactForm');
+    const form = document.getElementById('qualificationForm');
     if (!form) return;
 
     // US phone masking: (XXX) XXX-XXXX
@@ -261,9 +261,9 @@ function initializeContactForm() {
         });
     }
 
-    // Step navigation
+    // Step navigation (now 4 steps)
     const goToStep = (step) => {
-        [1, 2, 3].forEach(n => {
+        [1, 2, 3, 4].forEach(n => {
             const el = document.getElementById(`formStep${n}`);
             if (el) el.style.display = n === step ? 'block' : 'none';
 
@@ -281,22 +281,41 @@ function initializeContactForm() {
         });
     };
 
-    // Step 1 → 2 (POST to create lead row)
+    // Step 1 → 2 (POST to create lead row with contact info)
     document.getElementById('step1Next')?.addEventListener('click', () => {
         const firstName = document.getElementById('firstName').value.trim();
         const lastName = document.getElementById('lastName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const state = document.getElementById('state').value.trim();
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneDigits = phone.replace(/\D/g, '');
+
         if (!firstName || !lastName) {
             showNotification('Please enter your first and last name.', 'error');
             return;
         }
-        goToStep(2);
-        document.getElementById('email')?.focus();
+        if (!email || !emailRegex.test(email)) {
+            showNotification('Please enter a valid email address.', 'error');
+            return;
+        }
+        if (phoneDigits.length !== 10) {
+            showNotification('Please enter a valid 10-digit US phone number.', 'error');
+            return;
+        }
+        if (!state) {
+            showNotification('Please enter your state.', 'error');
+            return;
+        }
 
-        // Create the lead row in the background
+        goToStep(2);
+
+        // Create the lead row with all contact info
         fetch('/api/leads', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ firstName, lastName })
+            body: JSON.stringify({ firstName, lastName, email, phone, state })
         })
             .then(async (res) => {
                 if (!res.ok) throw new Error(`POST failed: ${res.status}`);
@@ -312,79 +331,59 @@ function initializeContactForm() {
     // Step 2 → 1
     document.getElementById('step2Back')?.addEventListener('click', () => goToStep(1));
 
-    // Step 2 → 3 (PATCH contact info)
+    // Step 2 → 3 (PATCH qualification answers)
     document.getElementById('step2Next')?.addEventListener('click', () => {
-        const email = document.getElementById('email').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phoneDigits = phone.replace(/\D/g, '');
+        const metaBudgetCommitment = document.querySelector('input[name="metaBudgetCommitment"]:checked');
+        const avgCaseValue = document.getElementById('avgCaseValue').value.trim();
+        const dedicatedIntake = document.querySelector('input[name="dedicatedIntake"]:checked');
+        const responseTime = document.getElementById('responseTime').value.trim();
+        const usesCRM = document.querySelector('input[name="usesCRM"]:checked');
+        const firmDifferentiator = document.getElementById('firmDifferentiator').value.trim();
 
-        if (!email || !emailRegex.test(email)) {
-            showNotification('Please enter a valid email address.', 'error');
+        if (!metaBudgetCommitment) {
+            showNotification('Please answer the Meta ads budget question.', 'error');
             return;
         }
-        if (phoneDigits.length !== 10) {
-            showNotification('Please enter a valid 10-digit US phone number.', 'error');
+        if (!avgCaseValue) {
+            showNotification('Please enter your average case value.', 'error');
             return;
         }
+        if (!dedicatedIntake) {
+            showNotification('Please answer the dedicated intake question.', 'error');
+            return;
+        }
+        if (!responseTime) {
+            showNotification('Please enter your response time.', 'error');
+            return;
+        }
+        if (!usesCRM) {
+            showNotification('Please answer the CRM question.', 'error');
+            return;
+        }
+
         goToStep(3);
-        document.getElementById('lawFirm')?.focus();
 
-        patchLead({ email, phone });
+        // PATCH qualification data
+        patchLead({
+            metaBudgetCommitment: metaBudgetCommitment.value,
+            avgCaseValue,
+            dedicatedIntake: dedicatedIntake.value,
+            responseTime,
+            usesCRM: usesCRM.value,
+            firmDifferentiator: firmDifferentiator || null
+        });
     });
 
     // Step 3 → 2
     document.getElementById('step3Back')?.addEventListener('click', () => goToStep(2));
 
-    // Final submit
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const lawFirm = document.getElementById('lawFirm').value.trim();
-        if (!lawFirm) {
-            showNotification('Please enter your law firm name.', 'error');
-            return;
-        }
-
-        contactFormData = {
-            firstName: document.getElementById('firstName').value.trim(),
-            lastName: document.getElementById('lastName').value.trim(),
-            email: document.getElementById('email').value.trim(),
-            phone: document.getElementById('phone').value.trim(),
-            lawFirm,
-            website: document.getElementById('website').value.trim()
-        };
-
-        console.log('Contact form data stored:', contactFormData);
-
-        showNotification('Calculator unlocked! Enter your numbers below.', 'success');
-
-        // PATCH firm info
-        patchLead({ lawFirm, website: document.getElementById('website').value.trim() });
-
-        // Unlock the hero calculator
-        const heroCalcCard = document.querySelector('.hero-calculator-card');
-        const lockOverlay = document.querySelector('.calculator-lock-overlay');
-        const calcInputs = document.querySelectorAll('#cplForm input');
-        const calcButton = document.querySelector('#cplForm button[type="submit"]');
-        const heroLegend = document.getElementById('heroLegend');
-
-        if (heroCalcCard) heroCalcCard.classList.remove('locked');
-        if (lockOverlay) lockOverlay.style.display = 'none';
-
-        // Enable calculator inputs
-        calcInputs.forEach(input => input.removeAttribute('disabled'));
-        if (calcButton) calcButton.removeAttribute('disabled');
-
-        // Show legend cards
-        if (heroLegend) heroLegend.style.display = 'grid';
-
-        // Focus first calculator input
-        setTimeout(() => {
-            const adSpendInput = document.getElementById('adSpend');
-            if (adSpendInput) adSpendInput.focus();
-        }, 300);
+    // Step 3 → 4 (Video to Booking)
+    document.getElementById('step3Next')?.addEventListener('click', () => {
+        goToStep(4);
     });
+
+    // Step 4 → 3
+    document.getElementById('step4Back')?.addEventListener('click', () => goToStep(3));
 }
 
 function submitToDatabase(formData) {
