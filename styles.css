@@ -166,7 +166,7 @@ body::before {
 
 /* Header */
 .header {
-    padding: 20px 0;
+    padding: 12px 0;
     background: rgba(10, 10, 10, 0.8);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-color);
@@ -175,46 +175,21 @@ body::before {
     z-index: 100;
 }
 
-.nav {
+.logo {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
 }
 
 .logo-img {
-    height: 80px;
+    height: 50px;
     width: auto;
     object-fit: contain;
 }
 
-.logo h1 {
-    font-size: 28px;
-    font-weight: 800;
-    background: var(--gradient-1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.nav-links {
-    display: flex;
-    gap: 30px;
-}
-
-.nav-links a {
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-.nav-links a:hover {
-    color: var(--accent-color);
-}
-
 /* Hero Section */
 .hero {
-    padding: 30px 0 30px;
+    padding: 40px 0 30px;
 }
 
 .hero-flow {
@@ -309,9 +284,9 @@ body::before {
 }
 
 .hero-title {
-    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
     font-weight: 800;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     background: linear-gradient(135deg, #ffffff 0%, #ff006e 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -320,7 +295,7 @@ body::before {
 }
 
 .hero-subtitle {
-    font-size: clamp(0.85rem, 1.3vw, 0.95rem);
+    font-size: clamp(0.9rem, 1.4vw, 1.05rem);
     color: var(--text-secondary);
     line-height: 1.5;
     margin-bottom: 20px;
@@ -1887,12 +1862,12 @@ textarea::placeholder {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .nav-links {
-        display: none;
+    .logo-img {
+        height: 40px;
     }
 
     .hero {
-        padding: 20px 0 20px;
+        padding: 30px 0 20px;
     }
 
     .hero-grid {
@@ -1906,12 +1881,12 @@ textarea::placeholder {
     }
 
     .hero-title {
-        font-size: 1.4rem;
-        margin-bottom: 8px;
+        font-size: 1.6rem;
+        margin-bottom: 10px;
     }
 
     .hero-subtitle {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         margin-bottom: 16px;
     }
 
@@ -2016,16 +1991,20 @@ textarea::placeholder {
         padding: 0 12px;
     }
 
+    .logo-img {
+        height: 36px;
+    }
+
     .hero {
-        padding: 15px 0 15px;
+        padding: 25px 0 15px;
     }
 
     .hero-title {
-        font-size: 1.3rem;
+        font-size: 1.5rem;
     }
 
     .hero-subtitle {
-        font-size: 0.8rem;
+        font-size: 0.85rem;
     }
 
     .scroll-indicator {
