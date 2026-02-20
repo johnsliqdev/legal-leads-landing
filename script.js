@@ -183,19 +183,39 @@ function updateResultsSection(data) {
     const currentCpql = data.currentCpl;
     const currentSpend = data.totalMonthlySpend;
 
-    // Project lead range with same budget
-    const projectedLeadsLow = Math.round(currentSpend / (targetCpql * 1.2)); // Conservative estimate
-    const projectedLeadsHigh = Math.round(currentSpend / (targetCpql * 0.8)); // Optimistic estimate
+    const isOptimal = currentCpql > 0 && currentCpql <= targetCpql;
 
-    // Calculate CPQL reduction percentage
-    const cpqlReduction = currentCpql > 0 ? Math.round(((currentCpql - targetCpql) / currentCpql) * 100) : 0;
-    const cpqlReductionLow = Math.max(0, cpqlReduction - 10);
-    const cpqlReductionHigh = cpqlReduction + 10;
+    if (isOptimal) {
+        // Client is already performing optimally
+        setText('projectionHeading', 'You\'re Already Performing Optimally');
+        setText('projectionDesc', 'Your Cost Per Qualified Lead is excellent. Let\'s scale and optimize your current spend.');
+        setText('projectionLabel1', 'Potential Monthly Lead Volume Increase');
+        setText('projectionLabel2', 'Additional Channel Opportunities');
 
-    // Populate projection section
-    setText('projectedLeadRange', `${projectedLeadsLow}-${projectedLeadsHigh} leads`);
-    setText('targetCpql', `$${Math.round(targetCpql * 0.85)}-$${Math.round(targetCpql * 1.15)}`);
-    setText('cpqlReduction', `${cpqlReductionLow}-${cpqlReductionHigh}%`);
+        // Calculate potential scale with 50% more budget
+        const scaledLeadsLow = Math.round(data.leadsCount * 1.3);
+        const scaledLeadsHigh = Math.round(data.leadsCount * 1.7);
+        setText('projectedLeadRange', `${scaledLeadsLow}-${scaledLeadsHigh} leads`);
+        setText('cpqlReduction', 'Meta + SEO + Retargeting');
+    } else {
+        // Standard projection flow
+        setText('projectionHeading', 'What Sliq Can Do For You');
+        setText('projectionDesc', 'Based on your current spend and our proven results');
+        setText('projectionLabel1', 'Projected Monthly Lead Range');
+        setText('projectionLabel2', 'Potential Cost Per Qualified Lead Reduction');
+
+        // Project lead range with same budget
+        const projectedLeadsLow = Math.round(currentSpend / (targetCpql * 1.2)); // Conservative estimate
+        const projectedLeadsHigh = Math.round(currentSpend / (targetCpql * 0.8)); // Optimistic estimate
+
+        // Calculate CPQL reduction percentage
+        const cpqlReduction = Math.round(((currentCpql - targetCpql) / currentCpql) * 100);
+        const cpqlReductionLow = Math.max(0, cpqlReduction - 10);
+        const cpqlReductionHigh = cpqlReduction + 10;
+
+        setText('projectedLeadRange', `${projectedLeadsLow}-${projectedLeadsHigh} leads`);
+        setText('cpqlReduction', `${cpqlReductionLow}-${cpqlReductionHigh}%`);
+    }
 
     // Show projection section
     const projectionSection = document.getElementById('sliqProjectionSection');

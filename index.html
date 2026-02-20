@@ -168,22 +168,27 @@
                     <!-- Step 3.5: What Sliq Can Do (shown after results) -->
                     <div class="flow-section" id="sliqProjectionSection" style="display:none;">
                         <div class="flow-card sliq-projection-card">
-                            <h3>What Sliq Can Do For You</h3>
-                            <p class="flow-desc">Based on your current spend and our proven results</p>
-                            <div class="projection-grid">
+                            <h3 id="projectionHeading">What Sliq Can Do For You</h3>
+                            <p class="flow-desc" id="projectionDesc">Based on your current spend and our proven results</p>
+                            <div class="projection-grid" id="projectionGrid">
                                 <div class="projection-item">
-                                    <div class="projection-icon">📈</div>
-                                    <div class="projection-label">Projected Monthly Lead Range</div>
+                                    <div class="projection-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M3 17L9 11L13 15L21 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M21 12V7H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                    <div class="projection-label" id="projectionLabel1">Projected Monthly Lead Range</div>
                                     <div class="projection-value" id="projectedLeadRange">15-25 leads</div>
                                 </div>
                                 <div class="projection-item">
-                                    <div class="projection-icon">💰</div>
-                                    <div class="projection-label">Target Cost Per Qualified Lead</div>
-                                    <div class="projection-value" id="targetCpql">$600-$800</div>
-                                </div>
-                                <div class="projection-item">
-                                    <div class="projection-icon">📉</div>
-                                    <div class="projection-label">Potential Cost Per Qualified Lead Reduction</div>
+                                    <div class="projection-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M3 17L9 11L13 15L21 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M14 7L21 7L21 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                    <div class="projection-label" id="projectionLabel2">Potential Cost Per Qualified Lead Reduction</div>
                                     <div class="projection-value" id="cpqlReduction">30-45%</div>
                                 </div>
                             </div>
