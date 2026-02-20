@@ -178,6 +178,31 @@ function updateResultsSection(data) {
         resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
+    // Calculate and show Sliq projections
+    const targetCpql = data.guaranteedCpl;
+    const currentCpql = data.currentCpl;
+    const currentSpend = data.totalMonthlySpend;
+
+    // Project lead range with same budget
+    const projectedLeadsLow = Math.round(currentSpend / (targetCpql * 1.2)); // Conservative estimate
+    const projectedLeadsHigh = Math.round(currentSpend / (targetCpql * 0.8)); // Optimistic estimate
+
+    // Calculate CPQL reduction percentage
+    const cpqlReduction = currentCpql > 0 ? Math.round(((currentCpql - targetCpql) / currentCpql) * 100) : 0;
+    const cpqlReductionLow = Math.max(0, cpqlReduction - 10);
+    const cpqlReductionHigh = cpqlReduction + 10;
+
+    // Populate projection section
+    setText('projectedLeadRange', `${projectedLeadsLow}-${projectedLeadsHigh} leads`);
+    setText('targetCpql', `$${Math.round(targetCpql * 0.85)}-$${Math.round(targetCpql * 1.15)}`);
+    setText('cpqlReduction', `${cpqlReductionLow}-${cpqlReductionHigh}%`);
+
+    // Show projection section
+    const projectionSection = document.getElementById('sliqProjectionSection');
+    if (projectionSection) {
+        projectionSection.style.display = 'block';
+    }
+
     // Legacy code for old results section (if it exists)
     const isOutstanding = data.currentCpl > 0 && data.currentCpl <= data.guaranteedCpl;
 
@@ -247,6 +272,8 @@ function initializeContactForm() {
 
             const firstName = document.getElementById('firstName').value.trim();
             const lastName = document.getElementById('lastName').value.trim();
+            const lawFirmName = document.getElementById('lawFirmName').value.trim();
+            const website = document.getElementById('website').value.trim();
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
             const state = document.getElementById('state').value.trim();
@@ -264,13 +291,13 @@ function initializeContactForm() {
             }
 
             // Store contact data for later use
-            contactFormData = { firstName, lastName, email, phone, state };
+            contactFormData = { firstName, lastName, lawFirmName, website, email, phone, state };
 
             // Save to database
             fetch('/api/leads', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ firstName, lastName, email, phone, state })
+                body: JSON.stringify({ firstName, lastName, lawFirmName, website, email, phone, state })
             })
                 .then(async (res) => {
                     if (!res.ok) throw new Error(`POST failed: ${res.status}`);
