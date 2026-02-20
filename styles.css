@@ -611,6 +611,31 @@ input::placeholder {
     opacity: 0.6;
 }
 
+select {
+    width: 100%;
+    padding: 12px;
+    background: var(--secondary-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 15px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(255, 0, 110, 0.1);
+}
+
+select option {
+    background: var(--secondary-bg);
+    color: var(--text-primary);
+    padding: 10px;
+}
+
 textarea {
     width: 100%;
     padding: 12px;

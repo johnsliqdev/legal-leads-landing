@@ -29,7 +29,7 @@
                     <!-- Step 1: Contact Info -->
                     <div class="flow-section" id="contactSection">
                         <div class="flow-card">
-                            <h3>Get Your Free CPQL Analysis</h3>
+                            <h3>Get Your Free Cost Per Qualified Lead Analysis</h3>
                             <p class="flow-desc">Enter your information to access the calculator</p>
                             <form id="contactForm" class="flow-form">
                                 <div class="form-row">
@@ -51,7 +51,59 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="state">State</label>
-                                        <input type="text" id="state" name="state" placeholder="Florida" required>
+                                        <select id="state" name="state" required>
+                                            <option value="">Select your state</option>
+                                            <option value="Alabama">Alabama</option>
+                                            <option value="Alaska">Alaska</option>
+                                            <option value="Arizona">Arizona</option>
+                                            <option value="Arkansas">Arkansas</option>
+                                            <option value="California">California</option>
+                                            <option value="Colorado">Colorado</option>
+                                            <option value="Connecticut">Connecticut</option>
+                                            <option value="Delaware">Delaware</option>
+                                            <option value="Florida">Florida</option>
+                                            <option value="Georgia">Georgia</option>
+                                            <option value="Hawaii">Hawaii</option>
+                                            <option value="Idaho">Idaho</option>
+                                            <option value="Illinois">Illinois</option>
+                                            <option value="Indiana">Indiana</option>
+                                            <option value="Iowa">Iowa</option>
+                                            <option value="Kansas">Kansas</option>
+                                            <option value="Kentucky">Kentucky</option>
+                                            <option value="Louisiana">Louisiana</option>
+                                            <option value="Maine">Maine</option>
+                                            <option value="Maryland">Maryland</option>
+                                            <option value="Massachusetts">Massachusetts</option>
+                                            <option value="Michigan">Michigan</option>
+                                            <option value="Minnesota">Minnesota</option>
+                                            <option value="Mississippi">Mississippi</option>
+                                            <option value="Missouri">Missouri</option>
+                                            <option value="Montana">Montana</option>
+                                            <option value="Nebraska">Nebraska</option>
+                                            <option value="Nevada">Nevada</option>
+                                            <option value="New Hampshire">New Hampshire</option>
+                                            <option value="New Jersey">New Jersey</option>
+                                            <option value="New Mexico">New Mexico</option>
+                                            <option value="New York">New York</option>
+                                            <option value="North Carolina">North Carolina</option>
+                                            <option value="North Dakota">North Dakota</option>
+                                            <option value="Ohio">Ohio</option>
+                                            <option value="Oklahoma">Oklahoma</option>
+                                            <option value="Oregon">Oregon</option>
+                                            <option value="Pennsylvania">Pennsylvania</option>
+                                            <option value="Rhode Island">Rhode Island</option>
+                                            <option value="South Carolina">South Carolina</option>
+                                            <option value="South Dakota">South Dakota</option>
+                                            <option value="Tennessee">Tennessee</option>
+                                            <option value="Texas">Texas</option>
+                                            <option value="Utah">Utah</option>
+                                            <option value="Vermont">Vermont</option>
+                                            <option value="Virginia">Virginia</option>
+                                            <option value="Washington">Washington</option>
+                                            <option value="West Virginia">West Virginia</option>
+                                            <option value="Wisconsin">Wisconsin</option>
+                                            <option value="Wyoming">Wyoming</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <button type="submit" class="submit-btn">Access Calculator →</button>
@@ -62,8 +114,8 @@
                     <!-- Step 2: Calculator (hidden until contact submitted) -->
                     <div class="flow-section" id="calculatorSection" style="display:none;">
                         <div class="flow-card">
-                            <h3>PI Case CPQL Calculator</h3>
-                            <p class="flow-desc">Calculate your current Cost per Qualified Lead</p>
+                            <h3>PI Case Cost Per Qualified Lead Calculator</h3>
+                            <p class="flow-desc">Calculate your current Cost Per Qualified Lead</p>
                             <form id="cplForm" class="flow-form">
                                 <div class="form-row">
                                     <div class="form-group">
@@ -79,7 +131,7 @@
                                         <input type="number" id="leadsCount" name="leadsCount" placeholder="50" required min="0.01" step="0.01">
                                     </div>
                                 </div>
-                                <button type="submit" class="submit-btn">Calculate My CPQL →</button>
+                                <button type="submit" class="submit-btn">Calculate My Cost Per Qualified Lead →</button>
                             </form>
                         </div>
                     </div>
@@ -87,14 +139,14 @@
                     <!-- Step 3: Results with CTA (hidden until calculated) -->
                     <div class="flow-section" id="resultsSection" style="display:none;">
                         <div class="flow-card">
-                            <h3>Your PI Case CPQL Analysis</h3>
+                            <h3>Your PI Case Cost Per Qualified Lead Analysis</h3>
                             <div class="results-grid">
                                 <div class="result-item">
                                     <div class="result-label">Current Monthly Spend</div>
                                     <div class="result-value" id="resultCurrentSpend">$0</div>
                                 </div>
                                 <div class="result-item">
-                                    <div class="result-label">Current CPQL</div>
+                                    <div class="result-label">Current Cost Per Qualified Lead</div>
                                     <div class="result-value" id="resultCurrentCpql">$0</div>
                                 </div>
                                 <div class="result-item">
@@ -170,9 +222,8 @@
                     <div class="flow-section" id="videoSection" style="display:none;">
                         <div class="flow-card">
                             <h3>Watch This Quick 2-Minute Overview</h3>
-                            <div class="video-placeholder">
-                                <p>📺 Video will be embedded here</p>
-                                <p class="video-note">Add your video URL</p>
+                            <div class="video-container">
+                                <iframe width="100%" height="400" src="https://www.youtube.com/embed/kvK3G0-ewdQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="border-radius: 12px;"></iframe>
                             </div>
                             <button type="button" class="submit-btn" id="showBookingBtn">Continue to Booking →</button>
                         </div>
@@ -253,7 +304,7 @@
                     </div>
 
                     <div class="overspend-cta">
-                        <a href="#hero" class="calculate-btn">Calculate Your Current CPQL</a>
+                        <a href="#hero" class="calculate-btn">Calculate Your Current Cost Per Qualified Lead</a>
                     </div>
                 </div>
             </div>
@@ -275,7 +326,7 @@
                         </div>
                         <div class="case-stat">
                             <div class="case-stat-value">~$650</div>
-                            <div class="case-stat-label">Final CPQL</div>
+                            <div class="case-stat-label">Final Cost Per Qualified Lead</div>
                         </div>
                         <div class="case-stat">
                             <div class="case-stat-value">40%</div>
@@ -286,7 +337,7 @@
                         <h4>Mid-Size PI Firm — Southeast US</h4>
                         <div class="case-study-block">
                             <h5>The Challenge</h5>
-                            <p>The firm was spending heavily on Google Ads and aggregator leads with CPCs north of $80 and a CPQL over $1,200. Most "leads" were unqualified — wrong case type, no intent, or already retained elsewhere.</p>
+                            <p>The firm was spending heavily on Google Ads and aggregator leads with CPCs north of $80 and a Cost Per Qualified Lead over $1,200. Most "leads" were unqualified — wrong case type, no intent, or already retained elsewhere.</p>
                         </div>
                         <div class="case-study-block">
                             <h5>What We Did</h5>
@@ -294,7 +345,7 @@
                         </div>
                         <div class="case-study-block">
                             <h5>The Result</h5>
-                            <p>30+ qualified leads in 78 days. CPQL dropped from $1,200+ to approximately $650 — and the firm's intake team reported significantly higher close rates from leads that came through our system.</p>
+                            <p>30+ qualified leads in 78 days. Cost Per Qualified Lead dropped from $1,200+ to approximately $650 — and the firm's intake team reported significantly higher close rates from leads that came through our system.</p>
                         </div>
                         <p class="case-study-disclaimer">*Results may vary. Case study based on actual client engagement.</p>
                     </div>
@@ -315,7 +366,7 @@
                         </div>
                     </div>
                     <div class="testimonial-card">
-                        <div class="testimonial-quote">"Our CPQL dropped by nearly half. The leads actually pick up the phone, they have real cases, and our intake team isn't wasting time on dead ends anymore."</div>
+                        <div class="testimonial-quote">"Our Cost Per Qualified Lead dropped by nearly half. The leads actually pick up the phone, they have real cases, and our intake team isn't wasting time on dead ends anymore."</div>
                         <div class="testimonial-author">
                             <div class="testimonial-name">Sarah M.</div>
                             <div class="testimonial-role">Marketing Director — Injury Law Group, Texas</div>
