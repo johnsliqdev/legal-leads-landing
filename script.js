@@ -227,7 +227,11 @@ function updateResultsSection(data) {
 
         // Right box: Get More Cases at No Extra Ad Spend
         setText('projectionLabel2', 'Get More Cases at No Extra Ad Spend');
-        setText('cpqlReduction', 'Explore Organic Channels - (Google, Bing, AI Search (ChatGPT, Gemini, Google AI Overview))');
+        // Use innerHTML for mixed font sizes
+        const cpqlEl = document.getElementById('cpqlReduction');
+        if (cpqlEl) {
+            cpqlEl.innerHTML = 'Explore Organic Channels <span style="font-size: 0.85em;">- Google, Bing, AI Search (ChatGPT, Gemini, Google AI Overview)</span>';
+        }
         setText('projectionSubtext2', 'Most law firms are invisible on Google when people search for lawyers. We\'ll help you show up organically and get cases without paying for ads.');
 
         // Update CTA for optimal performers
