@@ -19,12 +19,44 @@
         </div>
     </header>
 
+    <!-- Progress Milestone Bar -->
+    <div class="progress-bar" id="progressBar">
+        <div class="progress-item" data-section="hero">
+            <div class="progress-dot"></div>
+            <div class="progress-label">Contact</div>
+        </div>
+        <div class="progress-item" data-section="calculatorSection">
+            <div class="progress-dot"></div>
+            <div class="progress-label">Calculator</div>
+        </div>
+        <div class="progress-item" data-section="resultsSection">
+            <div class="progress-dot"></div>
+            <div class="progress-label">Results</div>
+        </div>
+        <div class="progress-item" data-section="sliqProjectionSection">
+            <div class="progress-dot"></div>
+            <div class="progress-label">Analysis</div>
+        </div>
+        <div class="progress-item" data-section="qualificationSection">
+            <div class="progress-dot"></div>
+            <div class="progress-label">Qualify</div>
+        </div>
+        <div class="progress-item" data-section="videoSection">
+            <div class="progress-dot"></div>
+            <div class="progress-label">Video</div>
+        </div>
+        <div class="progress-item" data-section="bookingSection">
+            <div class="progress-dot"></div>
+            <div class="progress-label">Book Call</div>
+        </div>
+    </div>
+
     <main>
         <section id="hero" class="hero">
             <div class="container">
                 <div class="hero-flow">
                     <h2 class="hero-title">30 Qualified PI Leads in 90 Days — Or Free Until You Do</h2>
-                    <p class="hero-subtitle">We build and optimize your Meta + funnel system. You fund the ad spend. We guarantee 30 qualified personal injury leads within 90 days — if we miss, we keep working at zero management fee until you hit 30.</p>
+                    <p class="hero-subtitle">We build and optimize your Meta + funnel system. You fund the ad spend. We guarantee 30 qualified personal injury leads within 90 days — if we miss, we keep working at zero management fee until you hit 30*.</p>
 
                     <!-- Step 1: Contact Info -->
                     <div class="flow-section" id="contactSection">
@@ -131,21 +163,21 @@
                                             Monthly Ad Spend ($)
                                             <button type="button" class="help-icon" data-modal="adSpendModal">?</button>
                                         </label>
-                                        <input type="number" id="adSpend" name="adSpend" placeholder="5000" required min="0" step="0.01">
+                                        <input type="number" id="adSpend" name="adSpend" placeholder="5000" required min="0" step="1">
                                     </div>
                                     <div class="form-group">
                                         <label for="marketingFees">
                                             Monthly Marketing Fees ($)
                                             <button type="button" class="help-icon" data-modal="marketingFeesModal">?</button>
                                         </label>
-                                        <input type="number" id="marketingFees" name="marketingFees" placeholder="2000" required min="0" step="0.01">
+                                        <input type="number" id="marketingFees" name="marketingFees" placeholder="2000" required min="0" step="1">
                                     </div>
                                     <div class="form-group">
                                         <label for="leadsCount">
                                             Number of Qualified PI Leads per Month
                                             <button type="button" class="help-icon" data-modal="qualifiedLeadModal">?</button>
                                         </label>
-                                        <input type="number" id="leadsCount" name="leadsCount" placeholder="50" required min="0.01" step="0.01">
+                                        <input type="number" id="leadsCount" name="leadsCount" placeholder="50" required min="1" step="1">
                                     </div>
                                 </div>
                                 <button type="submit" class="submit-btn">Calculate My Cost Per Qualified Lead →</button>
@@ -356,7 +388,7 @@
                             <div class="point-icon icon-step-num"><span>&#10003;</span></div>
                             <div class="point-content">
                                 <h4>Miss the Target? We Work Free</h4>
-                                <p>If we fall short of 30 qualified leads in 90 days, we continue working at zero management fee until you hit the target. That's our guarantee.</p>
+                                <p>If we fall short of 30 qualified leads in 90 days, we continue working at zero management fee until you hit the target. That's our guarantee*.</p>
                             </div>
                         </div>
                     </div>

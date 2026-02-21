@@ -201,10 +201,10 @@ function updateResultsSection(data) {
         setText('projectedLeadRange', '30-50% Ad Spend Reduction');
         setText('projectionSubtext1', 'Build SEO/GEO assets that generate cases at $0 marginal cost over 12 months');
 
-        // Right box: Untapped Visibility Gaps
-        setText('projectionLabel2', 'Untapped Visibility Gaps');
-        setText('cpqlReduction', 'SEO + GBP + AI Search');
-        setText('projectionSubtext2', 'Most firms miss 40-60% of local search traffic. Capture cases your competitors are getting for free.');
+        // Right box: Get More Cases at No Extra Cost
+        setText('projectionLabel2', 'Get More Cases at No Extra Cost');
+        setText('cpqlReduction', 'Free Organic Channels');
+        setText('projectionSubtext2', 'Most law firms are invisible on Google when people search for lawyers. We\'ll help you show up for free and get cases without paying for ads.');
 
         // Update CTA for optimal performers
         const ctaHeading = document.querySelector('#sliqProjectionSection .results-cta h4');
@@ -416,7 +416,7 @@ function initializeContactForm() {
 
             // Show video
             document.getElementById('videoSection').style.display = 'block';
-            document.getElementById('videoSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.getElementById('videoSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
     }
 
@@ -425,7 +425,7 @@ function initializeContactForm() {
     if (showBookingBtn) {
         showBookingBtn.addEventListener('click', function() {
             document.getElementById('bookingSection').style.display = 'block';
-            document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
     }
 }
@@ -686,4 +686,109 @@ document.addEventListener('DOMContentLoaded', function() {
             modal.style.display = 'none';
         }
     });
+});
+
+// Progress Bar Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const progressBar = document.getElementById('progressBar');
+    const progressItems = document.querySelectorAll('.progress-item');
+
+    if (!progressBar || progressItems.length === 0) return;
+
+    // Make progress items clickable
+    progressItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const sectionId = this.getAttribute('data-section');
+            let targetSection;
+
+            if (sectionId === 'hero') {
+                targetSection = document.getElementById('hero');
+            } else {
+                targetSection = document.getElementById(sectionId);
+            }
+
+            if (targetSection && targetSection.style.display !== 'none') {
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    });
+
+    // Update progress bar based on scroll and visible sections
+    function updateProgressBar() {
+        let activeSection = null;
+
+        // Check each section
+        const sections = [
+            { id: 'hero', element: document.getElementById('hero') },
+            { id: 'calculatorSection', element: document.getElementById('calculatorSection') },
+            { id: 'resultsSection', element: document.getElementById('resultsSection') },
+            { id: 'sliqProjectionSection', element: document.getElementById('sliqProjectionSection') },
+            { id: 'qualificationSection', element: document.getElementById('qualificationSection') },
+            { id: 'videoSection', element: document.getElementById('videoSection') },
+            { id: 'bookingSection', element: document.getElementById('bookingSection') }
+        ];
+
+        // Find the currently visible section
+        for (let i = 0; i < sections.length; i++) {
+            const section = sections[i];
+            if (!section.element) continue;
+
+            // Skip if section is hidden
+            if (section.element.style.display === 'none') continue;
+
+            const rect = section.element.getBoundingClientRect();
+            const isVisible = rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2;
+
+            if (isVisible) {
+                activeSection = section.id;
+                break;
+            }
+        }
+
+        // Update progress items
+        progressItems.forEach(item => {
+            const sectionId = item.getAttribute('data-section');
+            const section = sections.find(s => s.id === sectionId);
+
+            if (!section || !section.element) return;
+
+            // Hide progress item if section is not yet visible (display: none)
+            if (section.element.style.display === 'none') {
+                item.style.opacity = '0.3';
+                item.style.pointerEvents = 'none';
+                item.classList.remove('active', 'completed');
+                return;
+            } else {
+                item.style.opacity = '1';
+                item.style.pointerEvents = 'auto';
+            }
+
+            // Mark as active or completed
+            if (sectionId === activeSection) {
+                item.classList.add('active');
+                item.classList.remove('completed');
+            } else {
+                item.classList.remove('active');
+                // Check if this section was completed (before active section)
+                const sectionIndex = sections.findIndex(s => s.id === sectionId);
+                const activeIndex = sections.findIndex(s => s.id === activeSection);
+                if (sectionIndex < activeIndex && sectionIndex >= 0 && activeIndex >= 0) {
+                    item.classList.add('completed');
+                } else {
+                    item.classList.remove('completed');
+                }
+            }
+        });
+    }
+
+    // Update on scroll
+    window.addEventListener('scroll', updateProgressBar);
+
+    // Update when sections become visible
+    const observer = new MutationObserver(updateProgressBar);
+    const config = { attributes: true, attributeFilter: ['style'], subtree: true };
+    observer.observe(document.body, config);
+
+    // Initial update
+    updateProgressBar();
 });
