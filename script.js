@@ -101,9 +101,10 @@ function initializeCPLCalculator() {
             monthlySavings,
             annualSavings,
             percentageSavings,
-            sameBudgetLeads
+            sameBudgetLeads,
+            adSpend
         };
-        
+
         updateResultsSection({
             currentCpl,
             guaranteedCpl,
@@ -113,7 +114,8 @@ function initializeCPLCalculator() {
             monthlySavings,
             annualSavings,
             percentageSavings,
-            sameBudgetLeads
+            sameBudgetLeads,
+            adSpend
         });
 
         populateHiddenCalculationFields(lastCalculation);
@@ -182,7 +184,7 @@ function updateResultsSection(data) {
 
     // Check if ad spend is less than $5000
     const minBudget = 5000;
-    const isLowBudget = (data.totalMonthlySpend - data.guaranteedCpl) < minBudget;
+    const isLowBudget = data.adSpend < minBudget;
 
     const isOptimal = currentCpql > 0 && currentCpql <= targetCpql;
 
@@ -204,7 +206,7 @@ function updateResultsSection(data) {
         setText('projectedLeadRange', `$${minimumTotalBudget.toLocaleString()}/mo`);
         setText('cpqlReduction', `${projectedLeadsWithMinBudget} qualified leads`);
         setText('projectionSubtext1', '$5,000 ad spend + $3,500 management fee');
-        setText('projectionSubtext2', `At an average of $${targetCpql} per qualified lead`);
+        setText('projectionSubtext2', '');
 
         // Update CTA for low budget
         const ctaHeading = document.querySelector('#sliqProjectionSection .results-cta h4');
