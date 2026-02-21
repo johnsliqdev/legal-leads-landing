@@ -175,7 +175,7 @@ function updateResultsSection(data) {
     const resultsSection = document.getElementById('resultsSection');
     if (resultsSection) {
         resultsSection.style.display = 'block';
-        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        resultsSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     // Calculate and show Sliq projections
@@ -184,6 +184,12 @@ function updateResultsSection(data) {
     const currentSpend = data.totalMonthlySpend;
 
     const isOptimal = currentCpql > 0 && currentCpql <= targetCpql;
+
+    // Update CTA button based on optimal status
+    const qualBtn = document.getElementById('showQualificationBtn');
+    if (qualBtn) {
+        qualBtn.setAttribute('data-optimal', isOptimal ? 'true' : 'false');
+    }
 
     if (isOptimal) {
         // Client is already performing optimally
@@ -199,9 +205,16 @@ function updateResultsSection(data) {
         setText('projectionLabel2', 'Untapped Visibility Gaps');
         setText('cpqlReduction', 'SEO + GBP + AI Search');
         setText('projectionSubtext2', 'Most firms miss 40-60% of local search traffic. Capture cases your competitors are getting for free.');
+
+        // Update CTA for optimal performers
+        const ctaHeading = document.querySelector('#sliqProjectionSection .results-cta h4');
+        const ctaText = document.querySelector('#sliqProjectionSection .results-cta p');
+        if (ctaHeading) ctaHeading.textContent = 'Ready to Scale Your Success?';
+        if (ctaText) ctaText.textContent = 'Let\'s discuss how we can help you grow even further';
+        if (qualBtn) qualBtn.textContent = 'Schedule a Call →';
     } else {
-        // Standard projection flow
-        setText('projectionHeading', 'What Sliq Can Do For You');
+        // Standard projection flow - not performing optimally
+        setText('projectionHeading', 'You\'re Not Performing Optimally — Here\'s What We Can Do For You');
         setText('projectionDesc', 'Based on your current spend and our proven results');
         setText('projectionLabel1', 'Projected Monthly Lead Range');
         setText('projectionLabel2', 'Potential Cost Per Qualified Lead Reduction');
@@ -219,6 +232,13 @@ function updateResultsSection(data) {
         setText('cpqlReduction', `${cpqlReductionLow}-${cpqlReductionHigh}%`);
         setText('projectionSubtext1', '');
         setText('projectionSubtext2', '');
+
+        // Update CTA for non-optimal performers
+        const ctaHeading = document.querySelector('#sliqProjectionSection .results-cta h4');
+        const ctaText = document.querySelector('#sliqProjectionSection .results-cta p');
+        if (ctaHeading) ctaHeading.textContent = 'Ready to Get 30 Qualified Leads in 90 Days?';
+        if (ctaText) ctaText.textContent = 'Answer a few quick questions to see if you qualify';
+        if (qualBtn) qualBtn.textContent = 'Continue to Qualify →';
     }
 
     // Show projection section
@@ -339,16 +359,34 @@ function initializeContactForm() {
         });
     }
 
-    // 2. Results CTA → Show Qualification
-    const showQualificationBtn = document.getElementById('showQualificationBtn');
-    if (showQualificationBtn) {
-        showQualificationBtn.addEventListener('click', function() {
-            document.getElementById('qualificationSection').style.display = 'block';
-            document.getElementById('qualificationSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // 2. Results → Show Projection
+    const showProjectionBtn = document.getElementById('showProjectionBtn');
+    if (showProjectionBtn) {
+        showProjectionBtn.addEventListener('click', function() {
+            document.getElementById('sliqProjectionSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
     }
 
-    // 3. Qualification Form → Show Video
+    // 3. Projection CTA → Show Qualification or Booking
+    const showQualificationBtn = document.getElementById('showQualificationBtn');
+    if (showQualificationBtn) {
+        showQualificationBtn.addEventListener('click', function() {
+            // Check if user is optimal (this will be set by the projection calculation)
+            const isOptimalUser = showQualificationBtn.getAttribute('data-optimal') === 'true';
+
+            if (isOptimalUser) {
+                // Skip to booking for optimal performers
+                document.getElementById('bookingSection').style.display = 'block';
+                document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                // Show qualification questions for non-optimal performers
+                document.getElementById('qualificationSection').style.display = 'block';
+                document.getElementById('qualificationSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    }
+
+    // 4. Qualification Form → Show Video
     const qualificationForm = document.getElementById('qualificationForm');
     if (qualificationForm) {
         qualificationForm.addEventListener('submit', function(e) {
@@ -382,7 +420,7 @@ function initializeContactForm() {
         });
     }
 
-    // 4. Video → Show Booking
+    // 5. Video → Show Booking
     const showBookingBtn = document.getElementById('showBookingBtn');
     if (showBookingBtn) {
         showBookingBtn.addEventListener('click', function() {

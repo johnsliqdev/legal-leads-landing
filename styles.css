@@ -240,7 +240,7 @@ body::before {
 
 .results-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     margin-bottom: 30px;
 }
@@ -251,6 +251,45 @@ body::before {
     border-radius: 12px;
     padding: 20px;
     text-align: center;
+}
+
+.result-item-cta {
+    background: linear-gradient(135deg, rgba(255, 0, 110, 0.08) 0%, rgba(255, 64, 129, 0.04) 100%);
+    border: 1px solid rgba(255, 0, 110, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.result-cta-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+}
+
+.result-cta-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 0, 110, 0.3);
+}
+
+.result-cta-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.result-cta-btn:hover svg {
+    transform: translateX(4px);
 }
 
 .result-label {
