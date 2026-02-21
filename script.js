@@ -435,30 +435,91 @@ function initializeContactForm() {
         });
     }
 
-    // 4. Qualification Form → Show Video
+    // 4. Qualification Form - Budget tier logic
+    const budget10kRadios = document.querySelectorAll('input[name="budget10k"]');
+    const budget5kRadios = document.querySelectorAll('input[name="budget5k"]');
+    const budgetQuestion2 = document.getElementById('budgetQuestion2');
+    const disqualificationMessage = document.getElementById('disqualificationMessage');
+    const submitBtn = document.getElementById('qualificationSubmitBtn');
+
+    if (budget10kRadios.length > 0) {
+        budget10kRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'no') {
+                    // Show second budget question
+                    budgetQuestion2.style.display = 'block';
+                    // Make budget5k required
+                    budget5kRadios.forEach(r => r.required = true);
+                    // Hide disqualification in case it was shown before
+                    disqualificationMessage.style.display = 'none';
+                    submitBtn.disabled = false;
+                } else {
+                    // Hide second budget question and disqualification
+                    budgetQuestion2.style.display = 'none';
+                    disqualificationMessage.style.display = 'none';
+                    // Remove required from budget5k
+                    budget5kRadios.forEach(r => r.required = false);
+                    submitBtn.disabled = false;
+                }
+            });
+        });
+    }
+
+    if (budget5kRadios.length > 0) {
+        budget5kRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'no') {
+                    // Show disqualification message
+                    disqualificationMessage.style.display = 'block';
+                    // Disable submit button
+                    submitBtn.disabled = true;
+                    submitBtn.style.opacity = '0.5';
+                    submitBtn.style.cursor = 'not-allowed';
+                } else {
+                    // Hide disqualification message
+                    disqualificationMessage.style.display = 'none';
+                    // Enable submit button
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    submitBtn.style.cursor = 'pointer';
+                }
+            });
+        });
+    }
+
+    // Qualification Form → Show Video
     const qualificationForm = document.getElementById('qualificationForm');
     if (qualificationForm) {
         qualificationForm.addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const metaBudgetCommitment = document.querySelector('input[name="metaBudgetCommitment"]:checked');
-            const avgCaseValue = document.getElementById('avgCaseValue').value.trim();
+            const budget10k = document.querySelector('input[name="budget10k"]:checked');
+            const budget5k = document.querySelector('input[name="budget5k"]:checked');
             const dedicatedIntake = document.querySelector('input[name="dedicatedIntake"]:checked');
-            const responseTime = document.getElementById('responseTime').value.trim();
             const usesCRM = document.querySelector('input[name="usesCRM"]:checked');
             const firmDifferentiator = document.getElementById('firmDifferentiator').value.trim();
 
-            if (!metaBudgetCommitment || !dedicatedIntake || !usesCRM) {
-                showNotification('Please answer all questions.', 'error');
+            // Determine budget commitment value
+            let metaBudgetCommitment = '';
+            if (budget10k && budget10k.value === 'yes') {
+                metaBudgetCommitment = '10k';
+            } else if (budget5k && budget5k.value === 'yes') {
+                metaBudgetCommitment = '5k';
+            } else if (budget5k && budget5k.value === 'no') {
+                // Disqualified - shouldn't reach here due to disabled button
+                showNotification('Minimum budget requirement not met.', 'error');
+                return;
+            }
+
+            if (!budget10k || !dedicatedIntake || !usesCRM) {
+                showNotification('Please answer all required questions.', 'error');
                 return;
             }
 
             // Save qualification data
             patchLead({
-                metaBudgetCommitment: metaBudgetCommitment.value,
-                avgCaseValue,
+                metaBudgetCommitment,
                 dedicatedIntake: dedicatedIntake.value,
-                responseTime,
                 usesCRM: usesCRM.value,
                 firmDifferentiator: firmDifferentiator || null
             });
