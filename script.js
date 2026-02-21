@@ -178,6 +178,11 @@ function updateResultsSection(data) {
     const targetCpql = data.guaranteedCpl;
     const currentCpql = data.currentCpl;
     const currentSpend = data.totalMonthlySpend;
+    const currentLeads = data.leadsCount;
+
+    // Check if ad spend is less than $5000
+    const minBudget = 5000;
+    const isLowBudget = (data.totalMonthlySpend - data.guaranteedCpl) < minBudget;
 
     const isOptimal = currentCpql > 0 && currentCpql <= targetCpql;
 
@@ -187,7 +192,27 @@ function updateResultsSection(data) {
         qualBtn.setAttribute('data-optimal', isOptimal ? 'true' : 'false');
     }
 
-    if (isOptimal) {
+    if (isLowBudget) {
+        // Budget is too low - show minimum budget requirement
+        const minimumTotalBudget = minBudget + 3500; // $5k ad spend + $3.5k management
+        const projectedLeadsWithMinBudget = Math.round(minimumTotalBudget / targetCpql);
+
+        setText('projectionHeading', 'Your Current Spend Is Below Legal Market Minimums');
+        setText('projectionDesc', 'In the competitive legal advertising space, a minimum monthly investment of $5,000 in ad spend is required to see meaningful results');
+        setText('projectionLabel1', 'Minimum Monthly Budget Required');
+        setText('projectionLabel2', 'What You Could Generate');
+        setText('projectedLeadRange', `$${minimumTotalBudget.toLocaleString()}/mo`);
+        setText('cpqlReduction', `${projectedLeadsWithMinBudget} qualified leads`);
+        setText('projectionSubtext1', '$5,000 ad spend + $3,500 management fee');
+        setText('projectionSubtext2', `At an average of $${targetCpql} per qualified lead`);
+
+        // Update CTA for low budget
+        const ctaHeading = document.querySelector('#sliqProjectionSection .results-cta h4');
+        const ctaText = document.querySelector('#sliqProjectionSection .results-cta p');
+        if (ctaHeading) ctaHeading.textContent = 'Ready to Scale to Minimum Viable Budget?';
+        if (ctaText) ctaText.textContent = 'Let\'s discuss how to get you to the results you deserve';
+        if (qualBtn) qualBtn.textContent = 'Talk to Our Team →';
+    } else if (isOptimal) {
         // Client is already performing optimally
         setText('projectionHeading', 'You\'re Already Performing Optimally');
         setText('projectionDesc', 'Your Cost Per Qualified Lead is excellent. Let\'s scale and optimize your current spend.');
@@ -216,8 +241,18 @@ function updateResultsSection(data) {
         setText('projectionLabel2', 'Potential Cost Per Qualified Lead Reduction');
 
         // Project lead range with same budget
-        const projectedLeadsLow = Math.round(currentSpend / (targetCpql * 1.2)); // Conservative estimate
-        const projectedLeadsHigh = Math.round(currentSpend / (targetCpql * 0.8)); // Optimistic estimate
+        let projectedLeadsLow = Math.round(currentSpend / (targetCpql * 1.2)); // Conservative estimate
+        let projectedLeadsHigh = Math.round(currentSpend / (targetCpql * 0.8)); // Optimistic estimate
+
+        // Ensure projected range is always higher than current leads
+        if (projectedLeadsHigh <= currentLeads) {
+            // If our high end is not better than their current, aim for upper range
+            projectedLeadsLow = Math.round(currentLeads * 1.3); // 30% more than current
+            projectedLeadsHigh = Math.round(currentLeads * 1.8); // 80% more than current
+        } else if (projectedLeadsLow <= currentLeads) {
+            // If only low end is problematic, adjust it
+            projectedLeadsLow = Math.round(currentLeads * 1.1); // At least 10% more than current
+        }
 
         // Calculate CPQL reduction percentage
         const cpqlReduction = Math.round(((currentCpql - targetCpql) / currentCpql) * 100);
