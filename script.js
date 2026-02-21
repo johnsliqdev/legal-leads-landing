@@ -223,12 +223,12 @@ function updateResultsSection(data) {
         // Left box: Reduce Paid Dependency
         setText('projectionLabel1', 'Reduce Paid Dependency');
         setText('projectedLeadRange', '30-50% Ad Spend Reduction');
-        setText('projectionSubtext1', 'Build SEO/GEO assets that generate cases at $0 marginal cost over 12 months');
+        setText('projectionSubtext1', 'We Build SEO/GEO assets that generate cases at $0 ad cost over 12 months');
 
-        // Right box: Get More Cases at No Extra Cost
-        setText('projectionLabel2', 'Get More Cases at No Extra Cost');
-        setText('cpqlReduction', 'Free Organic Channels');
-        setText('projectionSubtext2', 'Most law firms are invisible on Google when people search for lawyers. We\'ll help you show up for free and get cases without paying for ads.');
+        // Right box: Get More Cases at No Extra Ad Spend
+        setText('projectionLabel2', 'Get More Cases at No Extra Ad Spend');
+        setText('cpqlReduction', 'Explore Organic Channels - (Google, Bing, AI Search (ChatGPT, Gemini, Google AI Overview))');
+        setText('projectionSubtext2', 'Most law firms are invisible on Google when people search for lawyers. We\'ll help you show up organically and get cases without paying for ads.');
 
         // Update CTA for optimal performers
         const ctaHeading = document.querySelector('#sliqProjectionSection .results-cta h4');
