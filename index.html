@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="website">Website</label>
-                                        <input type="url" id="website" name="website" placeholder="https://www.smithlaw.com" required>
+                                        <input type="text" id="website" name="website" placeholder="www.smithlaw.com" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="email">Email Address</label>
@@ -127,15 +127,24 @@
                             <form id="cplForm" class="flow-form">
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label for="adSpend">Monthly Ad Spend ($)</label>
+                                        <label for="adSpend">
+                                            Monthly Ad Spend ($)
+                                            <button type="button" class="help-icon" data-modal="adSpendModal">?</button>
+                                        </label>
                                         <input type="number" id="adSpend" name="adSpend" placeholder="5000" required min="0" step="0.01">
                                     </div>
                                     <div class="form-group">
-                                        <label for="marketingFees">Monthly Marketing Fees ($)</label>
+                                        <label for="marketingFees">
+                                            Monthly Marketing Fees ($)
+                                            <button type="button" class="help-icon" data-modal="marketingFeesModal">?</button>
+                                        </label>
                                         <input type="number" id="marketingFees" name="marketingFees" placeholder="2000" required min="0" step="0.01">
                                     </div>
                                     <div class="form-group">
-                                        <label for="leadsCount">Number of PI Leads per Month</label>
+                                        <label for="leadsCount">
+                                            Number of Qualified PI Leads per Month
+                                            <button type="button" class="help-icon" data-modal="qualifiedLeadModal">?</button>
+                                        </label>
                                         <input type="number" id="leadsCount" name="leadsCount" placeholder="50" required min="0.01" step="0.01">
                                     </div>
                                 </div>
@@ -172,7 +181,7 @@
                             <p class="flow-desc" id="projectionDesc">Based on your current spend and our proven results</p>
                             <div class="projection-grid" id="projectionGrid">
                                 <div class="projection-item">
-                                    <div class="projection-icon">
+                                    <div class="projection-icon" id="projectionIcon1">
                                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M3 17L9 11L13 15L21 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                             <path d="M21 12V7H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -180,9 +189,10 @@
                                     </div>
                                     <div class="projection-label" id="projectionLabel1">Projected Monthly Lead Range</div>
                                     <div class="projection-value" id="projectedLeadRange">15-25 leads</div>
+                                    <div class="projection-subtext" id="projectionSubtext1"></div>
                                 </div>
                                 <div class="projection-item">
-                                    <div class="projection-icon">
+                                    <div class="projection-icon" id="projectionIcon2">
                                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M3 17L9 11L13 15L21 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                             <path d="M14 7L21 7L21 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -190,6 +200,7 @@
                                     </div>
                                     <div class="projection-label" id="projectionLabel2">Potential Cost Per Qualified Lead Reduction</div>
                                     <div class="projection-value" id="cpqlReduction">30-45%</div>
+                                    <div class="projection-subtext" id="projectionSubtext2"></div>
                                 </div>
                             </div>
                             <div class="results-cta">
@@ -426,6 +437,15 @@
     <div class="disclaimer-banner">
         <div class="container">
             <p>* The 30-lead guarantee assumes a minimum monthly ad spend of $10,000. Results are based on qualified personal injury leads as defined above. Individual results may vary based on market, geography, and case type.</p>
+        </div>
+    </div>
+
+    <!-- Help Modals -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h3 id="modalTitle"></h3>
+            <p id="modalBody"></p>
         </div>
     </div>
 

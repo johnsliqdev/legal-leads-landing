@@ -189,14 +189,16 @@ function updateResultsSection(data) {
         // Client is already performing optimally
         setText('projectionHeading', 'You\'re Already Performing Optimally');
         setText('projectionDesc', 'Your Cost Per Qualified Lead is excellent. Let\'s scale and optimize your current spend.');
-        setText('projectionLabel1', 'Potential Monthly Lead Volume Increase');
-        setText('projectionLabel2', 'Additional Channel Opportunities');
 
-        // Calculate potential scale with 50% more budget
-        const scaledLeadsLow = Math.round(data.leadsCount * 1.3);
-        const scaledLeadsHigh = Math.round(data.leadsCount * 1.7);
-        setText('projectedLeadRange', `${scaledLeadsLow}-${scaledLeadsHigh} leads`);
-        setText('cpqlReduction', 'Meta + SEO + Retargeting');
+        // Left box: Reduce Paid Dependency
+        setText('projectionLabel1', 'Reduce Paid Dependency');
+        setText('projectedLeadRange', '30-50% Ad Spend Reduction');
+        setText('projectionSubtext1', 'Build SEO/GEO assets that generate cases at $0 marginal cost over 12 months');
+
+        // Right box: Untapped Visibility Gaps
+        setText('projectionLabel2', 'Untapped Visibility Gaps');
+        setText('cpqlReduction', 'SEO + GBP + AI Search');
+        setText('projectionSubtext2', 'Most firms miss 40-60% of local search traffic. Capture cases your competitors are getting for free.');
     } else {
         // Standard projection flow
         setText('projectionHeading', 'What Sliq Can Do For You');
@@ -215,6 +217,8 @@ function updateResultsSection(data) {
 
         setText('projectedLeadRange', `${projectedLeadsLow}-${projectedLeadsHigh} leads`);
         setText('cpqlReduction', `${cpqlReductionLow}-${cpqlReductionHigh}%`);
+        setText('projectionSubtext1', '');
+        setText('projectionSubtext2', '');
     }
 
     // Show projection section
@@ -331,7 +335,7 @@ function initializeContactForm() {
 
             // Show calculator
             document.getElementById('calculatorSection').style.display = 'block';
-            document.getElementById('calculatorSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            document.getElementById('calculatorSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
     }
 
@@ -585,3 +589,63 @@ function showNotification(message, type) {
         }, 300);
     }, 3000);
 }
+
+// Help Modal Functionality
+const modalContent = {
+    adSpendModal: {
+        title: "Monthly Ad Spend",
+        body: "This is the total amount you spend directly on advertising platforms (Google Ads, Meta Ads, etc.) each month, not including agency fees or management costs."
+    },
+    marketingFeesModal: {
+        title: "Monthly Marketing Fees",
+        body: "This includes all costs beyond direct ad spend: agency fees, software subscriptions, marketing tools, freelancers, and any other marketing-related expenses."
+    },
+    qualifiedLeadModal: {
+        title: "What is a Qualified Lead?",
+        body: "Not every inquiry is a lead. A qualified lead is a prospect with confirmed intent, a viable case, and a high probability to retain — someone with an extremely high chance to close, not just a name on a list."
+    }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('helpModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    const closeBtn = document.querySelector('.modal-close');
+    const helpIcons = document.querySelectorAll('.help-icon');
+
+    // Open modal when help icon is clicked
+    helpIcons.forEach(icon => {
+        icon.addEventListener('click', function(e) {
+            e.preventDefault();
+            const modalId = this.getAttribute('data-modal');
+            const content = modalContent[modalId];
+            
+            if (content) {
+                modalTitle.textContent = content.title;
+                modalBody.textContent = content.body;
+                modal.style.display = 'block';
+            }
+        });
+    });
+
+    // Close modal when X is clicked
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+    }
+
+    // Close modal when clicking outside the modal content
+    window.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.style.display === 'block') {
+            modal.style.display = 'none';
+        }
+    });
+});
