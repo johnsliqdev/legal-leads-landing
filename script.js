@@ -715,8 +715,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update progress bar based on scroll and visible sections
     function updateProgressBar() {
-        let activeSection = null;
-
         // Check each section
         const sections = [
             { id: 'hero', element: document.getElementById('hero') },
@@ -728,21 +726,40 @@ document.addEventListener('DOMContentLoaded', function() {
             { id: 'bookingSection', element: document.getElementById('bookingSection') }
         ];
 
-        // Find the currently visible section
-        for (let i = 0; i < sections.length; i++) {
+        // Find the last visible (unlocked) section - this helps determine completion
+        let lastVisibleIndex = -1;
+        for (let i = sections.length - 1; i >= 0; i--) {
+            const section = sections[i];
+            if (section.element && section.element.style.display !== 'none') {
+                lastVisibleIndex = i;
+                break;
+            }
+        }
+
+        // Find the currently active section (the one in viewport center)
+        let activeSection = null;
+        let activeSectionIndex = -1;
+
+        for (let i = sections.length - 1; i >= 0; i--) {
             const section = sections[i];
             if (!section.element) continue;
-
-            // Skip if section is hidden
             if (section.element.style.display === 'none') continue;
 
             const rect = section.element.getBoundingClientRect();
-            const isVisible = rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2;
+            const viewportCenter = window.innerHeight / 2;
 
-            if (isVisible) {
+            // Check if viewport center is within this section
+            if (rect.top <= viewportCenter && rect.bottom >= viewportCenter) {
                 activeSection = section.id;
+                activeSectionIndex = i;
                 break;
             }
+        }
+
+        // If no section detected at center, use the first visible section
+        if (activeSection === null && lastVisibleIndex >= 0) {
+            activeSection = sections[0].id;
+            activeSectionIndex = 0;
         }
 
         // Update progress items
@@ -752,7 +769,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (!section || !section.element) return;
 
-            // Hide progress item if section is not yet visible (display: none)
+            const sectionIndex = sections.findIndex(s => s.id === sectionId);
+
+            // Hide progress item if section is not yet unlocked (display: none)
             if (section.element.style.display === 'none') {
                 item.style.opacity = '0.3';
                 item.style.pointerEvents = 'none';
@@ -763,20 +782,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 item.style.pointerEvents = 'auto';
             }
 
-            // Mark as active or completed
+            // Mark as active, completed, or available
             if (sectionId === activeSection) {
+                // This is the current section
                 item.classList.add('active');
                 item.classList.remove('completed');
-            } else {
+            } else if (sectionIndex < activeSectionIndex) {
+                // This section is before the active one - mark as completed
                 item.classList.remove('active');
-                // Check if this section was completed (before active section)
-                const sectionIndex = sections.findIndex(s => s.id === sectionId);
-                const activeIndex = sections.findIndex(s => s.id === activeSection);
-                if (sectionIndex < activeIndex && sectionIndex >= 0 && activeIndex >= 0) {
-                    item.classList.add('completed');
-                } else {
-                    item.classList.remove('completed');
-                }
+                item.classList.add('completed');
+            } else {
+                // This section is after the active one - just available
+                item.classList.remove('active', 'completed');
             }
         });
     }
