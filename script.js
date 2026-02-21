@@ -138,18 +138,14 @@ function initializeCPLCalculator() {
                 patchLead({
                     email: contactFormData.email,
                     phone: contactFormData.phone,
-                    lawFirm: contactFormData.lawFirm,
                     website: contactFormData.website,
                     ...calcFields
                 }).then(() => showNotification('Thank you! Your results are ready.', 'success'));
             } else {
                 // Fallback: full insert (step 1 POST failed)
                 const completeFormData = {
-                    firstName: contactFormData.firstName,
-                    lastName: contactFormData.lastName,
                     email: contactFormData.email,
                     phone: contactFormData.phone,
-                    lawFirm: contactFormData.lawFirm,
                     website: contactFormData.website || '',
                     ...calcFields
                 };
@@ -314,13 +310,9 @@ function initializeContactForm() {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const firstName = document.getElementById('firstName').value.trim();
-            const lastName = document.getElementById('lastName').value.trim();
-            const lawFirmName = document.getElementById('lawFirmName').value.trim();
             const website = document.getElementById('website').value.trim();
             const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
-            const state = document.getElementById('state').value.trim();
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             const phoneDigits = phone.replace(/\D/g, '');
@@ -335,13 +327,13 @@ function initializeContactForm() {
             }
 
             // Store contact data for later use
-            contactFormData = { firstName, lastName, lawFirmName, website, email, phone, state };
+            contactFormData = { website, email, phone };
 
             // Save to database
             fetch('/api/leads', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ firstName, lastName, lawFirmName, website, email, phone, state })
+                body: JSON.stringify({ website, email, phone })
             })
                 .then(async (res) => {
                     if (!res.ok) throw new Error(`POST failed: ${res.status}`);
