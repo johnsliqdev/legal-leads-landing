@@ -185,8 +185,12 @@ function updateResultsSection(data) {
     // Check if ad spend is less than $5000
     const minBudget = 5000;
     const isLowBudget = data.adSpend < minBudget;
+    const minimumTotalBudget = minBudget + 3500; // $8,500 total ($5k ad + $3.5k management)
+    const projectedLeadsWithMinBudget = Math.round(minimumTotalBudget / targetCpql);
 
-    const isOptimal = currentCpql > 0 && currentCpql <= targetCpql;
+    // If low budget BUT generating more leads than minimum budget would, treat as optimal
+    const isOptimal = (currentCpql > 0 && currentCpql <= targetCpql) ||
+                      (isLowBudget && currentLeads > projectedLeadsWithMinBudget);
 
     // Update CTA button based on optimal status
     const qualBtn = document.getElementById('showQualificationBtn');
@@ -194,18 +198,15 @@ function updateResultsSection(data) {
         qualBtn.setAttribute('data-optimal', isOptimal ? 'true' : 'false');
     }
 
-    if (isLowBudget) {
-        // Budget is too low - show minimum budget requirement
-        const minimumTotalBudget = minBudget + 3500; // $5k ad spend + $3.5k management
-        const projectedLeadsWithMinBudget = Math.round(minimumTotalBudget / targetCpql);
-
+    if (isLowBudget && currentLeads <= projectedLeadsWithMinBudget) {
+        // Budget is too low AND not performing exceptionally - show minimum budget requirement
         setText('projectionHeading', 'Your Current Spend Is Below Legal Market Minimums');
-        setText('projectionDesc', 'In the competitive legal advertising space, a minimum monthly investment of $5,000 in ad spend is required to see meaningful results');
+        setText('projectionDesc', 'In the competitive legal advertising space, a minimum total monthly investment of $8,500 is required to see meaningful results');
         setText('projectionLabel1', 'Minimum Monthly Budget Required');
         setText('projectionLabel2', 'What You Could Generate');
         setText('projectedLeadRange', `$${minimumTotalBudget.toLocaleString()}/mo`);
         setText('cpqlReduction', `${projectedLeadsWithMinBudget} qualified leads`);
-        setText('projectionSubtext1', '$5,000 ad spend + $3,500 management fee');
+        setText('projectionSubtext1', '');
         setText('projectionSubtext2', '');
 
         // Update CTA for low budget
