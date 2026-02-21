@@ -65,7 +65,14 @@ function initializeCPLCalculator() {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         console.log('Calculator form submitted');
-        
+
+        // Reset all flow sections after calculator to ensure proper path on recalculation
+        const sectionsToReset = ['resultsSection', 'sliqProjectionSection', 'qualificationSection', 'videoSection', 'bookingSection'];
+        sectionsToReset.forEach(sectionId => {
+            const section = document.getElementById(sectionId);
+            if (section) section.style.display = 'none';
+        });
+
         // Get form values
         const adSpend = parseFloat(document.getElementById('adSpend').value) || 0;
         const marketingFees = parseFloat(document.getElementById('marketingFees').value) || 0;
@@ -370,6 +377,14 @@ function initializeContactForm() {
 
             // Store contact data for later use
             contactFormData = { website, email, phone };
+
+            // Lock the form to prevent editing
+            document.getElementById('email').disabled = true;
+            document.getElementById('phone').disabled = true;
+            document.getElementById('website').disabled = true;
+            e.target.querySelector('button[type="submit"]').disabled = true;
+            e.target.querySelector('button[type="submit"]').textContent = 'Submitted ✓';
+            e.target.querySelector('button[type="submit"]').style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
 
             // Save to database
             fetch('/api/leads', {
