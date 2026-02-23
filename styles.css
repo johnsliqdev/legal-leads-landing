@@ -435,10 +435,22 @@ section {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.trust-badge:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.07);
 }
 
 .trust-logo {
     flex-shrink: 0;
+}
+
+.trust-logo-clutch {
+    width: 60px;
+    height: auto;
 }
 
 .trust-stars {
