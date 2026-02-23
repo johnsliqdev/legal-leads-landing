@@ -139,24 +139,8 @@ async function displaySubmissions() {
                     <div class="submission-value">${money(submission.calc_current_cpql)}</div>
                 </div>
                 <div class="submission-field">
-                    <div class="submission-label">Guaranteed CPQL:</div>
-                    <div class="submission-value">${money(submission.calc_guaranteed_cpql)}</div>
-                </div>
-                <div class="submission-field">
                     <div class="submission-label">Monthly Leads:</div>
                     <div class="submission-value">${val(submission.calc_leads_count)}</div>
-                </div>
-                <div class="submission-field">
-                    <div class="submission-label">Same Budget Leads:</div>
-                    <div class="submission-value">${val(submission.calc_same_budget_leads)}</div>
-                </div>
-                <div class="submission-field">
-                    <div class="submission-label">Monthly Savings:</div>
-                    <div class="submission-value">${money(submission.calc_monthly_savings)}</div>
-                </div>
-                <div class="submission-field">
-                    <div class="submission-label">Annual Savings:</div>
-                    <div class="submission-value">${money(submission.calc_annual_savings)}</div>
                 </div>
                 <div class="submission-field">
                     <div class="submission-label">CPQL Reduction:</div>

@@ -7,17 +7,34 @@ let leadId = null;
 
 // YouTube video tracking
 let ytPlayer = null;
+let ytApiReady = false;
 let videoTrackingInterval = null;
 let maxWatchedSeconds = 0;
 
+// Called by YouTube API when ready
 function onYouTubeIframeAPIReady() {
+    ytApiReady = true;
+    // If video section is already visible, create the player now
+    var videoSection = document.getElementById('videoSection');
+    if (videoSection && videoSection.style.display !== 'none') {
+        initYouTubePlayer();
+    }
+}
+
+// Create player only when video section is visible
+function initYouTubePlayer() {
+    if (ytPlayer || !ytApiReady) return;
+    var container = document.getElementById('ytPlayer');
+    if (!container) return;
     ytPlayer = new YT.Player('ytPlayer', {
         width: '100%',
         height: '400',
         videoId: 'kvK3G0-ewdQ',
         playerVars: {
             rel: 0,
-            modestbranding: 1
+            modestbranding: 1,
+            enablejsapi: 1,
+            origin: window.location.origin
         },
         events: {
             onStateChange: onPlayerStateChange
@@ -143,6 +160,16 @@ function initializeCPLCalculator() {
         if (videoTrackingInterval) {
             clearInterval(videoTrackingInterval);
             videoTrackingInterval = null;
+        }
+        // Destroy and reset player so it can be re-created when section is visible again
+        if (ytPlayer && typeof ytPlayer.destroy === 'function') {
+            ytPlayer.destroy();
+            ytPlayer = null;
+            // Re-create the placeholder div
+            var videoContainer = document.querySelector('#videoSection .video-container');
+            if (videoContainer) {
+                videoContainer.innerHTML = '<div id="ytPlayer"></div>';
+            }
         }
 
         // Get form values
@@ -599,6 +626,7 @@ function initializeContactForm() {
             // Show video
             document.getElementById('videoSection').style.display = 'block';
             document.getElementById('videoSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            initYouTubePlayer();
         });
     }
 
