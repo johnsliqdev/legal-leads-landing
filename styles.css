@@ -1445,6 +1445,25 @@ textarea::placeholder {
     word-break: break-word;
 }
 
+.submission-section-label {
+    grid-column: 1 / -1;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--accent-color);
+    margin-top: 12px;
+    margin-bottom: 4px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+}
+
+.submission-section-label:first-of-type {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
 .submission-full {
     grid-column: 1 / -1;
 }

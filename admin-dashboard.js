@@ -89,40 +89,94 @@ async function displaySubmissions() {
     
     const sortedSubmissions = submissions;
     
-    submissionsList.innerHTML = sortedSubmissions.map(submission => `
+    submissionsList.innerHTML = sortedSubmissions.map(submission => {
+        const val = (v) => v || '—';
+        const money = (v) => v ? `$${Number(v).toLocaleString()}` : '—';
+        const pct = (v) => v ? `${v}%` : '—';
+        const yesNo = (v) => {
+            if (!v) return '—';
+            return v === 'yes' ? 'Yes' : v === 'no' ? 'No' : v;
+        };
+        const budget = (v) => {
+            if (!v) return '—';
+            return v === '10k' ? '$10,000/mo' : v === '5k' ? '$5,000/mo' : v;
+        };
+
+        return `
         <div class="submission-item">
             <div class="submission-header">
                 <div class="submission-date">${new Date(submission.created_at).toLocaleString()}</div>
-                <div class="submission-id">ID: ${submission.id}</div>
+                <div class="submission-id">ID: ${submission.id}${submission.requested_callback ? ' <span style="color: #00ff88; font-weight: 600;">CALLBACK REQUESTED</span>' : ''}</div>
             </div>
             <div class="submission-details">
-                <div class="submission-field">
-                    <div class="submission-label">Name:</div>
-                    <div class="submission-value">${submission.first_name} ${submission.last_name}</div>
-                </div>
+                <div class="submission-section-label">Contact Info</div>
                 <div class="submission-field">
                     <div class="submission-label">Email:</div>
-                    <div class="submission-value">${submission.email}</div>
+                    <div class="submission-value">${val(submission.email)}</div>
                 </div>
                 <div class="submission-field">
                     <div class="submission-label">Phone:</div>
-                    <div class="submission-value">${submission.phone}</div>
+                    <div class="submission-value">${val(submission.phone)}</div>
                 </div>
                 <div class="submission-field">
-                    <div class="submission-label">Law Firm:</div>
-                    <div class="submission-value">${submission.law_firm}</div>
+                    <div class="submission-label">Website:</div>
+                    <div class="submission-value">${val(submission.website)}</div>
+                </div>
+
+                <div class="submission-section-label">Calculator Results</div>
+                <div class="submission-field">
+                    <div class="submission-label">Current Monthly Spend:</div>
+                    <div class="submission-value">${money(submission.calc_current_monthly_spend)}</div>
                 </div>
                 <div class="submission-field">
                     <div class="submission-label">Current CPQL:</div>
-                    <div class="submission-value">${submission.calc_current_cpql || ''}</div>
+                    <div class="submission-value">${money(submission.calc_current_cpql)}</div>
                 </div>
                 <div class="submission-field">
-                    <div class="submission-label">Potential Savings:</div>
-                    <div class="submission-value">${submission.calc_monthly_savings || ''}</div>
+                    <div class="submission-label">Guaranteed CPQL:</div>
+                    <div class="submission-value">${money(submission.calc_guaranteed_cpql)}</div>
+                </div>
+                <div class="submission-field">
+                    <div class="submission-label">Monthly Leads:</div>
+                    <div class="submission-value">${val(submission.calc_leads_count)}</div>
+                </div>
+                <div class="submission-field">
+                    <div class="submission-label">Same Budget Leads:</div>
+                    <div class="submission-value">${val(submission.calc_same_budget_leads)}</div>
+                </div>
+                <div class="submission-field">
+                    <div class="submission-label">Monthly Savings:</div>
+                    <div class="submission-value">${money(submission.calc_monthly_savings)}</div>
+                </div>
+                <div class="submission-field">
+                    <div class="submission-label">Annual Savings:</div>
+                    <div class="submission-value">${money(submission.calc_annual_savings)}</div>
+                </div>
+                <div class="submission-field">
+                    <div class="submission-label">CPQL Reduction:</div>
+                    <div class="submission-value">${pct(submission.calc_cpql_reduction)}</div>
+                </div>
+
+                <div class="submission-section-label">Qualification</div>
+                <div class="submission-field">
+                    <div class="submission-label">Meta Budget Commitment:</div>
+                    <div class="submission-value">${budget(submission.meta_budget_commitment)}</div>
+                </div>
+                <div class="submission-field">
+                    <div class="submission-label">Dedicated Intake:</div>
+                    <div class="submission-value">${yesNo(submission.dedicated_intake)}</div>
+                </div>
+                <div class="submission-field">
+                    <div class="submission-label">Uses CRM:</div>
+                    <div class="submission-value">${yesNo(submission.uses_crm)}</div>
+                </div>
+                <div class="submission-field">
+                    <div class="submission-label">Firm Differentiator:</div>
+                    <div class="submission-value">${val(submission.firm_differentiator)}</div>
                 </div>
             </div>
         </div>
-    `).join('');
+    `}).join('');
 }
 
 // Update display

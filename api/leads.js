@@ -79,25 +79,22 @@ async function ensureSchema(poolInstance) {
       calc_cpql_reduction TEXT,
       calc_leads_count TEXT,
       calc_same_budget_leads TEXT,
-      requested_callback BOOLEAN DEFAULT FALSE
+      requested_callback BOOLEAN DEFAULT FALSE,
+      meta_budget_commitment TEXT,
+      dedicated_intake TEXT,
+      uses_crm TEXT,
+      firm_differentiator TEXT
     );
   `;
 
   // Add columns if they don't exist (for existing databases)
-  await poolInstance.sql`
-    ALTER TABLE leads
-    ADD COLUMN IF NOT EXISTS requested_callback BOOLEAN DEFAULT FALSE;
-  `;
-
-  await poolInstance.sql`
-    ALTER TABLE leads
-    ADD COLUMN IF NOT EXISTS calc_same_budget_leads TEXT;
-  `;
-
-  await poolInstance.sql`
-    ALTER TABLE leads
-    ADD COLUMN IF NOT EXISTS website TEXT;
-  `;
+  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS requested_callback BOOLEAN DEFAULT FALSE;`;
+  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS calc_same_budget_leads TEXT;`;
+  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS website TEXT;`;
+  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS meta_budget_commitment TEXT;`;
+  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS dedicated_intake TEXT;`;
+  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS uses_crm TEXT;`;
+  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS firm_differentiator TEXT;`;
 }
 
 export default async function handler(req, res) {
@@ -171,7 +168,11 @@ export default async function handler(req, res) {
           calc_cpql_reduction = COALESCE(${toVal(body.calcCpqlReduction)}, calc_cpql_reduction),
           calc_leads_count = COALESCE(${toVal(body.calcLeadsCount)}, calc_leads_count),
           calc_same_budget_leads = COALESCE(${toVal(body.calcSameBudgetLeads)}, calc_same_budget_leads),
-          requested_callback = COALESCE(${body.requestedCallback === undefined ? null : body.requestedCallback}, requested_callback)
+          requested_callback = COALESCE(${body.requestedCallback === undefined ? null : body.requestedCallback}, requested_callback),
+          meta_budget_commitment = COALESCE(${toVal(body.metaBudgetCommitment)}, meta_budget_commitment),
+          dedicated_intake = COALESCE(${toVal(body.dedicatedIntake)}, dedicated_intake),
+          uses_crm = COALESCE(${toVal(body.usesCRM)}, uses_crm),
+          firm_differentiator = COALESCE(${toVal(body.firmDifferentiator)}, firm_differentiator)
         WHERE id = ${id};
       `;
 
