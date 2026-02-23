@@ -56,6 +56,100 @@
                         </div>
                     </div>
                     
+                    <div class="settings-section" style="margin-top: 40px;">
+                        <h3>Content Management</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">Edit the main content of your landing page without touching the code</p>
+
+                        <form id="contentForm">
+                            <div style="margin-bottom: 30px; padding: 20px; background: var(--secondary-bg); border-radius: 10px;">
+                                <h4 style="margin-bottom: 15px; color: var(--primary-color);">SEO &amp; Meta</h4>
+                                <div class="form-group">
+                                    <label for="contentPageTitle">Page Title</label>
+                                    <input type="text" id="contentPageTitle" placeholder="Title shown in browser tab &amp; search results">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contentMetaDescription">Meta Description</label>
+                                    <textarea id="contentMetaDescription" rows="2" placeholder="Description shown in search engine results (150-160 characters recommended)"></textarea>
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 30px; padding: 20px; background: var(--secondary-bg); border-radius: 10px;">
+                                <h4 style="margin-bottom: 15px; color: var(--primary-color);">Hero Section</h4>
+                                <div class="form-group">
+                                    <label for="contentHeroTitle">Headline</label>
+                                    <input type="text" id="contentHeroTitle" placeholder="Main headline of the page">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contentHeroSubtitle">Subtitle</label>
+                                    <textarea id="contentHeroSubtitle" rows="3" placeholder="Supporting text below the headline"></textarea>
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 30px; padding: 20px; background: var(--secondary-bg); border-radius: 10px;">
+                                <h4 style="margin-bottom: 15px; color: var(--primary-color);">How the Guarantee Works</h4>
+                                <div class="form-group">
+                                    <label for="contentGuaranteeHeading">Section Heading</label>
+                                    <input type="text" id="contentGuaranteeHeading" placeholder="Section heading">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contentGuaranteeDesc">Section Description</label>
+                                    <textarea id="contentGuaranteeDesc" rows="2" placeholder="Brief description below the heading"></textarea>
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 30px; padding: 20px; background: var(--secondary-bg); border-radius: 10px;">
+                                <h4 style="margin-bottom: 15px; color: var(--primary-color);">Case Study Section</h4>
+                                <div class="form-group">
+                                    <label for="contentCaseStudyHeading">Section Heading</label>
+                                    <input type="text" id="contentCaseStudyHeading" placeholder="Case study section heading">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contentCaseStudyDesc">Section Description</label>
+                                    <textarea id="contentCaseStudyDesc" rows="2" placeholder="Brief description below the heading"></textarea>
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 30px; padding: 20px; background: var(--secondary-bg); border-radius: 10px;">
+                                <h4 style="margin-bottom: 15px; color: var(--primary-color);">Footer &amp; Legal</h4>
+                                <div class="form-group">
+                                    <label for="contentDisclaimerText">Disclaimer Text</label>
+                                    <textarea id="contentDisclaimerText" rows="3" placeholder="Legal disclaimer text at the bottom of the page"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contentFooterText">Footer Text</label>
+                                    <input type="text" id="contentFooterText" placeholder="Footer copyright text">
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 30px; padding: 20px; background: var(--secondary-bg); border-radius: 10px;">
+                                <h4 style="margin-bottom: 15px; color: var(--primary-color);">Sitemap &amp; SEO Files</h4>
+                                <div class="form-group">
+                                    <label for="contentSiteUrl">Site URL</label>
+                                    <input type="text" id="contentSiteUrl" placeholder="https://yourdomain.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contentLlmsDescription">LLMS.txt Description</label>
+                                    <textarea id="contentLlmsDescription" rows="2" placeholder="Description of your site for AI / LLM systems"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contentLlmsTopics">LLMS.txt Topics <span style="color:var(--text-secondary);font-weight:400;">(comma-separated)</span></label>
+                                    <input type="text" id="contentLlmsTopics" placeholder="personal injury leads, legal marketing, Meta ads for lawyers">
+                                </div>
+                                <div style="margin-top: 15px;">
+                                    <p style="color: var(--text-secondary); font-size: 14px;">
+                                        XML Sitemap: <a href="/api/sitemap" target="_blank" style="color: var(--primary-color);">/api/sitemap</a><br>
+                                        LLMS.txt: <a href="/api/llms" target="_blank" style="color: var(--primary-color);">/api/llms</a>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="submit-btn">Save All Content</button>
+                            <div id="contentSaveSuccess" style="color: var(--success-color); margin-top: 15px; display: none;">
+                                Content saved successfully!
+                            </div>
+                        </form>
+                    </div>
+
                     <div class="submissions-section" style="margin-top: 40px;">
                         <h3>Form Submissions</h3>
                         <p style="color: var(--text-secondary); margin-bottom: 20px;">View all contact form submissions from potential clients</p>

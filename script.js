@@ -87,8 +87,50 @@ function stopVideoTracking(ended) {
     patchLead({ videoWatchSeconds: maxWatchedSeconds, videoWatchPercent: percent });
 }
 
+// Booking iframe deferred loading
+function loadBookingWidget() {
+    var iframe = document.getElementById('bookingIframe');
+    if (iframe && !iframe.src) {
+        iframe.src = 'https://api.leadconnectorhq.com/widget/booking/swe1lSedf4hVYFTLSTIc';
+    }
+}
+
+// Load editable content from CMS
+async function loadPageContent() {
+    try {
+        var res = await fetch('/api/content', { method: 'GET' });
+        if (!res.ok) return;
+        var content = await res.json();
+
+        // Update title
+        if (content.pageTitle) document.title = content.pageTitle;
+
+        // Update meta description
+        if (content.metaDescription) {
+            var meta = document.querySelector('meta[name="description"]');
+            if (meta) meta.setAttribute('content', content.metaDescription);
+        }
+
+        // Update data-content elements
+        document.querySelectorAll('[data-content]').forEach(function(el) {
+            var key = el.getAttribute('data-content');
+            if (content[key]) {
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    el.value = content[key];
+                } else {
+                    el.innerHTML = content[key];
+                }
+            }
+        });
+    } catch (err) {
+        console.error('Failed to load page content:', err);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Page loaded');
+
+    loadPageContent();
 
     loadCpqlTarget()
         .catch((err) => console.error('Failed to load CPQL target', err))
@@ -525,6 +567,7 @@ function initializeContactForm() {
             if (isOptimalUser) {
                 // Skip to booking for optimal performers
                 document.getElementById('bookingSection').style.display = 'block';
+                loadBookingWidget();
                 document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
             } else {
                 // Show qualification questions for non-optimal performers
@@ -635,6 +678,7 @@ function initializeContactForm() {
     if (showBookingBtn) {
         showBookingBtn.addEventListener('click', function() {
             document.getElementById('bookingSection').style.display = 'block';
+            loadBookingWidget();
             document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
     }

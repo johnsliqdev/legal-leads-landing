@@ -375,7 +375,79 @@ document.getElementById('changePasswordForm')?.addEventListener('submit', async 
     }
 });
 
+// Content management fields mapping: formId -> contentKey
+const contentFields = {
+    contentPageTitle: 'pageTitle',
+    contentMetaDescription: 'metaDescription',
+    contentHeroTitle: 'heroTitle',
+    contentHeroSubtitle: 'heroSubtitle',
+    contentGuaranteeHeading: 'guaranteeHeading',
+    contentGuaranteeDesc: 'guaranteeDesc',
+    contentCaseStudyHeading: 'caseStudyHeading',
+    contentCaseStudyDesc: 'caseStudyDesc',
+    contentDisclaimerText: 'disclaimerText',
+    contentFooterText: 'footerText',
+    contentSiteUrl: 'siteUrl',
+    contentLlmsDescription: 'llmsDescription',
+    contentLlmsTopics: 'llmsTopics'
+};
+
+// Load content from API
+async function loadContent() {
+    try {
+        const res = await fetch('/api/content', { method: 'GET' });
+        if (!res.ok) return;
+        const content = await res.json();
+
+        for (const [formId, key] of Object.entries(contentFields)) {
+            const el = document.getElementById(formId);
+            if (el && content[key]) {
+                el.value = content[key];
+            }
+        }
+    } catch (err) {
+        console.error('Failed to load content:', err);
+    }
+}
+
+// Save content to API
+document.getElementById('contentForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const token = sessionStorage.getItem('adminApiToken') || '';
+    const body = {};
+
+    for (const [formId, key] of Object.entries(contentFields)) {
+        const el = document.getElementById(formId);
+        if (el && el.value.trim()) {
+            body[key] = el.value.trim();
+        }
+    }
+
+    try {
+        const res = await fetch('/api/content', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-admin-token': token
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (!res.ok) throw new Error(`Failed to save content: ${res.status}`);
+
+        const successMsg = document.getElementById('contentSaveSuccess');
+        successMsg.style.display = 'block';
+        setTimeout(() => { successMsg.style.display = 'none'; }, 3000);
+        showNotification('Content saved successfully', 'success');
+    } catch (err) {
+        console.error(err);
+        showNotification('Failed to save content', 'error');
+    }
+});
+
 // Initialize on page load
 if (checkAuth()) {
     updateDisplay();
+    loadContent();
 }
