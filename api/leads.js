@@ -83,7 +83,9 @@ async function ensureSchema(poolInstance) {
       meta_budget_commitment TEXT,
       dedicated_intake TEXT,
       uses_crm TEXT,
-      firm_differentiator TEXT
+      firm_differentiator TEXT,
+      video_watch_seconds INTEGER DEFAULT 0,
+      video_watch_percent INTEGER DEFAULT 0
     );
   `;
 
@@ -95,6 +97,8 @@ async function ensureSchema(poolInstance) {
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS dedicated_intake TEXT;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS uses_crm TEXT;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS firm_differentiator TEXT;`;
+  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS video_watch_seconds INTEGER DEFAULT 0;`;
+  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS video_watch_percent INTEGER DEFAULT 0;`;
 }
 
 export default async function handler(req, res) {
@@ -172,7 +176,9 @@ export default async function handler(req, res) {
           meta_budget_commitment = COALESCE(${toVal(body.metaBudgetCommitment)}, meta_budget_commitment),
           dedicated_intake = COALESCE(${toVal(body.dedicatedIntake)}, dedicated_intake),
           uses_crm = COALESCE(${toVal(body.usesCRM)}, uses_crm),
-          firm_differentiator = COALESCE(${toVal(body.firmDifferentiator)}, firm_differentiator)
+          firm_differentiator = COALESCE(${toVal(body.firmDifferentiator)}, firm_differentiator),
+          video_watch_seconds = COALESCE(${body.videoWatchSeconds === undefined ? null : Number(body.videoWatchSeconds)}, video_watch_seconds),
+          video_watch_percent = COALESCE(${body.videoWatchPercent === undefined ? null : Number(body.videoWatchPercent)}, video_watch_percent)
         WHERE id = ${id};
       `;
 

@@ -93,6 +93,12 @@ async function displaySubmissions() {
         const val = (v) => v || '—';
         const money = (v) => v ? `$${Number(v).toLocaleString()}` : '—';
         const pct = (v) => v ? `${v}%` : '—';
+        const duration = (seconds) => {
+            if (!seconds || seconds === 0) return '—';
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return m > 0 ? `${m}m ${s}s` : `${s}s`;
+        };
         const yesNo = (v) => {
             if (!v) return '—';
             return v === 'yes' ? 'Yes' : v === 'no' ? 'No' : v;
@@ -173,6 +179,16 @@ async function displaySubmissions() {
                 <div class="submission-field">
                     <div class="submission-label">Firm Differentiator:</div>
                     <div class="submission-value">${val(submission.firm_differentiator)}</div>
+                </div>
+
+                <div class="submission-section-label">Video Engagement</div>
+                <div class="submission-field">
+                    <div class="submission-label">Watch Duration:</div>
+                    <div class="submission-value">${duration(submission.video_watch_seconds)}</div>
+                </div>
+                <div class="submission-field">
+                    <div class="submission-label">Watch Completion:</div>
+                    <div class="submission-value">${submission.video_watch_percent ? submission.video_watch_percent + '%' : '—'}</div>
                 </div>
             </div>
         </div>

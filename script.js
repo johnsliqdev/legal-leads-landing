@@ -5,6 +5,71 @@ let cpqlTarget = 700;
 let contactFormData = null;
 let leadId = null;
 
+// YouTube video tracking
+let ytPlayer = null;
+let videoTrackingInterval = null;
+let maxWatchedSeconds = 0;
+
+function onYouTubeIframeAPIReady() {
+    ytPlayer = new YT.Player('ytPlayer', {
+        width: '100%',
+        height: '400',
+        videoId: 'kvK3G0-ewdQ',
+        playerVars: {
+            rel: 0,
+            modestbranding: 1
+        },
+        events: {
+            onStateChange: onPlayerStateChange
+        }
+    });
+    // Style the iframe after it's created
+    var checkIframe = setInterval(function() {
+        var iframe = document.querySelector('#ytPlayer iframe, iframe#ytPlayer');
+        if (iframe) {
+            iframe.style.borderRadius = '12px';
+            clearInterval(checkIframe);
+        }
+    }, 100);
+}
+
+function onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.PLAYING) {
+        startVideoTracking();
+    } else if (event.data === YT.PlayerState.PAUSED) {
+        stopVideoTracking(false);
+    } else if (event.data === YT.PlayerState.ENDED) {
+        stopVideoTracking(true);
+    }
+}
+
+function startVideoTracking() {
+    if (videoTrackingInterval) return;
+    videoTrackingInterval = setInterval(function() {
+        if (!ytPlayer || typeof ytPlayer.getCurrentTime !== 'function') return;
+        var currentTime = Math.round(ytPlayer.getCurrentTime());
+        var duration = Math.round(ytPlayer.getDuration());
+        if (duration <= 0) return;
+        maxWatchedSeconds = Math.max(maxWatchedSeconds, currentTime);
+        var percent = Math.min(100, Math.round((maxWatchedSeconds / duration) * 100));
+        patchLead({ videoWatchSeconds: maxWatchedSeconds, videoWatchPercent: percent });
+    }, 5000);
+}
+
+function stopVideoTracking(ended) {
+    if (videoTrackingInterval) {
+        clearInterval(videoTrackingInterval);
+        videoTrackingInterval = null;
+    }
+    if (!ytPlayer || typeof ytPlayer.getCurrentTime !== 'function') return;
+    var currentTime = Math.round(ytPlayer.getCurrentTime());
+    var duration = Math.round(ytPlayer.getDuration());
+    if (duration <= 0) return;
+    maxWatchedSeconds = Math.max(maxWatchedSeconds, currentTime);
+    var percent = ended ? 100 : Math.min(100, Math.round((maxWatchedSeconds / duration) * 100));
+    patchLead({ videoWatchSeconds: maxWatchedSeconds, videoWatchPercent: percent });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Page loaded');
 
@@ -72,6 +137,13 @@ function initializeCPLCalculator() {
             const section = document.getElementById(sectionId);
             if (section) section.style.display = 'none';
         });
+
+        // Reset video tracking
+        maxWatchedSeconds = 0;
+        if (videoTrackingInterval) {
+            clearInterval(videoTrackingInterval);
+            videoTrackingInterval = null;
+        }
 
         // Get form values
         const adSpend = parseFloat(document.getElementById('adSpend').value) || 0;
