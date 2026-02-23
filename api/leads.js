@@ -198,9 +198,19 @@ export default async function handler(req, res) {
       return json(res, 200, { success: true });
     }
 
-    const adminToken = process.env.ADMIN_API_TOKEN;
     const reqToken = getAdminToken(req);
-    const authorized = adminToken && reqToken && reqToken === adminToken;
+    let authorized = false;
+    if (reqToken) {
+      const envToken = process.env.ADMIN_API_TOKEN;
+      if (envToken && reqToken === envToken) {
+        authorized = true;
+      } else {
+        const { rows: pwRows } = await poolInstance.sql`
+          SELECT value FROM app_settings WHERE key = 'adminPassword' LIMIT 1;
+        `;
+        if (pwRows?.[0]?.value && reqToken === pwRows[0].value) authorized = true;
+      }
+    }
 
     if (req.method === 'GET') {
       if (!authorized) return json(res, 401, { error: 'unauthorized' });

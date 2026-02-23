@@ -1,11 +1,4 @@
-// Admin authentication and settings management
-const ADMIN_CREDENTIALS = {
-    username: 'admin',
-    password: 'sliq2024'
-};
-
-// CPQL target value (default $700)
-let cpqlTarget = 700;
+// Admin authentication
 
 // Check if user is logged in
 function isLoggedIn() {
@@ -13,35 +6,38 @@ function isLoggedIn() {
 }
 
 // Handle admin login
-document.getElementById('adminLoginForm')?.addEventListener('submit', function(e) {
+document.getElementById('adminLoginForm')?.addEventListener('submit', async function(e) {
     e.preventDefault();
-    
+
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    
-    if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-        sessionStorage.setItem('adminLoggedIn', 'true');
-        sessionStorage.setItem('adminApiToken', password);
-        window.location.href = 'admin-dashboard.html';
-    } else {
-        document.getElementById('loginError').style.display = 'block';
+    const loginError = document.getElementById('loginError');
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+
+    loginError.style.display = 'none';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Logging in...';
+
+    try {
+        const res = await fetch('/api/settings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'login', username, password })
+        });
+
+        if (res.ok) {
+            sessionStorage.setItem('adminLoggedIn', 'true');
+            sessionStorage.setItem('adminApiToken', password);
+            window.location.href = 'admin-dashboard.html';
+        } else {
+            loginError.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Login';
+        }
+    } catch (err) {
+        console.error('Login error:', err);
+        loginError.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Login';
     }
 });
-
-// Load saved CPQL target from localStorage
-function loadCpqlTarget() {
-    const saved = localStorage.getItem('cpqlTarget');
-    if (saved) {
-        cpqlTarget = parseFloat(saved);
-    }
-    return cpqlTarget;
-}
-
-// Save CPQL target to localStorage
-function saveCpqlTarget(value) {
-    cpqlTarget = value;
-    localStorage.setItem('cpqlTarget', value.toString());
-}
-
-// Initialize on page load
-loadCpqlTarget();

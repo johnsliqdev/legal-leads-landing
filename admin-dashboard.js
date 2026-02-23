@@ -295,7 +295,84 @@ function showNotification(message, type) {
 document.getElementById('logoutBtn')?.addEventListener('click', function(e) {
     e.preventDefault();
     sessionStorage.removeItem('adminLoggedIn');
+    sessionStorage.removeItem('adminApiToken');
     window.location.href = 'admin.html';
+});
+
+// Change password modal
+const changePasswordModal = document.getElementById('changePasswordModal');
+const changePasswordBtn = document.getElementById('changePasswordBtn');
+const closePasswordModal = document.getElementById('closePasswordModal');
+
+changePasswordBtn?.addEventListener('click', () => {
+    changePasswordModal.style.display = 'block';
+});
+
+closePasswordModal?.addEventListener('click', () => {
+    changePasswordModal.style.display = 'none';
+});
+
+window.addEventListener('click', (e) => {
+    if (e.target === changePasswordModal) {
+        changePasswordModal.style.display = 'none';
+    }
+});
+
+// Handle change password form
+document.getElementById('changePasswordForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const currentPassword = document.getElementById('currentPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    if (newPassword !== confirmPassword) {
+        showNotification('New passwords do not match', 'error');
+        return;
+    }
+
+    if (newPassword.length < 6) {
+        showNotification('Password must be at least 6 characters', 'error');
+        return;
+    }
+
+    const token = sessionStorage.getItem('adminApiToken') || '';
+
+    try {
+        const res = await fetch('/api/settings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-admin-token': token
+            },
+            body: JSON.stringify({
+                action: 'changePassword',
+                currentPassword,
+                newPassword
+            })
+        });
+
+        if (!res.ok) {
+            const data = await res.json();
+            if (data.error === 'current_password_incorrect') {
+                showNotification('Current password is incorrect', 'error');
+            } else {
+                showNotification('Failed to change password', 'error');
+            }
+            return;
+        }
+
+        // Update stored token
+        sessionStorage.setItem('adminApiToken', newPassword);
+
+        // Reset form and close modal
+        this.reset();
+        changePasswordModal.style.display = 'none';
+        showNotification('Password changed successfully', 'success');
+    } catch (err) {
+        console.error(err);
+        showNotification('Failed to change password', 'error');
+    }
 });
 
 // Initialize on page load

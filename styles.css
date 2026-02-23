@@ -203,6 +203,52 @@ section {
     align-items: center;
 }
 
+/* Admin Nav */
+.admin-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.admin-nav .logo {
+    justify-content: flex-start;
+}
+
+.admin-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-nav-link {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: inherit;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.admin-nav-link:hover {
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+}
+
+.admin-nav-logout {
+    color: var(--accent-color);
+    border-color: rgba(255, 0, 110, 0.3);
+}
+
+.admin-nav-logout:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
 .logo-img {
     height: 50px;
     width: auto;

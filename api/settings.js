@@ -48,6 +48,13 @@ async function ensureSchema(poolInstance) {
     VALUES ('cpqlTarget', '700')
     ON CONFLICT (key) DO NOTHING;
   `;
+
+  // Seed default admin password if not set
+  await poolInstance.sql`
+    INSERT INTO app_settings (key, value)
+    VALUES ('adminPassword', 'sliq2024')
+    ON CONFLICT (key) DO NOTHING;
+  `;
 }
 
 export default async function handler(req, res) {
@@ -63,11 +70,64 @@ export default async function handler(req, res) {
       return json(res, 200, { cpqlTarget: Number(value) });
     }
 
-    const adminToken = process.env.ADMIN_API_TOKEN;
+    // Helper: check auth against DB password or env var
+    async function isAuthorized(token) {
+      if (!token) return false;
+      // Check env var first
+      const envToken = process.env.ADMIN_API_TOKEN;
+      if (envToken && token === envToken) return true;
+      // Check DB password
+      const { rows } = await poolInstance.sql`
+        SELECT value FROM app_settings WHERE key = 'adminPassword' LIMIT 1;
+      `;
+      const dbPassword = rows?.[0]?.value;
+      return dbPassword && token === dbPassword;
+    }
+
     const reqToken = getAdminToken(req);
-    const authorized = adminToken && reqToken && reqToken === adminToken;
+
+    if (req.method === 'POST') {
+      // Login verification endpoint
+      const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+
+      if (body.action === 'login') {
+        const { username, password } = body;
+        if (username !== 'admin' || !password) {
+          return json(res, 401, { error: 'invalid_credentials' });
+        }
+        const authed = await isAuthorized(password);
+        if (!authed) return json(res, 401, { error: 'invalid_credentials' });
+        return json(res, 200, { success: true });
+      }
+
+      if (body.action === 'changePassword') {
+        const authed = await isAuthorized(reqToken);
+        if (!authed) return json(res, 401, { error: 'unauthorized' });
+
+        const { currentPassword, newPassword } = body;
+        if (!currentPassword || !newPassword || newPassword.length < 6) {
+          return json(res, 400, { error: 'invalid_password' });
+        }
+
+        // Verify current password
+        const currentAuthed = await isAuthorized(currentPassword);
+        if (!currentAuthed) return json(res, 401, { error: 'current_password_incorrect' });
+
+        // Save new password
+        await poolInstance.sql`
+          INSERT INTO app_settings (key, value)
+          VALUES ('adminPassword', ${newPassword})
+          ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
+        `;
+
+        return json(res, 200, { success: true });
+      }
+
+      return json(res, 400, { error: 'invalid_action' });
+    }
 
     if (req.method === 'PUT') {
+      const authorized = await isAuthorized(reqToken);
       if (!authorized) return json(res, 401, { error: 'unauthorized' });
 
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
@@ -85,7 +145,7 @@ export default async function handler(req, res) {
       return json(res, 200, { success: true, cpqlTarget: next });
     }
 
-    res.setHeader('Allow', 'GET,PUT');
+    res.setHeader('Allow', 'GET,POST,PUT');
     return json(res, 405, { error: 'method_not_allowed' });
   } catch (err) {
     return json(res, 500, { error: String(err?.message || err) });
