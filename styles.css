@@ -2000,73 +2000,36 @@ textarea::placeholder {
     box-shadow: 0 0 20px rgba(255, 0, 110, 0.15);
 }
 
+.case-study-testimonial {
+    margin-top: 24px;
+    padding: 16px 20px;
+    border-left: 3px solid var(--accent-color);
+    background: rgba(255, 0, 110, 0.05);
+    border-radius: 0 8px 8px 0;
+}
+
+.case-study-quote {
+    font-size: 15px;
+    font-style: italic;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.case-study-quote-author {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 8px 0 0;
+    font-style: normal;
+    font-weight: 500;
+}
+
 .case-study-read-more {
     text-align: center;
     margin-top: 20px;
     color: var(--accent-color);
     font-weight: 600;
     font-size: 15px;
-}
-
-/* Testimonials Section */
-.testimonials-section {
-    padding: 60px 0;
-    background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
-}
-
-.testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.testimonial-card {
-    background: var(--card-bg);
-    border-radius: 16px;
-    padding: 28px 24px;
-    border: 1px solid var(--border-color);
-    border-left: 3px solid var(--accent-color);
-    position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.testimonial-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(255, 0, 110, 0.1);
-}
-
-.testimonial-card::before {
-    content: '\201C';
-    position: absolute;
-    top: 16px;
-    right: 20px;
-    font-size: 48px;
-    font-weight: 800;
-    color: var(--accent-color);
-    opacity: 0.15;
-    line-height: 1;
-}
-
-.testimonial-quote {
-    color: var(--text-secondary);
-    font-size: 14px;
-    line-height: 1.7;
-    margin-bottom: 20px;
-    font-style: italic;
-}
-
-.testimonial-name {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 2px;
-}
-
-.testimonial-role {
-    font-size: 12px;
-    color: var(--text-secondary);
 }
 
 /* Disclaimer Banner */
@@ -2201,10 +2164,6 @@ textarea::placeholder {
         font-size: 24px;
     }
 
-    .testimonials-grid {
-        grid-template-columns: 1fr;
-    }
-
     .hero-cta .calculate-btn {
         min-width: unset;
         width: 100%;
@@ -2239,7 +2198,7 @@ textarea::placeholder {
     }
 
     .calculator-section, .results-section, .contact-section,
-    .case-study-section, .testimonials-section {
+    .case-study-section {
         padding: 30px 0;
     }
 }
