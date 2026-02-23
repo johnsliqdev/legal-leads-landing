@@ -281,7 +281,7 @@ function updateResultsSection(data) {
         // Update CTA for non-optimal performers
         const ctaHeading = document.querySelector('#sliqProjectionSection .results-cta h4');
         const ctaText = document.querySelector('#sliqProjectionSection .results-cta p');
-        if (ctaHeading) ctaHeading.textContent = 'Ready to Get 30 Qualified Leads in 90 Days?';
+        if (ctaHeading) ctaHeading.textContent = 'Ready to Optimize Your Ad Spend and Get More Qualified Leads?';
         if (ctaText) ctaText.textContent = 'Answer a few quick questions to see if you qualify';
         if (qualBtn) qualBtn.textContent = 'Continue to Qualify →';
     }
@@ -311,7 +311,7 @@ function updateResultsSection(data) {
     } else {
         if (savingsView) savingsView.style.display = 'block';
         if (outstandingView) outstandingView.style.display = 'none';
-        if (callbackCtaHeading) callbackCtaHeading.textContent = 'Ready to Get 30 Qualified Leads in 90 Days?';
+        if (callbackCtaHeading) callbackCtaHeading.textContent = 'Ready to Optimize Your Ad Spend and Get More Qualified Leads?';
         if (callbackCtaText) callbackCtaText.textContent = "Let's talk about how the guarantee works for your firm";
         if (callbackBtn) callbackBtn.textContent = 'Request a Callback';
     }
