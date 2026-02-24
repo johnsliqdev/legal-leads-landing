@@ -575,6 +575,8 @@ function initializeContactForm() {
                 // Skip to booking for optimal performers
                 document.getElementById('bookingSection').style.display = 'block';
                 loadBookingWidget();
+                document.getElementById('videoSection').style.display = 'block';
+                initYouTubePlayer();
                 document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
             } else {
                 // Show qualification questions for non-optimal performers
@@ -673,20 +675,12 @@ function initializeContactForm() {
                 firmDifferentiator: firmDifferentiator || null
             });
 
-            // Show booking
+            // Show booking + video
             document.getElementById('bookingSection').style.display = 'block';
             loadBookingWidget();
-            document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
-    }
-
-    // 5. Booking → Show Video
-    const showVideoBtn = document.getElementById('showVideoBtn');
-    if (showVideoBtn) {
-        showVideoBtn.addEventListener('click', function() {
             document.getElementById('videoSection').style.display = 'block';
-            document.getElementById('videoSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
             initYouTubePlayer();
+            document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
     }
 }
