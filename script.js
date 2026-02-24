@@ -22,8 +22,22 @@ function onYouTubeIframeAPIReady() {
 }
 
 // Create player only when video section is visible
+var ytPlayerRetry = null;
 function initYouTubePlayer() {
-    if (ytPlayer || !ytApiReady) return;
+    if (ytPlayer) return;
+    if (!ytApiReady || typeof YT === 'undefined' || !YT.Player) {
+        // API not ready yet — retry every 300ms until it is
+        if (!ytPlayerRetry) {
+            ytPlayerRetry = setInterval(function() {
+                if (ytApiReady && typeof YT !== 'undefined' && YT.Player) {
+                    clearInterval(ytPlayerRetry);
+                    ytPlayerRetry = null;
+                    initYouTubePlayer();
+                }
+            }, 300);
+        }
+        return;
+    }
     var container = document.getElementById('ytPlayer');
     if (!container) return;
     ytPlayer = new YT.Player('ytPlayer', {
