@@ -92,6 +92,13 @@ function loadBookingWidget() {
     var iframe = document.getElementById('bookingIframe');
     if (iframe && !iframe.src) {
         iframe.src = 'https://api.leadconnectorhq.com/widget/booking/swe1lSedf4hVYFTLSTIc';
+        // Load the form embed script the widget needs
+        if (!document.getElementById('ghlFormEmbed')) {
+            var s = document.createElement('script');
+            s.id = 'ghlFormEmbed';
+            s.src = 'https://link.msgsndr.com/js/form_embed.js';
+            document.body.appendChild(s);
+        }
     }
 }
 
