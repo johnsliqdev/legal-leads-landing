@@ -673,20 +673,20 @@ function initializeContactForm() {
                 firmDifferentiator: firmDifferentiator || null
             });
 
-            // Show video
-            document.getElementById('videoSection').style.display = 'block';
-            document.getElementById('videoSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
-            initYouTubePlayer();
-        });
-    }
-
-    // 5. Video → Show Booking
-    const showBookingBtn = document.getElementById('showBookingBtn');
-    if (showBookingBtn) {
-        showBookingBtn.addEventListener('click', function() {
+            // Show booking
             document.getElementById('bookingSection').style.display = 'block';
             loadBookingWidget();
             document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    }
+
+    // 5. Booking → Show Video
+    const showVideoBtn = document.getElementById('showVideoBtn');
+    if (showVideoBtn) {
+        showVideoBtn.addEventListener('click', function() {
+            document.getElementById('videoSection').style.display = 'block';
+            document.getElementById('videoSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            initYouTubePlayer();
         });
     }
 }
@@ -983,8 +983,8 @@ document.addEventListener('DOMContentLoaded', function() {
             { id: 'resultsSection', element: document.getElementById('resultsSection') },
             { id: 'sliqProjectionSection', element: document.getElementById('sliqProjectionSection') },
             { id: 'qualificationSection', element: document.getElementById('qualificationSection') },
-            { id: 'videoSection', element: document.getElementById('videoSection') },
-            { id: 'bookingSection', element: document.getElementById('bookingSection') }
+            { id: 'bookingSection', element: document.getElementById('bookingSection') },
+            { id: 'videoSection', element: document.getElementById('videoSection') }
         ];
 
         // Find the last visible (unlocked) section - this helps determine completion

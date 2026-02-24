@@ -42,13 +42,13 @@
             <div class="progress-dot"></div>
             <div class="progress-label">Qualify</div>
         </div>
-        <div class="progress-item" data-section="videoSection">
-            <div class="progress-dot"></div>
-            <div class="progress-label">Video</div>
-        </div>
         <div class="progress-item" data-section="bookingSection">
             <div class="progress-dot"></div>
             <div class="progress-label">Book Call</div>
+        </div>
+        <div class="progress-item" data-section="videoSection">
+            <div class="progress-dot"></div>
+            <div class="progress-label">Video</div>
         </div>
     </div>
 
@@ -278,22 +278,22 @@
                         </div>
                     </div>
 
-                    <!-- Step 5: Video (hidden until qualification submitted) -->
+                    <!-- Step 5: Booking (hidden until qualification submitted) -->
+                    <div class="flow-section" id="bookingSection" style="display:none;">
+                        <div class="flow-card">
+                            <h3>Book Your Strategy Call</h3>
+                            <iframe id="bookingIframe" style="width: 100%;border:none;overflow: hidden;min-height:1000px;" scrolling="no"></iframe>
+                            <button type="button" class="submit-btn" id="showVideoBtn" style="margin-top:20px;">Watch a Quick Overview →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: Video (hidden until booking section shown) -->
                     <div class="flow-section" id="videoSection" style="display:none;">
                         <div class="flow-card">
                             <h3>Watch This Quick 2-Minute Overview</h3>
                             <div class="video-container">
                                 <div id="ytPlayer"></div>
                             </div>
-                            <button type="button" class="submit-btn" id="showBookingBtn">Continue to Booking →</button>
-                        </div>
-                    </div>
-
-                    <!-- Step 6: Booking Iframe (hidden until video viewed) -->
-                    <div class="flow-section" id="bookingSection" style="display:none;">
-                        <div class="flow-card">
-                            <h3>Book Your Strategy Call</h3>
-                            <iframe id="bookingIframe" style="width: 100%;border:none;overflow: hidden;min-height:1000px;" scrolling="no"></iframe>
                         </div>
                     </div>
                 </div>
