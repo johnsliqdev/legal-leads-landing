@@ -64,11 +64,8 @@ async function ensureSchema(poolInstance) {
     CREATE TABLE IF NOT EXISTS leads (
       id SERIAL PRIMARY KEY,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      first_name TEXT,
-      last_name TEXT,
       email TEXT,
       phone TEXT,
-      law_firm TEXT,
       website TEXT,
       calc_current_monthly_spend TEXT,
       calc_current_cpql TEXT,
@@ -99,6 +96,11 @@ async function ensureSchema(poolInstance) {
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS firm_differentiator TEXT;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS video_watch_seconds INTEGER DEFAULT 0;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS video_watch_percent INTEGER DEFAULT 0;`;
+
+  // Drop unused columns (never collected)
+  await poolInstance.sql`ALTER TABLE leads DROP COLUMN IF EXISTS first_name;`;
+  await poolInstance.sql`ALTER TABLE leads DROP COLUMN IF EXISTS last_name;`;
+  await poolInstance.sql`ALTER TABLE leads DROP COLUMN IF EXISTS law_firm;`;
 }
 
 export default async function handler(req, res) {
@@ -111,15 +113,14 @@ export default async function handler(req, res) {
 
       const { rows } = await poolInstance.sql`
         INSERT INTO leads (
-          first_name, last_name, email, phone, law_firm, website,
+          email, phone, website,
           calc_current_monthly_spend, calc_current_cpql, calc_guaranteed_cpql,
           calc_new_monthly_spend, calc_monthly_savings, calc_annual_savings,
           calc_cpql_reduction, calc_leads_count, calc_same_budget_leads,
           requested_callback
         ) VALUES (
-          ${body.firstName || null}, ${body.lastName || null},
           ${body.email || null}, ${body.phone || null},
-          ${body.lawFirm || null}, ${body.website === '' ? '' : (body.website || null)},
+          ${body.website === '' ? '' : (body.website || null)},
           ${body.calcCurrentMonthlySpend || null}, ${body.calcCurrentCpql || null},
           ${body.calcGuaranteedCpql || null}, ${body.calcNewMonthlySpend || null},
           ${body.calcMonthlySavings || null}, ${body.calcAnnualSavings || null},
@@ -131,20 +132,12 @@ export default async function handler(req, res) {
 
       const insertedId = rows[0].id;
 
-      // Fire GHL webhook only when the client requests a callback
-      if (body.requestedCallback) {
-        await fireGhlWebhook({
-          first_name: body.firstName || '', last_name: body.lastName || '',
-          email: body.email || '', phone: body.phone || '',
-          company_name: body.lawFirm || '', website: body.website || '',
-          current_monthly_spend: body.calcCurrentMonthlySpend || '',
-          current_cpql: body.calcCurrentCpql || '',
-          guaranteed_cpql: body.calcGuaranteedCpql || '',
-          cpql_reduction: body.calcCpqlReduction || '',
-          leads_count: body.calcLeadsCount || '',
-          same_budget_leads: body.calcSameBudgetLeads || '',
-        });
-      }
+      // Fire GHL webhook on every new lead (contact form submission)
+      await fireGhlWebhook({
+        email: body.email || '',
+        phone: body.phone || '',
+        website: body.website || '',
+      });
 
       return json(res, 200, { success: true, id: insertedId });
     }
@@ -161,7 +154,6 @@ export default async function handler(req, res) {
         UPDATE leads SET
           email = COALESCE(${toVal(body.email)}, email),
           phone = COALESCE(${toVal(body.phone)}, phone),
-          law_firm = COALESCE(${toVal(body.lawFirm)}, law_firm),
           website = COALESCE(${websiteVal}, website),
           calc_current_monthly_spend = COALESCE(${toVal(body.calcCurrentMonthlySpend)}, calc_current_monthly_spend),
           calc_current_cpql = COALESCE(${toVal(body.calcCurrentCpql)}, calc_current_cpql),
@@ -181,25 +173,6 @@ export default async function handler(req, res) {
           video_watch_percent = COALESCE(${body.videoWatchPercent === undefined ? null : Number(body.videoWatchPercent)}, video_watch_percent)
         WHERE id = ${id};
       `;
-
-      // Fire GHL webhook only when the client requests a callback — SELECT full row for complete payload
-      if (body.requestedCallback) {
-        const { rows } = await poolInstance.sql`SELECT * FROM leads WHERE id = ${id} LIMIT 1;`;
-        if (rows.length > 0) {
-          const row = rows[0];
-          await fireGhlWebhook({
-            first_name: row.first_name || '', last_name: row.last_name || '',
-            email: row.email || '', phone: row.phone || '',
-            company_name: row.law_firm || '', website: row.website || '',
-            current_monthly_spend: row.calc_current_monthly_spend || '',
-            current_cpql: row.calc_current_cpql || '',
-            guaranteed_cpql: row.calc_guaranteed_cpql || '',
-            cpql_reduction: row.calc_cpql_reduction || '',
-            leads_count: row.calc_leads_count || '',
-            same_budget_leads: row.calc_same_budget_leads || '',
-          });
-        }
-      }
 
       return json(res, 200, { success: true });
     }
