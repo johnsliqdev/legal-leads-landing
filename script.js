@@ -105,6 +105,11 @@ function stopVideoTracking(ended) {
 function loadBookingWidget() {
     var iframe = document.getElementById('bookingIframe');
     if (iframe && !iframe.src) {
+        // Show video only after booking iframe loads
+        iframe.addEventListener('load', function() {
+            document.getElementById('videoSection').style.display = 'block';
+            initYouTubePlayer();
+        });
         iframe.src = 'https://api.leadconnectorhq.com/widget/booking/swe1lSedf4hVYFTLSTIc';
         // Load the form embed script the widget needs
         if (!document.getElementById('ghlFormEmbed')) {
@@ -589,8 +594,6 @@ function initializeContactForm() {
                 // Skip to booking for optimal performers
                 document.getElementById('bookingSection').style.display = 'block';
                 loadBookingWidget();
-                document.getElementById('videoSection').style.display = 'block';
-                initYouTubePlayer();
                 document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
             } else {
                 // Show qualification questions for non-optimal performers
@@ -689,11 +692,9 @@ function initializeContactForm() {
                 firmDifferentiator: firmDifferentiator || null
             });
 
-            // Show booking + video
+            // Show booking (video appears after iframe loads)
             document.getElementById('bookingSection').style.display = 'block';
             loadBookingWidget();
-            document.getElementById('videoSection').style.display = 'block';
-            initYouTubePlayer();
             document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
     }
