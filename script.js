@@ -594,7 +594,7 @@ function initializeContactForm() {
                 // Skip to booking for optimal performers
                 document.getElementById('bookingSection').style.display = 'block';
                 loadBookingWidget();
-                document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
             } else {
                 // Show qualification questions for non-optimal performers
                 document.getElementById('qualificationSection').style.display = 'block';
@@ -695,7 +695,7 @@ function initializeContactForm() {
             // Show booking (video appears after iframe loads)
             document.getElementById('bookingSection').style.display = 'block';
             loadBookingWidget();
-            document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     }
 }
