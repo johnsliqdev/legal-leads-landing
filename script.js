@@ -553,6 +553,9 @@ function initializeContactForm() {
             e.target.querySelector('button[type="submit"]').textContent = 'Submitted ✓';
             e.target.querySelector('button[type="submit"]').style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
 
+            // Meta Pixel: Track contact details submission
+            if (typeof fbq === 'function') fbq('track', 'Lead');
+
             // Save to database
             fetch('/api/leads', {
                 method: 'POST',
@@ -683,6 +686,9 @@ function initializeContactForm() {
                 showNotification('Please answer all required questions.', 'error');
                 return;
             }
+
+            // Meta Pixel: Track qualification submission
+            if (typeof fbq === 'function') fbq('track', 'CompleteRegistration');
 
             // Save qualification data
             patchLead({
