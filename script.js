@@ -687,9 +687,6 @@ function initializeContactForm() {
                 return;
             }
 
-            // Meta Pixel: Track qualification submission
-            if (typeof fbq === 'function') fbq('track', 'CompleteRegistration');
-
             // Save qualification data
             patchLead({
                 metaBudgetCommitment,
