@@ -33,7 +33,8 @@ export default async function handler(req, res) {
       content[row.key.replace('content_', '')] = row.value;
     }
 
-    const siteUrl = (content.siteUrl || 'https://example.com').trim().replace(/[^\x20-\x7E]/g, '').replace(/\/+$/, '');
+    const host = (req.headers.host || '').split(':')[0];
+    const siteUrl = `https://${host}`;
     const today = new Date().toISOString().split('T')[0];
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
