@@ -3,6 +3,7 @@
   "trailingSlash": false,
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
-    { "source": "/llms.txt", "destination": "/api/llms" }
+    { "source": "/llms.txt", "destination": "/api/llms" },
+    { "source": "/robots.txt", "destination": "/api/robots" }
   ]
 }
