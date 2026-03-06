@@ -167,6 +167,27 @@
         font-weight: 500;
         line-height: 1.4;
     }
+    .gc-stat--guarantee {
+        border-color: rgba(255,0,110,0.45);
+        background: rgba(255,0,110,0.07);
+        box-shadow: 0 0 24px rgba(255,0,110,0.15), inset 0 1px 0 rgba(255,0,110,0.1);
+    }
+    .gc-stat--guarantee::before {
+        width: 100%;
+        height: 3px;
+        top: 0;
+        bottom: auto;
+        border-radius: 3px 3px 0 0;
+        background: linear-gradient(90deg, #ff006e, #ff6b35);
+    }
+    .gc-guarantee-tag {
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--accent-color);
+        margin-bottom: 6px;
+    }
 
     /* Trust badges */
     .gc-trust {
@@ -375,11 +396,15 @@
         box-shadow: 0 0 0 1px rgba(255,0,110,0.2);
     }
     .gc-scenario-icon {
-        font-size: 30px;
         flex-shrink: 0;
         width: 44px;
-        text-align: center;
-        line-height: 1;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255,0,110,0.1);
+        border-radius: 10px;
+        color: var(--accent-color);
     }
     .gc-scenario-body strong {
         display: block;
@@ -559,28 +584,8 @@
                 We build and run your Meta ad system from scratch. You fund the spend. We guarantee qualified commercial leads in 90 days — or we keep working until you hit the number, no management fee.
             </p>
 
-            <!-- Impact stats -->
-            <div class="gc-stats">
-                <div class="gc-stat">
-                    <div class="gc-stat-num">10<span>–15</span></div>
-                    <div class="gc-stat-label">Qualified project leads per month</div>
-                </div>
-                <div class="gc-stat">
-                    <div class="gc-stat-num">$<span>0</span></div>
-                    <div class="gc-stat-label">Management fee if we miss the target</div>
-                </div>
-                <div class="gc-stat">
-                    <div class="gc-stat-num"><span>90</span></div>
-                    <div class="gc-stat-label">Day guaranteed delivery window</div>
-                </div>
-                <div class="gc-stat">
-                    <div class="gc-stat-num">$<span>100K</span><span style="font-size:18px;">+</span></div>
-                    <div class="gc-stat-label">Avg project value we target for you</div>
-                </div>
-            </div>
-
             <!-- Trust badges -->
-            <div class="gc-trust">
+            <div class="gc-trust" style="margin-bottom: 32px;">
                 <a href="https://maps.app.goo.gl/jZJwBzY5DwK7GHhY6" target="_blank" rel="noopener noreferrer" class="gc-badge">
                     <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
@@ -605,6 +610,28 @@
                     </div>
                 </a>
             </div>
+
+            <!-- Impact stats -->
+            <div class="gc-stats">
+                <div class="gc-stat">
+                    <div class="gc-stat-num">10<span>–15</span></div>
+                    <div class="gc-stat-label">Qualified project leads per month</div>
+                </div>
+                <div class="gc-stat gc-stat--guarantee">
+                    <div class="gc-guarantee-tag">Guaranteed</div>
+                    <div class="gc-stat-num">$<span>0</span></div>
+                    <div class="gc-stat-label">Management fee if we miss the target</div>
+                </div>
+                <div class="gc-stat">
+                    <div class="gc-stat-num"><span>90</span></div>
+                    <div class="gc-stat-label">Day guaranteed delivery window</div>
+                </div>
+                <div class="gc-stat">
+                    <div class="gc-stat-num">$<span>100K</span><span style="font-size:18px;">+</span></div>
+                    <div class="gc-stat-label">Avg project value we target for you</div>
+                </div>
+            </div>
+
 
         </div><!-- /.gc-hero -->
 
@@ -631,7 +658,9 @@
                         <div class="gc-q-text">Which best describes where you're at right now?</div>
                         <div class="gc-options" style="gap:12px;" id="gcScenarios">
                             <div class="gc-scenario" data-value="I'm booking 2-3 projects a month, want to double that" onclick="gcSelectScenario(this)">
-                                <div class="gc-scenario-icon">📈</div>
+                                <div class="gc-scenario-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                                </div>
                                 <div class="gc-scenario-body">
                                     <strong>Booking 2–3 projects/month</strong>
                                     <span>Consistent but want to double volume</span>
@@ -639,7 +668,9 @@
                                 <div class="gc-scenario-check">✓</div>
                             </div>
                             <div class="gc-scenario" data-value="I'm turning away small jobs, want only $150K+ projects" onclick="gcSelectScenario(this)">
-                                <div class="gc-scenario-icon">🏗️</div>
+                                <div class="gc-scenario-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="12" rx="1"/><path d="M3 9l9-6 9 6"/><line x1="9" y1="21" x2="9" y2="12"/><line x1="15" y1="21" x2="15" y2="12"/></svg>
+                                </div>
                                 <div class="gc-scenario-body">
                                     <strong>Turning away small jobs</strong>
                                     <span>Only want $150K+ commercial projects</span>
@@ -647,7 +678,9 @@
                                 <div class="gc-scenario-check">✓</div>
                             </div>
                             <div class="gc-scenario" data-value="My schedule has gaps, especially in winter" onclick="gcSelectScenario(this)">
-                                <div class="gc-scenario-icon">📅</div>
+                                <div class="gc-scenario-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                </div>
                                 <div class="gc-scenario-body">
                                     <strong>Schedule gaps in winter</strong>
                                     <span>Need a consistent year-round pipeline</span>
