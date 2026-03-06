@@ -153,12 +153,25 @@
                     <div class="submissions-section" style="margin-top: 40px;">
                         <h3>Form Submissions</h3>
                         <p style="color: var(--text-secondary); margin-bottom: 20px;">View all contact form submissions from potential clients</p>
-                        
-                        <div class="submissions-controls">
-                            <button id="refreshSubmissions" class="submit-btn" style="margin-bottom: 20px;">Refresh Submissions</button>
-                            <button id="clearSubmissions" class="submit-btn" style="margin-bottom: 20px; background: var(--accent-color);">Clear All Submissions</button>
+
+                        <!-- Campaign toggle -->
+                        <div style="display:flex; gap:8px; margin-bottom:24px; background:var(--secondary-bg); border-radius:12px; padding:4px; width:fit-content;">
+                            <button id="togglePI" onclick="switchCampaign('pi')" style="padding:10px 20px; border-radius:9px; border:none; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; background:var(--accent-color); color:#fff;">
+                                Personal Injury Leads
+                            </button>
+                            <button id="toggleGC" onclick="switchCampaign('gc')" style="padding:10px 20px; border-radius:9px; border:none; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; background:transparent; color:var(--text-secondary);">
+                                General Contractor Leads
+                            </button>
                         </div>
-                        
+
+                        <!-- Metrics bar -->
+                        <div id="campaignMetrics" style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px;"></div>
+
+                        <div class="submissions-controls">
+                            <button id="refreshSubmissions" class="submit-btn" style="margin-bottom: 20px;">Refresh</button>
+                            <button id="clearSubmissions" class="submit-btn" style="margin-bottom: 20px; background: var(--accent-color);">Clear All</button>
+                        </div>
+
                         <div id="submissionsList" class="submissions-list">
                             <!-- Submissions will be loaded here -->
                         </div>

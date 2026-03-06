@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fill Your Pipeline with $100K+ Projects — Sliq</title>
+    <meta name="description" content="We guarantee qualified commercial leads for general contractors within 90 days — or we keep working at zero management fee until you hit target.">
+    <link rel="icon" type="image/png" href="images/sliq-logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '2228515034285793');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=2228515034285793&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TCZJFLFXQH"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TCZJFLFXQH');
+    </script>
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "vo4e8qgw1b");
+    </script>
+    <style>
+        /* ── General Contractors page styles ── */
+
+        .gc-hero {
+            padding: 56px 20px 40px;
+            text-align: center;
+            max-width: 780px;
+            margin: 0 auto;
+        }
+        .gc-hero h1 {
+            font-size: clamp(26px, 4.5vw, 42px);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 18px;
+        }
+        .gc-hero h1 span { color: var(--accent-color); }
+        .gc-hero p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 620px;
+            margin: 0 auto 32px;
+        }
+
+        /* Value props grid */
+        .value-props {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            max-width: 560px;
+            margin: 0 auto 36px;
+        }
+        @media (max-width: 480px) { .value-props { grid-template-columns: 1fr; } }
+        .value-prop {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 14px;
+            text-align: left;
+        }
+        .value-prop-check {
+            color: var(--success-color);
+            font-size: 16px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .value-prop span {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        /* Trust badges */
+        .gc-trust {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        .gc-trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 9px 16px;
+            text-decoration: none;
+            transition: border-color 0.2s;
+        }
+        .gc-trust-badge:hover { border-color: var(--accent-color); }
+        .gc-trust-badge .badge-stars { color: #f4c430; font-size: 13px; letter-spacing: 1px; }
+        .gc-trust-badge .badge-label { font-size: 12px; font-weight: 600; color: var(--text-primary); }
+
+        /* Funnel wrapper */
+        .gc-funnel {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+        }
+
+        /* Step progress */
+        .gc-progress {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin-bottom: 36px;
+        }
+        .gc-step-dot {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+        .gc-step-dot.active {
+            border-color: var(--accent-color);
+            background: var(--accent-color);
+            color: #fff;
+            box-shadow: 0 0 18px rgba(255,0,110,0.4);
+        }
+        .gc-step-dot.done {
+            border-color: #28a745;
+            background: #28a745;
+            color: #fff;
+        }
+        .gc-step-label {
+            position: absolute;
+            top: 44px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .gc-step-line {
+            width: 56px;
+            height: 2px;
+            background: var(--border-color);
+            transition: background 0.3s;
+        }
+        .gc-step-line.done { background: #28a745; }
+
+        /* Section cards */
+        .gc-section { margin-bottom: 8px; }
+        .gc-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 44px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+        }
+        @media (max-width: 600px) { .gc-card { padding: 28px 20px; } }
+        .gc-card h2 {
+            font-size: 22px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .gc-card-desc {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        /* Scenario cards (Step 1) */
+        .scenario-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+        .scenario-card {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 22px 24px;
+            border-radius: 14px;
+            border: 2px solid var(--border-color);
+            background: var(--secondary-bg);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        .scenario-card:hover {
+            border-color: var(--accent-color);
+            background: rgba(255,0,110,0.04);
+            transform: translateY(-1px);
+        }
+        .scenario-card.selected {
+            border-color: var(--accent-color);
+            background: rgba(255,0,110,0.08);
+            box-shadow: 0 0 0 1px rgba(255,0,110,0.3);
+        }
+        .scenario-icon {
+            font-size: 28px;
+            flex-shrink: 0;
+            width: 40px;
+            text-align: center;
+        }
+        .scenario-text strong {
+            display: block;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 3px;
+        }
+        .scenario-text span {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .scenario-check {
+            margin-left: auto;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 13px;
+            font-weight: 700;
+            color: transparent;
+            transition: all 0.2s;
+        }
+        .scenario-card.selected .scenario-check {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #fff;
+        }
+
+        /* Qualifier option cards (Step 2) */
+        .qualifier-question {
+            margin-bottom: 32px;
+        }
+        .qualifier-question label {
+            display: block;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--text-primary);
+        }
+        .option-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 18px;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            background: var(--secondary-bg);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        .option-card:hover {
+            border-color: var(--accent-color);
+            background: rgba(255,0,110,0.04);
+        }
+        .option-card.selected {
+            border-color: var(--accent-color);
+            background: rgba(255,0,110,0.08);
+        }
+        .option-card.selected-disq {
+            border-color: #dc3545;
+            background: rgba(220,53,69,0.06);
+        }
+        .option-indicator {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 12px;
+            font-weight: 700;
+            color: transparent;
+            transition: all 0.2s;
+        }
+        .option-card.selected .option-indicator {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #fff;
+        }
+        .option-card.selected-disq .option-indicator {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: #fff;
+        }
+        .option-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* Disqualification box */
+        .disqual-box {
+            display: none;
+            background: rgba(220,53,69,0.08);
+            border: 1px solid rgba(220,53,69,0.3);
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin-top: 16px;
+        }
+        .disqual-box p {
+            color: #ff6b6b;
+            font-size: 14px;
+            margin: 0;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* Contact form */
+        .gc-form .form-group label {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .gc-form input {
+            padding: 14px 16px;
+            font-size: 15px;
+        }
+        .optional-tag {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-left: 6px;
+        }
+
+        /* Booking */
+        .booking-pill {
+            text-align: center;
+            background: rgba(255,0,110,0.06);
+            border: 1px solid rgba(255,0,110,0.15);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 28px;
+        }
+        .booking-pill p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Progress dots wrapper needs relative position for labels */
+        .gc-step-wrap {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="geometric-bg"></div>
+
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="images/sliq-logo.png" alt="Sliq By Design" class="logo-img">
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="gc-hero">
+        <h1>Fill Your Pipeline with<br><span>$100K+ Projects</span> —<br>Guaranteed 90-Day Results</h1>
+        <p>We build and optimize your Meta + funnel system. You fund the ad spend. We guarantee qualified commercial leads within 90 days — if we miss, we keep working at zero management fee until you hit target.</p>
+
+        <!-- Value props -->
+        <div class="value-props">
+            <div class="value-prop">
+                <span class="value-prop-check">✓</span>
+                <span>10–15 qualified project leads/month</span>
+            </div>
+            <div class="value-prop">
+                <span class="value-prop-check">✓</span>
+                <span>$100K–$250K avg project value</span>
+            </div>
+            <div class="value-prop">
+                <span class="value-prop-check">✓</span>
+                <span>Pre-qualified budgets, no tire-kickers</span>
+            </div>
+            <div class="value-prop">
+                <span class="value-prop-check">✓</span>
+                <span>Works while you're on job sites</span>
+            </div>
+        </div>
+
+        <!-- Trust badges -->
+        <div class="gc-trust">
+            <a href="https://maps.app.goo.gl/jZJwBzY5DwK7GHhY6" target="_blank" rel="noopener noreferrer" class="gc-trust-badge">
+                <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                <div>
+                    <div class="badge-stars">★★★★★</div>
+                    <div class="badge-label">5-Star on Google</div>
+                </div>
+            </a>
+            <a href="https://clutch.co/profile/sliq-design" target="_blank" rel="noopener noreferrer" class="gc-trust-badge">
+                <svg viewBox="0 0 88 25" width="50" height="14" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="#fff">
+                        <path d="M22.861 0h4v25h-4zM40.861 17.025c0 3.826-3.217 4.131-4.174 4.131-2.391 0-2.826-2.238-2.826-3.588V8h-4v9.548c0 2.37.744 4.326 2.048 5.63 1.152 1.153 2.878 1.783 4.748 1.783 1.326 0 3.204-.413 4.204-1.326V25h4V8h-4zM52.861 2h-4v6h-3v4h3v13h4V12h3V8h-3zM68.458 19.917c-.871.783-2.021 1.217-3.283 1.217-2.782 0-4.825-2.043-4.825-4.848s1.978-4.762 4.825-4.762c1.24 0 2.412.413 3.305 1.196l.607.522 2.697-2.696-.675-.609C69.522 8.504 67.415 7.7 65.174 7.7c-5 0-8.631 3.608-8.631 8.565 0 4.936 3.718 8.673 8.631 8.673 2.283 0 4.412-.804 5.979-2.26l.652-.609-2.739-2.694zM86.061 9.482C84.909 8.33 83.559 7.7 81.689 7.7c-1.326 0-2.828.413-3.828 1.325V0h-4v25h4v-9.365c0-3.826 2.718-4.13 3.675-4.13 2.391 0 2.325 2.239 2.325 3.587V25h4v-9.887c0-2.37-.495-4.326-1.8-5.631"/>
+                    </g>
+                    <path d="M65.043 13.438a2.891 2.891 0 1 1 0 5.784 2.891 2.891 0 0 1 0-5.784" fill="#ff3d2e"/>
+                    <path d="M17.261 18.721c-1.521 1.565-3.587 2.413-5.761 2.413-4.456 0-7.696-3.5-7.696-8.304 0-4.826 3.24-8.326 7.696-8.326 2.153 0 4.196.847 5.74 2.391l.608.609 2.674-2.674-.587-.609C17.718 1.938 14.718.7 11.5.7 4.935.7 0 5.917 0 12.851 0 19.764 4.957 24.96 11.5 24.96c3.24 0 6.24-1.26 8.457-3.543l.587-.609-2.652-2.717z" fill="#fff"/>
+                </svg>
+                <div>
+                    <div class="badge-stars">★★★★★</div>
+                    <div class="badge-label">5-Star on Clutch</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Funnel -->
+    <div class="gc-funnel">
+
+        <!-- Step progress -->
+        <div class="gc-progress" id="gcProgress">
+            <div style="position:relative;">
+                <div class="gc-step-dot active" id="gcDot1">1</div>
+                <div class="gc-step-label">Scenario</div>
+            </div>
+            <div class="gc-step-line" id="gcLine1"></div>
+            <div style="position:relative;">
+                <div class="gc-step-dot" id="gcDot2">2</div>
+                <div class="gc-step-label">Qualify</div>
+            </div>
+            <div class="gc-step-line" id="gcLine2"></div>
+            <div style="position:relative;">
+                <div class="gc-step-dot" id="gcDot3">3</div>
+                <div class="gc-step-label">Details</div>
+            </div>
+            <div class="gc-step-line" id="gcLine3"></div>
+            <div style="position:relative;">
+                <div class="gc-step-dot" id="gcDot4">4</div>
+                <div class="gc-step-label">Book</div>
+            </div>
+        </div>
+
+        <!-- ── Step 1: Scenario ── -->
+        <div class="gc-section" id="gcStep1">
+            <div class="gc-card">
+                <h2>Which best describes where you're at?</h2>
+                <p class="gc-card-desc">Pick the scenario that fits your situation — this helps us tailor a plan for your pipeline</p>
+
+                <div class="scenario-cards" id="scenarioCards">
+                    <div class="scenario-card" data-value="I'm booking 2-3 projects a month, want to double that" onclick="selectScenario(this)">
+                        <div class="scenario-icon">📈</div>
+                        <div class="scenario-text">
+                            <strong>I'm booking 2–3 projects a month</strong>
+                            <span>Consistent work but ready to scale volume</span>
+                        </div>
+                        <div class="scenario-check">✓</div>
+                    </div>
+                    <div class="scenario-card" data-value="I'm turning away small jobs, want only $150K+ projects" onclick="selectScenario(this)">
+                        <div class="scenario-icon">🏗️</div>
+                        <div class="scenario-text">
+                            <strong>I'm turning away small jobs</strong>
+                            <span>I only want $150K+ commercial projects</span>
+                        </div>
+                        <div class="scenario-check">✓</div>
+                    </div>
+                    <div class="scenario-card" data-value="My schedule has gaps, especially in winter" onclick="selectScenario(this)">
+                        <div class="scenario-icon">📅</div>
+                        <div class="scenario-text">
+                            <strong>My schedule has gaps</strong>
+                            <span>Especially in winter — need consistent pipeline</span>
+                        </div>
+                        <div class="scenario-check">✓</div>
+                    </div>
+                </div>
+
+                <button class="submit-btn" id="step1Btn" onclick="advanceToStep2()" disabled style="opacity:0.45;cursor:not-allowed;">
+                    That's My Situation →
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Step 2: Qualifier ── -->
+        <div class="gc-section" id="gcStep2" style="display:none; margin-top:24px;">
+            <div class="gc-card">
+                <h2>A few quick questions</h2>
+                <p class="gc-card-desc">Help us confirm you're a fit — takes under 60 seconds</p>
+
+                <!-- Q1: Project value -->
+                <div class="qualifier-question">
+                    <label>What's your average project value?</label>
+                    <div class="option-cards" id="q1Cards">
+                        <div class="option-card" data-q="q1" data-value="$50K-$100K" onclick="selectOption(this)">
+                            <div class="option-indicator">✓</div>
+                            <span class="option-label">$50K – $100K</span>
+                        </div>
+                        <div class="option-card" data-q="q1" data-value="$100K-$200K" onclick="selectOption(this)">
+                            <div class="option-indicator">✓</div>
+                            <span class="option-label">$100K – $200K</span>
+                        </div>
+                        <div class="option-card" data-q="q1" data-value="$200K-$500K" onclick="selectOption(this)">
+                            <div class="option-indicator">✓</div>
+                            <span class="option-label">$200K – $500K</span>
+                        </div>
+                        <div class="option-card" data-q="q1" data-value="$500K+" onclick="selectOption(this)">
+                            <div class="option-indicator">✓</div>
+                            <span class="option-label">$500K+</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q2: Budget commitment -->
+                <div class="qualifier-question">
+                    <label>Can you commit $3,000–$5,000/mo in ad spend for 90 days?</label>
+                    <div class="option-cards" id="q2Cards">
+                        <div class="option-card" data-q="q2" data-value="Yes, ready to invest" onclick="selectOption(this)">
+                            <div class="option-indicator">✓</div>
+                            <span class="option-label">Yes, ready to invest</span>
+                        </div>
+                        <div class="option-card" data-q="q2" data-value="Yes, but need to see plan first" onclick="selectOption(this)">
+                            <div class="option-indicator">✓</div>
+                            <span class="option-label">Yes, but need to see the plan first</span>
+                        </div>
+                        <div class="option-card" data-q="q2" data-value="Maybe, depends on ROI" onclick="selectOption(this)">
+                            <div class="option-indicator">✓</div>
+                            <span class="option-label">Maybe — depends on ROI</span>
+                        </div>
+                        <div class="option-card" data-q="q2" data-value="No, outside budget" data-disq="true" onclick="selectOption(this)">
+                            <div class="option-indicator">✗</div>
+                            <span class="option-label">No, outside my budget right now</span>
+                        </div>
+                    </div>
+                    <div class="disqual-box" id="budgetDisqual">
+                        <p>Our minimum ad spend is $3K/mo for the guarantee to work. If your budget grows, bookmark this page — we'd love to work with you.</p>
+                    </div>
+                </div>
+
+                <!-- Q3: Response time -->
+                <div class="qualifier-question" style="margin-bottom:0;">
+                    <label>Can you respond to new leads within 24 hours?</label>
+                    <div class="option-cards" id="q3Cards">
+                        <div class="option-card" data-q="q3" data-value="Yes, always" onclick="selectOption(this)">
+                            <div class="option-indicator">✓</div>
+                            <span class="option-label">Yes, always</span>
+                        </div>
+                        <div class="option-card" data-q="q3" data-value="Usually" onclick="selectOption(this)">
+                            <div class="option-indicator">✓</div>
+                            <span class="option-label">Usually</span>
+                        </div>
+                        <div class="option-card" data-q="q3" data-value="Sometimes" onclick="selectOption(this)">
+                            <div class="option-indicator">✓</div>
+                            <span class="option-label">Sometimes — I get busy on sites</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="submit-btn" id="step2Btn" onclick="advanceToStep3()" disabled style="margin-top:28px;opacity:0.45;cursor:not-allowed;">
+                    Continue →
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Step 3: Contact Form ── -->
+        <div class="gc-section" id="gcStep3" style="display:none; margin-top:24px;">
+            <div class="gc-card">
+                <h2>You're a fit — let's get your details</h2>
+                <p class="gc-card-desc">We'll reach out to confirm your strategy call before booking</p>
+
+                <form id="gcContactForm" class="gc-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="gcName">Full Name</label>
+                            <input type="text" id="gcName" placeholder="John Smith" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gcPhone">Phone Number</label>
+                            <input type="tel" id="gcPhone" placeholder="(555) 000-0000" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="gcEmail">Email Address</label>
+                        <input type="email" id="gcEmail" placeholder="john@smithcontracting.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gcWebsite">Company Website <span class="optional-tag">(optional)</span></label>
+                        <input type="text" id="gcWebsite" placeholder="smithcontracting.com">
+                    </div>
+                    <button type="submit" class="submit-btn">Reserve My Strategy Call →</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ── Step 4: Booking ── -->
+        <div class="gc-section" id="gcStep4" style="display:none; margin-top:24px;">
+            <div class="gc-card">
+                <h2>Book your free strategy call</h2>
+                <div class="booking-pill">
+                    <p>30 minutes · No pitch · Pure strategy — we'll map out exactly how to fill your pipeline with $100K+ projects in the next 90 days</p>
+                </div>
+                <iframe id="gcBookingIframe"
+                    style="width:100%;border:none;overflow:hidden;min-height:1000px;"
+                    scrolling="no">
+                </iframe>
+            </div>
+        </div>
+
+    </div><!-- /.gc-funnel -->
+
+    <script src="general-contractors.js"></script>
+</body>
+</html>

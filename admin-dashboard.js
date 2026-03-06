@@ -1,6 +1,27 @@
 // Admin dashboard functionality
 let cpqlTarget = 700;
 
+// ─── Campaign switcher ────────────────────────────────────────────────────────
+
+let activeCampaign = 'pi'; // 'pi' | 'gc'
+
+function switchCampaign(campaign) {
+    activeCampaign = campaign;
+
+    const piBtn = document.getElementById('togglePI');
+    const gcBtn = document.getElementById('toggleGC');
+
+    if (campaign === 'pi') {
+        piBtn.style.background = 'var(--accent-color)'; piBtn.style.color = '#fff';
+        gcBtn.style.background = 'transparent'; gcBtn.style.color = 'var(--text-secondary)';
+    } else {
+        gcBtn.style.background = 'var(--accent-color)'; gcBtn.style.color = '#fff';
+        piBtn.style.background = 'transparent'; piBtn.style.color = 'var(--text-secondary)';
+    }
+
+    displaySubmissions();
+}
+
 // Check authentication
 function checkAuth() {
     if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
@@ -55,11 +76,10 @@ async function saveCpqlTarget(value) {
 // Load submissions from localStorage
 async function loadSubmissions() {
     const token = sessionStorage.getItem('adminApiToken') || '';
-    const res = await fetch('/api/leads', {
+    const endpoint = activeCampaign === 'gc' ? '/api/contractor-leads' : '/api/leads';
+    const res = await fetch(endpoint, {
         method: 'GET',
-        headers: {
-            'x-admin-token': token
-        }
+        headers: { 'x-admin-token': token }
     });
 
     if (!res.ok) {
@@ -79,104 +99,126 @@ async function displaySubmissions() {
     } catch (err) {
         console.error(err);
         submissionsList.innerHTML = '<div class="no-submissions">Unable to load submissions (DB).</div>';
+        renderMetrics([]);
         return;
     }
-    
+
+    renderMetrics(submissions);
+
     if (submissions.length === 0) {
         submissionsList.innerHTML = '<div class="no-submissions">No submissions yet</div>';
         return;
     }
-    
-    const sortedSubmissions = submissions;
-    
-    submissionsList.innerHTML = sortedSubmissions.map(submission => {
-        const val = (v) => v || '—';
-        const money = (v) => v ? `$${Number(v).toLocaleString()}` : '—';
-        const pct = (v) => v ? `${v}%` : '—';
-        const duration = (seconds) => {
-            if (!seconds || seconds === 0) return '—';
-            const m = Math.floor(seconds / 60);
-            const s = seconds % 60;
-            return m > 0 ? `${m}m ${s}s` : `${s}s`;
-        };
-        const yesNo = (v) => {
-            if (!v) return '—';
-            return v === 'yes' ? 'Yes' : v === 'no' ? 'No' : v;
-        };
-        const budget = (v) => {
-            if (!v) return '—';
-            return v === '10k' ? '$10,000/mo' : v === '5k' ? '$5,000/mo' : v;
-        };
 
-        return `
-        <div class="submission-item">
-            <div class="submission-header">
-                <div class="submission-date">${new Date(submission.created_at).toLocaleString()}</div>
-                <div class="submission-id">ID: ${submission.id}${submission.requested_callback ? ' <span style="color: #00ff88; font-weight: 600;">CALLBACK REQUESTED</span>' : ''}</div>
-            </div>
-            <div class="submission-details">
-                <div class="submission-section-label">Contact Info</div>
-                <div class="submission-field">
-                    <div class="submission-label">Email:</div>
-                    <div class="submission-value">${val(submission.email)}</div>
-                </div>
-                <div class="submission-field">
-                    <div class="submission-label">Phone:</div>
-                    <div class="submission-value">${val(submission.phone)}</div>
-                </div>
-                <div class="submission-field">
-                    <div class="submission-label">Website:</div>
-                    <div class="submission-value">${val(submission.website)}</div>
-                </div>
+    submissionsList.innerHTML = submissions.map(s => activeCampaign === 'gc'
+        ? renderGcSubmission(s)
+        : renderPiSubmission(s)
+    ).join('');
+}
 
-                <div class="submission-section-label">Calculator Results</div>
-                <div class="submission-field">
-                    <div class="submission-label">Current Monthly Spend:</div>
-                    <div class="submission-value">${money(submission.calc_current_monthly_spend)}</div>
-                </div>
-                <div class="submission-field">
-                    <div class="submission-label">Current CPQL:</div>
-                    <div class="submission-value">${money(submission.calc_current_cpql)}</div>
-                </div>
-                <div class="submission-field">
-                    <div class="submission-label">Monthly Leads:</div>
-                    <div class="submission-value">${val(submission.calc_leads_count)}</div>
-                </div>
-                <div class="submission-field">
-                    <div class="submission-label">CPQL Reduction:</div>
-                    <div class="submission-value">${pct(submission.calc_cpql_reduction)}</div>
-                </div>
+function renderMetrics(submissions) {
+    const el = document.getElementById('campaignMetrics');
+    if (!el) return;
 
-                <div class="submission-section-label">Qualification</div>
-                <div class="submission-field">
-                    <div class="submission-label">Meta Budget Commitment:</div>
-                    <div class="submission-value">${budget(submission.meta_budget_commitment)}</div>
-                </div>
-                <div class="submission-field">
-                    <div class="submission-label">Dedicated Intake:</div>
-                    <div class="submission-value">${yesNo(submission.dedicated_intake)}</div>
-                </div>
-                <div class="submission-field">
-                    <div class="submission-label">Uses CRM:</div>
-                    <div class="submission-value">${yesNo(submission.uses_crm)}</div>
-                </div>
-                <div class="submission-field">
-                    <div class="submission-label">Firm Differentiator:</div>
-                    <div class="submission-value">${val(submission.firm_differentiator)}</div>
-                </div>
+    const metricCard = (label, value) => `
+        <div style="background:var(--card-bg);border:1px solid var(--border-color);border-radius:10px;padding:14px 20px;min-width:120px;">
+            <div style="font-size:22px;font-weight:800;color:var(--accent-color);">${value}</div>
+            <div style="font-size:12px;color:var(--text-secondary);margin-top:2px;">${label}</div>
+        </div>`;
 
-                <div class="submission-section-label">Video Engagement</div>
-                <div class="submission-field">
-                    <div class="submission-label">Watch Duration:</div>
-                    <div class="submission-value">${duration(submission.video_watch_seconds)}</div>
-                </div>
-                <div class="submission-field">
-                    <div class="submission-label">Watch Completion:</div>
-                    <div class="submission-value">${submission.video_watch_percent ? submission.video_watch_percent + '%' : '—'}</div>
-                </div>
-            </div>
+    if (activeCampaign === 'gc') {
+        const total = submissions.length;
+        const scenarioCounts = {};
+        submissions.forEach(s => {
+            const key = s.selected_scenario || 'Unknown';
+            scenarioCounts[key] = (scenarioCounts[key] || 0) + 1;
+        });
+        const topScenario = Object.entries(scenarioCounts).sort((a,b) => b[1]-a[1])[0];
+        const readyCount = submissions.filter(s => s.budget_commitment === 'Yes, ready to invest').length;
+
+        el.innerHTML =
+            metricCard('Total Leads', total) +
+            metricCard('Ready to Invest', readyCount) +
+            (topScenario ? metricCard('Top Scenario', `#${topScenario[1]}`) : '');
+    } else {
+        const total = submissions.length;
+        const withCalc = submissions.filter(s => s.calc_current_cpql).length;
+        const callbacks = submissions.filter(s => s.requested_callback).length;
+
+        el.innerHTML =
+            metricCard('Total Leads', total) +
+            metricCard('Ran Calculator', withCalc) +
+            metricCard('Callback Requests', callbacks);
+    }
+}
+
+function renderPiSubmission(submission) {
+    const val = (v) => v || '—';
+    const money = (v) => v ? `$${Number(v).toLocaleString()}` : '—';
+    const pct = (v) => v ? `${v}%` : '—';
+    const duration = (seconds) => {
+        if (!seconds || seconds === 0) return '—';
+        const m = Math.floor(seconds / 60);
+        const s = seconds % 60;
+        return m > 0 ? `${m}m ${s}s` : `${s}s`;
+    };
+    const yesNo = (v) => { if (!v) return '—'; return v === 'yes' ? 'Yes' : v === 'no' ? 'No' : v; };
+    const budget = (v) => { if (!v) return '—'; return v === '10k' ? '$10,000/mo' : v === '5k' ? '$5,000/mo' : v; };
+
+    return `
+    <div class="submission-item">
+        <div class="submission-header">
+            <div class="submission-date">${new Date(submission.created_at).toLocaleString()}</div>
+            <div class="submission-id">ID: ${submission.id}${submission.requested_callback ? ' <span style="color:#00ff88;font-weight:600;">CALLBACK REQUESTED</span>' : ''}</div>
         </div>
-    `}).join('');
+        <div class="submission-details">
+            <div class="submission-section-label">Contact Info</div>
+            <div class="submission-field"><div class="submission-label">Email:</div><div class="submission-value">${val(submission.email)}</div></div>
+            <div class="submission-field"><div class="submission-label">Phone:</div><div class="submission-value">${val(submission.phone)}</div></div>
+            <div class="submission-field"><div class="submission-label">Website:</div><div class="submission-value">${val(submission.website)}</div></div>
+
+            <div class="submission-section-label">Calculator Results</div>
+            <div class="submission-field"><div class="submission-label">Current Monthly Spend:</div><div class="submission-value">${money(submission.calc_current_monthly_spend)}</div></div>
+            <div class="submission-field"><div class="submission-label">Current CPQL:</div><div class="submission-value">${money(submission.calc_current_cpql)}</div></div>
+            <div class="submission-field"><div class="submission-label">Monthly Leads:</div><div class="submission-value">${val(submission.calc_leads_count)}</div></div>
+            <div class="submission-field"><div class="submission-label">CPQL Reduction:</div><div class="submission-value">${pct(submission.calc_cpql_reduction)}</div></div>
+
+            <div class="submission-section-label">Qualification</div>
+            <div class="submission-field"><div class="submission-label">Meta Budget Commitment:</div><div class="submission-value">${budget(submission.meta_budget_commitment)}</div></div>
+            <div class="submission-field"><div class="submission-label">Dedicated Intake:</div><div class="submission-value">${yesNo(submission.dedicated_intake)}</div></div>
+            <div class="submission-field"><div class="submission-label">Uses CRM:</div><div class="submission-value">${yesNo(submission.uses_crm)}</div></div>
+            <div class="submission-field"><div class="submission-label">Firm Differentiator:</div><div class="submission-value">${val(submission.firm_differentiator)}</div></div>
+
+            <div class="submission-section-label">Video Engagement</div>
+            <div class="submission-field"><div class="submission-label">Watch Duration:</div><div class="submission-value">${duration(submission.video_watch_seconds)}</div></div>
+            <div class="submission-field"><div class="submission-label">Watch Completion:</div><div class="submission-value">${submission.video_watch_percent ? submission.video_watch_percent + '%' : '—'}</div></div>
+        </div>
+    </div>`;
+}
+
+function renderGcSubmission(submission) {
+    const val = (v) => v || '—';
+
+    return `
+    <div class="submission-item">
+        <div class="submission-header">
+            <div class="submission-date">${new Date(submission.created_at).toLocaleString()}</div>
+            <div class="submission-id">ID: ${submission.id} · General Contractor</div>
+        </div>
+        <div class="submission-details">
+            <div class="submission-section-label">Contact Info</div>
+            <div class="submission-field"><div class="submission-label">Name:</div><div class="submission-value">${val(submission.name)}</div></div>
+            <div class="submission-field"><div class="submission-label">Email:</div><div class="submission-value">${val(submission.email)}</div></div>
+            <div class="submission-field"><div class="submission-label">Phone:</div><div class="submission-value">${val(submission.phone)}</div></div>
+            <div class="submission-field"><div class="submission-label">Website:</div><div class="submission-value">${val(submission.website)}</div></div>
+
+            <div class="submission-section-label">Qualification</div>
+            <div class="submission-field"><div class="submission-label">Scenario:</div><div class="submission-value">${val(submission.selected_scenario)}</div></div>
+            <div class="submission-field"><div class="submission-label">Avg Project Value:</div><div class="submission-value">${val(submission.avg_project_value)}</div></div>
+            <div class="submission-field"><div class="submission-label">Budget Commitment:</div><div class="submission-value">${val(submission.budget_commitment)}</div></div>
+            <div class="submission-field"><div class="submission-label">Response Time:</div><div class="submission-value">${val(submission.response_time)}</div></div>
+        </div>
+    </div>`;
 }
 
 // Update display
@@ -234,11 +276,10 @@ document.getElementById('clearSubmissions')?.addEventListener('click', async fun
 
     try {
         const token = sessionStorage.getItem('adminApiToken') || '';
-        const res = await fetch('/api/leads', {
+        const endpoint = activeCampaign === 'gc' ? '/api/contractor-leads' : '/api/leads';
+        const res = await fetch(endpoint, {
             method: 'DELETE',
-            headers: {
-                'x-admin-token': token
-            }
+            headers: { 'x-admin-token': token }
         });
         if (!res.ok) throw new Error(`Failed to clear: ${res.status}`);
 
