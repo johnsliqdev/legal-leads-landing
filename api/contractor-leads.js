@@ -33,7 +33,7 @@ function getAdminToken(req) {
 }
 
 async function fireWebhook(payload) {
-  const webhookUrl = process.env.CONTRACTOR_WEBHOOK_URL || process.env.GHL_WEBHOOK_URL;
+  const webhookUrl = process.env.CONTRACTOR_WEBHOOK_URL;
   if (!webhookUrl) return;
   try {
     await fetch(webhookUrl, {
