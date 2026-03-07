@@ -306,13 +306,13 @@
     /* Hard hat decoration */
     .gc-hardhat {
         position: absolute;
-        top: 22px;
-        left: -22px;
-        width: 88px;
-        height: 70px;
-        transform: rotate(-22deg);
+        top: 18px;
+        right: -28px;
+        width: 96px;
+        height: 72px;
+        transform: rotate(18deg);
         z-index: 2;
-        filter: drop-shadow(0 4px 12px rgba(255,107,53,0.35));
+        filter: drop-shadow(0 4px 14px rgba(255,107,53,0.4));
         pointer-events: none;
     }
     @media (max-width: 900px) {
@@ -772,30 +772,33 @@
         <div class="gc-form-col">
 
             <!-- Hard hat hung over the form card -->
-            <svg class="gc-hardhat" viewBox="0 0 100 78" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <svg class="gc-hardhat" viewBox="0 0 110 72" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <defs>
-                    <linearGradient id="hg" x1="10%" y1="0%" x2="90%" y2="100%">
+                    <linearGradient id="hg" x1="20%" y1="0%" x2="80%" y2="100%">
                         <stop offset="0%" stop-color="#ff6b35"/>
                         <stop offset="100%" stop-color="#ff006e"/>
                     </linearGradient>
-                    <linearGradient id="hg2" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="#e0552a"/>
-                        <stop offset="100%" stop-color="#d4005c"/>
+                    <linearGradient id="hgd" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#cc4420"/>
+                        <stop offset="100%" stop-color="#aa004a"/>
                     </linearGradient>
                 </defs>
-                <!-- Dome shadow/depth -->
-                <path d="M22 52 Q22 14 50 11 Q78 14 78 52 Z" fill="url(#hg2)" opacity="0.5" transform="translate(2,3)"/>
-                <!-- Dome -->
-                <path d="M22 52 Q22 14 50 11 Q78 14 78 52 Z" fill="url(#hg)"/>
+                <!-- Dome drop shadow -->
+                <path d="M16 50 Q16 6 55 4 Q94 6 94 50 Z" fill="rgba(0,0,0,0.25)" transform="translate(2,4)"/>
+                <!-- Dome — wide low hemisphere, not pointed -->
+                <path d="M16 50 Q16 6 55 4 Q94 6 94 50 Z" fill="url(#hg)"/>
+                <!-- Center rib -->
+                <line x1="55" y1="4" x2="55" y2="50" stroke="rgba(0,0,0,0.08)" stroke-width="2"/>
                 <!-- Dome highlight -->
-                <path d="M32 44 Q32 22 50 18 Q60 20 65 30" stroke="rgba(255,255,255,0.18)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                <!-- Brim -->
-                <path d="M6 52 Q50 59 94 52 L91 58 Q50 66 9 58 Z" fill="url(#hg2)"/>
-                <path d="M8 52 Q50 57 92 52" stroke="rgba(255,255,255,0.12)" stroke-width="1" fill="none"/>
+                <path d="M26 42 Q26 16 55 12" stroke="rgba(255,255,255,0.22)" stroke-width="3" fill="none" stroke-linecap="round"/>
                 <!-- Suspension band -->
-                <path d="M26 40 Q50 45 74 40" stroke="rgba(255,255,255,0.22)" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path d="M20 36 Q55 42 90 36" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <!-- Brim — flat rect, wide, industrial -->
+                <rect x="2" y="49" width="106" height="10" rx="3" fill="url(#hgd)"/>
+                <!-- Brim top edge highlight -->
+                <rect x="2" y="49" width="106" height="2" rx="1" fill="rgba(255,255,255,0.12)"/>
                 <!-- Top knob -->
-                <ellipse cx="50" cy="12" rx="5" ry="3.5" fill="rgba(255,255,255,0.25)"/>
+                <ellipse cx="55" cy="5" rx="5" ry="3" fill="rgba(255,255,255,0.2)"/>
             </svg>
 
             <div class="gc-form-card">
