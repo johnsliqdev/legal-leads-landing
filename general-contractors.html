@@ -72,9 +72,11 @@
 
     /* ── Left: Hero ─────────────────────────────────────────────── */
     .gc-hero {
-        padding: 52px 0 60px;
+        padding: 32px 0 32px;
         position: sticky;
         top: 82px;
+        max-height: calc(100vh - 82px);
+        overflow: hidden;
     }
     @media (max-width: 900px) {
         .gc-hero { position: static; padding: 36px 0 8px; }
@@ -93,7 +95,7 @@
         color: var(--accent-color);
         text-transform: uppercase;
         letter-spacing: 1px;
-        margin-bottom: 24px;
+        margin-bottom: 12px;
     }
     .gc-eyebrow-dot {
         width: 7px; height: 7px;
@@ -111,7 +113,7 @@
         font-weight: 900;
         line-height: 1.1;
         letter-spacing: -0.02em;
-        margin-bottom: 20px;
+        margin-bottom: 12px;
     }
     .gc-headline .hl {
         background: linear-gradient(135deg, #ff006e 0%, #ff6b35 100%);
@@ -121,10 +123,10 @@
     }
 
     .gc-sub {
-        font-size: 16px;
+        font-size: 15px;
         color: var(--text-secondary);
-        line-height: 1.7;
-        margin-bottom: 40px;
+        line-height: 1.6;
+        margin-bottom: 16px;
         max-width: 480px;
     }
 
@@ -132,14 +134,14 @@
     .gc-stats {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 14px;
-        margin-bottom: 36px;
+        gap: 10px;
+        margin-bottom: 0;
     }
     .gc-stat {
         background: var(--card-bg);
         border: 1px solid var(--border-color);
-        border-radius: 16px;
-        padding: 20px;
+        border-radius: 14px;
+        padding: 14px 16px;
         transition: border-color 0.2s;
         position: relative;
         overflow: hidden;
@@ -153,7 +155,7 @@
         border-radius: 3px 0 0 3px;
     }
     .gc-stat-num {
-        font-size: 28px;
+        font-size: 24px;
         font-weight: 900;
         color: var(--text-primary);
         letter-spacing: -0.02em;
@@ -585,7 +587,7 @@
             </p>
 
             <!-- Trust badges -->
-            <div class="gc-trust" style="margin-bottom: 32px;">
+            <div class="gc-trust" style="margin-bottom: 20px;">
                 <a href="https://maps.app.goo.gl/jZJwBzY5DwK7GHhY6" target="_blank" rel="noopener noreferrer" class="gc-badge">
                     <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
