@@ -74,12 +74,12 @@
     .gc-hero {
         padding: 32px 0 32px;
         position: sticky;
-        top: 82px;
-        max-height: calc(100vh - 82px);
+        top: 0;
+        max-height: 100vh;
         overflow: hidden;
     }
     @media (max-width: 900px) {
-        .gc-hero { position: static; padding: 36px 0 8px; }
+        .gc-hero { position: static; padding: 32px 0 8px; max-height: none; }
     }
 
     .gc-eyebrow {
@@ -557,14 +557,6 @@
 </head>
 <body>
     <div class="geometric-bg"></div>
-
-    <header class="header">
-        <div class="container">
-            <div class="logo">
-                <img src="images/sliq-logo.png" alt="Sliq By Design" class="logo-img">
-            </div>
-        </div>
-    </header>
 
     <div class="gc-page">
 
