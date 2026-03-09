@@ -555,6 +555,8 @@ function initializeContactForm() {
 
             // Meta Pixel: Track contact details submission
             if (typeof fbq === 'function') fbq('track', 'Lead');
+            // LinkedIn: Track lead conversion
+            if (typeof window.lintrk === 'function') window.lintrk('track', { conversion_id: 26383314 });
 
             // Save to database
             fetch('/api/leads', {
