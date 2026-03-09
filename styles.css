@@ -279,17 +279,30 @@ section {
 
 .flow-card {
     background: var(--card-bg);
-    border-radius: 16px;
-    padding: 32px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    padding: 36px;
+    border: 1px solid rgba(255, 0, 110, 0.3);
+    box-shadow: 0 0 0 1px rgba(255,0,110,0.08), 0 20px 60px rgba(0,0,0,0.35), 0 0 40px rgba(255,0,110,0.08);
+    position: relative;
+}
+.flow-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #ff006e, #ff6b35);
+    border-radius: 20px 20px 0 0;
 }
 
 .flow-card h3 {
-    font-size: 22px;
-    font-weight: 700;
+    font-size: 24px;
+    font-weight: 800;
     margin-bottom: 8px;
     text-align: center;
+    background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.75) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .flow-desc {
@@ -830,10 +843,10 @@ label {
 
 input {
     width: 100%;
-    padding: 12px;
+    padding: 14px 16px;
     background: var(--secondary-bg);
-    border: 2px solid var(--border-color);
-    border-radius: 10px;
+    border: 2px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
     color: var(--text-primary);
     font-size: 15px;
     transition: all 0.3s ease;
@@ -842,7 +855,8 @@ input {
 input:focus {
     outline: none;
     border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(255, 0, 110, 0.1);
+    box-shadow: 0 0 0 3px rgba(255, 0, 110, 0.18), 0 0 16px rgba(255,0,110,0.12);
+    background: rgba(255,0,110,0.04);
 }
 
 input::placeholder {
@@ -972,22 +986,44 @@ textarea::placeholder {
 
 .calculate-btn, .submit-btn {
     width: 100%;
-    padding: 14px;
-    background: var(--gradient-1);
+    padding: 16px;
+    background: linear-gradient(135deg, #ff006e 0%, #ff4081 100%);
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     color: white;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 4px 24px rgba(255, 0, 110, 0.4), 0 1px 0 rgba(255,255,255,0.15) inset;
+    letter-spacing: 0.01em;
+    animation: btnPulse 3s ease-in-out infinite;
+}
+@keyframes btnPulse {
+    0%, 100% { box-shadow: 0 4px 24px rgba(255,0,110,0.4), 0 1px 0 rgba(255,255,255,0.15) inset; }
+    50%       { box-shadow: 0 4px 36px rgba(255,0,110,0.65), 0 1px 0 rgba(255,255,255,0.15) inset; }
+}
+.calculate-btn::after, .submit-btn::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transform: skewX(-20deg);
+    animation: btnShine 4s ease-in-out infinite;
+}
+@keyframes btnShine {
+    0%, 70%, 100% { left: -100%; }
+    40%           { left: 150%; }
 }
 
 .calculate-btn:hover, .submit-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(255, 0, 110, 0.3);
+    box-shadow: 0 8px 32px rgba(255, 0, 110, 0.55);
+    animation: none;
 }
 
 .calculate-btn:active, .submit-btn:active {
