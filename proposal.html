@@ -369,6 +369,196 @@
             .terms-row { grid-template-columns: 1fr 1fr; }
             .hero-title { font-size: 2.6rem; }
         }
+        /* ── Client selector ── */
+        .client-selector-section {
+            margin-bottom: 48px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px 36px;
+            position: relative;
+            overflow: hidden;
+        }
+        .client-selector-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border-radius: 20px 20px 0 0;
+        }
+        .cs-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+        .cs-heading {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+        .cs-sub {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
+        .cs-search-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .cs-search-input {
+            flex: 1;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.04);
+            border: 1.5px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        .cs-search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255,0,110,0.1);
+        }
+        .cs-search-input::placeholder { color: #555; }
+        .cs-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #1a1a1a;
+            border: 1px solid rgba(255,0,110,0.25);
+            border-radius: 10px;
+            margin-top: 4px;
+            z-index: 100;
+            max-height: 260px;
+            overflow-y: auto;
+            display: none;
+        }
+        .cs-dropdown.open { display: block; }
+        .cs-dropdown-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: background 0.15s;
+        }
+        .cs-dropdown-item:last-child { border-bottom: none; }
+        .cs-dropdown-item:hover { background: rgba(255,0,110,0.08); }
+        .cs-item-email { font-size: 14px; font-weight: 600; color: white; }
+        .cs-item-meta { font-size: 12px; color: #777; margin-top: 2px; }
+        .cs-search-wrap { position: relative; flex: 1; }
+        .cs-no-results {
+            padding: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #555;
+        }
+
+        /* ── Client analysis panel ── */
+        #clientAnalysis {
+            display: none;
+            margin-bottom: 48px;
+        }
+        .ca-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        .ca-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+        .ca-client-tag {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            background: rgba(255,0,110,0.1);
+            border: 1px solid rgba(255,0,110,0.2);
+            border-radius: 999px;
+            padding: 4px 12px;
+        }
+        .ca-grid {
+            display: grid;
+            grid-template-columns: 1fr 40px 1fr;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 640px) {
+            .ca-grid { grid-template-columns: 1fr; }
+            .ca-arrow { display: none; }
+        }
+        .ca-panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 22px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .ca-panel-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+        .ca-panel.ca-sliq {
+            border-color: rgba(255,0,110,0.4);
+            background: rgba(255,0,110,0.05);
+        }
+        .ca-panel.ca-sliq .ca-panel-label { color: var(--accent); }
+        .ca-metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 13px;
+        }
+        .ca-metric-row:last-child { border-bottom: none; }
+        .ca-metric-label { color: var(--muted); }
+        .ca-metric-val { font-weight: 700; font-size: 15px; color: white; }
+        .ca-metric-val.positive { color: #00e676; }
+        .ca-metric-val.highlight { color: var(--accent); }
+        .ca-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 24px;
+            font-weight: 300;
+            padding-top: 28px;
+        }
+        .ca-divider {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            margin: 24px 0;
+        }
+        .ca-savings-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        @media (max-width: 640px) { .ca-savings-strip { grid-template-columns: 1fr 1fr; } }
+        .ca-saving {
+            background: rgba(0,230,118,0.07);
+            border: 1px solid rgba(0,230,118,0.2);
+            border-radius: 12px;
+            padding: 14px 16px;
+            text-align: center;
+        }
+        .ca-saving-val { font-size: 1.3rem; font-weight: 900; color: #00e676; margin-bottom: 4px; }
+        .ca-saving-lbl { font-size: 11px; color: var(--muted); font-weight: 500; line-height: 1.4; }
+
         /* ── Password gate ── */
         #pw-gate {
             position: fixed;
@@ -463,6 +653,81 @@
 </div>
 
 <div class="page">
+
+    <!-- Client selector -->
+    <div class="client-selector-section">
+        <div class="cs-label">Personalise This Proposal</div>
+        <div class="cs-heading">Select a Client</div>
+        <div class="cs-sub">Search by email or website to pull in their CPQL data and build a tailored analysis.</div>
+        <div class="cs-search-row">
+            <div class="cs-search-wrap">
+                <input class="cs-search-input" id="csSearch" type="text" placeholder="Search by email or website…" autocomplete="off" oninput="csFilter()" onfocus="csOpenDropdown()"/>
+                <div class="cs-dropdown" id="csDropdown"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client analysis (shown after selection) -->
+    <div id="clientAnalysis">
+        <div class="ca-header">
+            <div class="ca-title">Client Analysis</div>
+            <div class="ca-client-tag" id="caClientTag"></div>
+        </div>
+        <div class="ca-grid">
+            <!-- Their current situation -->
+            <div class="ca-panel">
+                <div class="ca-panel-label">Their Current Situation</div>
+                <div class="ca-metric-row">
+                    <span class="ca-metric-label">Monthly Ad Spend</span>
+                    <span class="ca-metric-val" id="caCurrentSpend">—</span>
+                </div>
+                <div class="ca-metric-row">
+                    <span class="ca-metric-label">Monthly Leads</span>
+                    <span class="ca-metric-val" id="caLeadsCount">—</span>
+                </div>
+                <div class="ca-metric-row">
+                    <span class="ca-metric-label">Cost Per Qualified Lead</span>
+                    <span class="ca-metric-val highlight" id="caCurrentCpql">—</span>
+                </div>
+            </div>
+
+            <div class="ca-arrow">→</div>
+
+            <!-- What Sliq can do -->
+            <div class="ca-panel ca-sliq">
+                <div class="ca-panel-label">With Sliq</div>
+                <div class="ca-metric-row">
+                    <span class="ca-metric-label">New Monthly Spend</span>
+                    <span class="ca-metric-val" id="caNewSpend">—</span>
+                </div>
+                <div class="ca-metric-row">
+                    <span class="ca-metric-label">Leads at Same Budget</span>
+                    <span class="ca-metric-val positive" id="caSameBudgetLeads">—</span>
+                </div>
+                <div class="ca-metric-row">
+                    <span class="ca-metric-label">Projected CPQL</span>
+                    <span class="ca-metric-val positive" id="caGuaranteedCpql">—</span>
+                </div>
+            </div>
+        </div>
+
+        <hr class="ca-divider"/>
+
+        <div class="ca-savings-strip">
+            <div class="ca-saving">
+                <div class="ca-saving-val" id="caCpqlReduction">—</div>
+                <div class="ca-saving-lbl">CPQL Reduction</div>
+            </div>
+            <div class="ca-saving">
+                <div class="ca-saving-val" id="caMonthlySavings">—</div>
+                <div class="ca-saving-lbl">Monthly Savings</div>
+            </div>
+            <div class="ca-saving">
+                <div class="ca-saving-val" id="caAnnualSavings">—</div>
+                <div class="ca-saving-lbl">Annual Savings</div>
+            </div>
+        </div>
+    </div>
 
     <!-- Brand bar -->
     <div class="brand-bar">
@@ -619,18 +884,22 @@
 
 <script>
     const SESSION_KEY = 'sliq_proposal_auth';
+    const PROPOSAL_PW  = 'sliq@proposal1234';
 
+    // ── Auth ──────────────────────────────────────────────────────
     (function() {
         if (sessionStorage.getItem(SESSION_KEY) === '1') {
             document.getElementById('pw-gate').classList.add('hidden');
+            loadLeads();
         }
     })();
 
     function checkPassword() {
         const val = document.getElementById('pw-input').value;
-        if (val === 'sliq@proposal1234') {
+        if (val === PROPOSAL_PW) {
             sessionStorage.setItem(SESSION_KEY, '1');
             document.getElementById('pw-gate').classList.add('hidden');
+            loadLeads();
         } else {
             const err = document.getElementById('pw-error');
             err.textContent = 'Incorrect password. Please try again.';
@@ -642,6 +911,88 @@
     document.getElementById('pw-input').addEventListener('keydown', function(e) {
         if (e.key === 'Enter') checkPassword();
     });
+
+    // ── Client data ───────────────────────────────────────────────
+    let allLeads = [];
+
+    async function loadLeads() {
+        try {
+            const res = await fetch('/api/proposal-leads', {
+                headers: { 'x-proposal-token': PROPOSAL_PW }
+            });
+            if (!res.ok) return;
+            allLeads = await res.json();
+            renderDropdown(allLeads);
+        } catch (e) {
+            console.error('Failed to load leads', e);
+        }
+    }
+
+    function csFilter() {
+        const q = document.getElementById('csSearch').value.toLowerCase().trim();
+        const filtered = q
+            ? allLeads.filter(l =>
+                (l.email || '').toLowerCase().includes(q) ||
+                (l.website || '').toLowerCase().includes(q))
+            : allLeads;
+        renderDropdown(filtered);
+        csOpenDropdown();
+    }
+
+    function renderDropdown(leads) {
+        const dd = document.getElementById('csDropdown');
+        if (!leads.length) {
+            dd.innerHTML = '<div class="cs-no-results">No clients with calculator data found.</div>';
+            return;
+        }
+        dd.innerHTML = leads.slice(0, 50).map(l => {
+            const date = new Date(l.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            const site = l.website ? ` · ${l.website}` : '';
+            return `<div class="cs-dropdown-item" onclick="selectClient(${l.id})">
+                <div class="cs-item-email">${l.email || '(no email)'}</div>
+                <div class="cs-item-meta">${date}${site} · CPQL ${l.calc_current_cpql || '?'}</div>
+            </div>`;
+        }).join('');
+    }
+
+    function csOpenDropdown() {
+        document.getElementById('csDropdown').classList.add('open');
+    }
+
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.cs-search-wrap')) {
+            document.getElementById('csDropdown').classList.remove('open');
+        }
+    });
+
+    function selectClient(id) {
+        const lead = allLeads.find(l => l.id === id);
+        if (!lead) return;
+
+        document.getElementById('csDropdown').classList.remove('open');
+        document.getElementById('csSearch').value = lead.email || lead.website || 'Client #' + lead.id;
+
+        // Populate analysis
+        document.getElementById('caClientTag').textContent = lead.email || lead.website || 'Client #' + lead.id;
+
+        setText('caCurrentSpend',      lead.calc_current_monthly_spend || '—');
+        setText('caLeadsCount',        lead.calc_leads_count ? lead.calc_leads_count + ' leads/mo' : '—');
+        setText('caCurrentCpql',       lead.calc_current_cpql || '—');
+        setText('caNewSpend',          lead.calc_new_monthly_spend || '—');
+        setText('caSameBudgetLeads',   lead.calc_same_budget_leads ? lead.calc_same_budget_leads + ' leads/mo' : '—');
+        setText('caGuaranteedCpql',    lead.calc_guaranteed_cpql || '—');
+        setText('caCpqlReduction',     lead.calc_cpql_reduction || '—');
+        setText('caMonthlySavings',    lead.calc_monthly_savings || '—');
+        setText('caAnnualSavings',     lead.calc_annual_savings || '—');
+
+        document.getElementById('clientAnalysis').style.display = 'block';
+        document.getElementById('clientAnalysis').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function setText(id, val) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+    }
 </script>
 </body>
 </html>
