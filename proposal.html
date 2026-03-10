@@ -374,37 +374,96 @@
             position: fixed;
             inset: 0;
             background: #080808;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             z-index: 9998;
-            padding: 24px;
+            overflow: hidden;
         }
         #cs-gate.hidden { display: none; }
-        .cs-box {
-            background: #131313;
-            border: 1px solid rgba(255,0,110,0.25);
-            border-radius: 20px;
-            padding: 44px 40px;
-            width: 100%;
-            max-width: 560px;
+
+        /* Left pane — branding */
+        .cs-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 56px;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 80%, rgba(255,0,110,0.14) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 40% at 80% 10%, rgba(180,0,200,0.08) 0%, transparent 70%);
+            border-right: 1px solid rgba(255,0,110,0.12);
+            position: relative;
         }
-        .cs-box-logo { margin-bottom: 28px; }
-        .cs-box-logo img { height: 56px; width: auto; }
-        .cs-box-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
-        .cs-box-sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; line-height: 1.5; }
-        .cs-search-wrap { position: relative; }
+        .cs-left::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,0,110,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,0,110,0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+        .cs-left-logo { margin-bottom: 40px; position: relative; }
+        .cs-left-logo img { height: 64px; width: auto; }
+        .cs-left-title {
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .cs-left-title .hl {
+            background: linear-gradient(135deg, #ff006e, #ff4d94);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .cs-left-sub {
+            font-size: 15px;
+            color: var(--muted);
+            line-height: 1.6;
+            max-width: 380px;
+            position: relative;
+        }
+
+        /* Right pane — search */
+        .cs-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 56px;
+        }
+        .cs-right-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        .cs-right-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .cs-right-sub {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+        .cs-search-wrap { position: relative; margin-bottom: 14px; }
         .cs-search-input {
             width: 100%;
-            padding: 14px 16px;
+            padding: 16px 18px;
             background: rgba(255,255,255,0.04);
-            border: 1.5px solid rgba(255,255,255,0.08);
-            border-radius: 11px;
+            border: 1.5px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
             color: white;
             font-family: 'Inter', sans-serif;
             font-size: 15px;
             transition: border-color 0.2s;
-            margin-bottom: 12px;
         }
         .cs-search-input:focus {
             outline: none;
@@ -414,16 +473,16 @@
         .cs-search-input::placeholder { color: #444; }
         .cs-dropdown {
             position: absolute;
-            top: calc(100% - 8px);
+            top: calc(100% + 4px);
             left: 0; right: 0;
-            background: #1e1e1e;
+            background: #1a1a1a;
             border: 1px solid rgba(255,0,110,0.25);
             border-radius: 12px;
             z-index: 10;
-            max-height: 280px;
+            max-height: 300px;
             overflow-y: auto;
             display: none;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.6);
         }
         .cs-dropdown.open { display: block; }
         .cs-dropdown-item {
@@ -437,8 +496,46 @@
         .cs-item-email { font-size: 14px; font-weight: 600; color: white; }
         .cs-item-meta { font-size: 12px; color: #666; margin-top: 3px; }
         .cs-no-results { padding: 20px; text-align: center; font-size: 13px; color: #555; }
+        .cs-proceed-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 28px rgba(255,0,110,0.45);
+            transition: opacity 0.2s, transform 0.2s;
+            margin-bottom: 14px;
+        }
+        .cs-proceed-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+        .cs-proceed-btn:not(:disabled):hover { opacity: 0.88; transform: translateY(-1px); }
+        .cs-selected-tag {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,0,110,0.08);
+            border: 1px solid rgba(255,0,110,0.2);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 14px;
+        }
+        .cs-selected-tag.visible { display: flex; }
+        .cs-selected-tag-clear {
+            margin-left: auto;
+            cursor: pointer;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1;
+        }
+        .cs-selected-tag-clear:hover { color: white; }
         .cs-skip {
-            margin-top: 16px;
             text-align: center;
             font-size: 13px;
             color: #555;
@@ -447,6 +544,12 @@
         }
         .cs-skip:hover { color: #888; }
         .cs-skip span { text-decoration: underline; }
+
+        @media (max-width: 800px) {
+            #cs-gate { grid-template-columns: 1fr; }
+            .cs-left { display: none; }
+            .cs-right { padding: 40px 28px; justify-content: flex-start; padding-top: 80px; }
+        }
 
         /* ── Client analysis panel ── */
         #clientAnalysis {
@@ -642,15 +745,39 @@
 
 <!-- Client selector gate -->
 <div id="cs-gate" class="hidden">
-    <div class="cs-box">
-        <div class="cs-box-logo"><img src="images/Sliq logo white.png" alt="Sliq"/></div>
-        <div class="cs-box-title">Who's on the call?</div>
-        <div class="cs-box-sub">Search for a client by email or website to personalise this proposal with their CPQL data. Or skip to view the generic proposal.</div>
+
+    <!-- Left: branding -->
+    <div class="cs-left">
+        <div class="cs-left-logo"><img src="images/Sliq logo white.png" alt="Sliq"/></div>
+        <div class="cs-left-title">
+            The <span class="hl">Lead-Gen</span><br>Package
+        </div>
+        <div class="cs-left-sub">
+            Select a client to personalise this proposal with their CPQL data and show them exactly how Sliq can outperform their current results.
+        </div>
+    </div>
+
+    <!-- Right: search -->
+    <div class="cs-right">
+        <div class="cs-right-label">Step 1 of 1</div>
+        <div class="cs-right-title">Who's on the call?</div>
+        <div class="cs-right-sub">Search by email or website to load their data. You can also skip and present the generic proposal.</div>
+
         <div class="cs-search-wrap">
             <input class="cs-search-input" id="csSearch" type="text" placeholder="Search by email or website…" autocomplete="off" oninput="csFilter()" onfocus="csOpenDropdown()"/>
             <div class="cs-dropdown" id="csDropdown"></div>
         </div>
-        <div class="cs-skip" onclick="skipClientSelect()">No client data available — <span>skip and view proposal</span></div>
+
+        <div class="cs-selected-tag" id="csSelectedTag">
+            <span id="csSelectedLabel"></span>
+            <span class="cs-selected-tag-clear" onclick="csClearSelection()">×</span>
+        </div>
+
+        <button class="cs-proceed-btn" id="csProceedBtn" onclick="proceedWithClient()">
+            View Personalised Proposal →
+        </button>
+
+        <div class="cs-skip" onclick="skipClientSelect()">No client data — <span>skip and view generic proposal</span></div>
     </div>
 </div>
 
@@ -897,10 +1024,12 @@
         }
     }
 
+    let selectedLeadId = null;
+
     function showClientGate() {
         document.getElementById('cs-gate').classList.remove('hidden');
+        document.getElementById('csProceedBtn').disabled = true;
         loadLeads();
-        // Focus after short delay so transition is visible
         setTimeout(function() {
             document.getElementById('csSearch').focus();
         }, 150);
@@ -908,6 +1037,20 @@
 
     function skipClientSelect() {
         document.getElementById('cs-gate').classList.add('hidden');
+    }
+
+    function proceedWithClient() {
+        if (selectedLeadId) selectClient(selectedLeadId);
+        else skipClientSelect();
+    }
+
+    function csClearSelection() {
+        selectedLeadId = null;
+        document.getElementById('csSearch').value = '';
+        document.getElementById('csSelectedTag').classList.remove('visible');
+        document.getElementById('csProceedBtn').disabled = true;
+        document.getElementById('csSearch').focus();
+        renderDropdown(allLeads);
     }
 
     document.getElementById('pw-input').addEventListener('keydown', function(e) {
@@ -950,7 +1093,7 @@
         dd.innerHTML = leads.slice(0, 50).map(l => {
             const date = new Date(l.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
             const site = l.website ? ` · ${l.website}` : '';
-            return `<div class="cs-dropdown-item" onclick="selectClient(${l.id})">
+            return `<div class="cs-dropdown-item" onclick="csPickClient(${l.id})">
                 <div class="cs-item-email">${l.email || '(no email)'}</div>
                 <div class="cs-item-meta">${date}${site} · CPQL ${l.calc_current_cpql || '?'}</div>
             </div>`;
@@ -967,12 +1110,25 @@
         }
     });
 
+    function csPickClient(id) {
+        const lead = allLeads.find(l => l.id === id);
+        if (!lead) return;
+        selectedLeadId = id;
+        const label = lead.email || lead.website || 'Client #' + lead.id;
+        document.getElementById('csSearch').value = '';
+        document.getElementById('csSearch').placeholder = 'Search by email or website…';
+        document.getElementById('csDropdown').classList.remove('open');
+        document.getElementById('csSelectedLabel').textContent = label;
+        document.getElementById('csSelectedTag').classList.add('visible');
+        document.getElementById('csProceedBtn').disabled = false;
+        document.getElementById('csProceedBtn').textContent = 'View Personalised Proposal →';
+    }
+
     function selectClient(id) {
         const lead = allLeads.find(l => l.id === id);
         if (!lead) return;
 
         document.getElementById('csDropdown').classList.remove('open');
-        document.getElementById('csSearch').value = lead.email || lead.website || 'Client #' + lead.id;
         document.getElementById('cs-gate').classList.add('hidden');
 
         // Populate analysis
