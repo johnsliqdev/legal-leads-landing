@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Lead-Gen Package — Sliq</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #080808;
+            --card: #131313;
+            --card2: #1c1c1c;
+            --accent: #ff006e;
+            --accent2: #ff4081;
+            --text: #ffffff;
+            --muted: #777;
+            --border: rgba(255,0,110,0.2);
+        }
+
+        html, body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(0deg, transparent 49%, rgba(255,0,110,0.04) 50%, transparent 51%),
+                linear-gradient(90deg, transparent 49%, rgba(255,0,110,0.04) 50%, transparent 51%);
+            background-size: 64px 64px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Glow orbs */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -30%;
+            left: -20%;
+            width: 140%;
+            height: 140%;
+            background:
+                radial-gradient(circle at 20% 25%, rgba(255,0,110,0.12) 0%, transparent 45%),
+                radial-gradient(circle at 80% 70%, rgba(255,64,129,0.10) 0%, transparent 45%);
+            pointer-events: none;
+            z-index: 0;
+            animation: driftBg 18s ease-in-out infinite alternate;
+        }
+
+        @keyframes driftBg {
+            from { transform: translate(0, 0); }
+            to   { transform: translate(30px, -20px); }
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 44px 24px 88px;
+        }
+
+        /* ── Brand bar ── */
+        .brand-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 52px;
+        }
+        .brand-name {
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--accent);
+        }
+        .brand-tag {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--muted);
+            padding: 5px 14px;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 100px;
+        }
+
+        /* ── Hero ── */
+        .hero-title {
+            font-size: clamp(3.2rem, 7vw, 5.2rem);
+            font-weight: 900;
+            line-height: 1.03;
+            margin-bottom: 28px;
+        }
+        .hero-title .accent {
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 72px;
+            align-items: center;
+        }
+        .pill {
+            padding: 10px 22px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 13px;
+        }
+        .pill-price {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            font-size: 20px;
+            padding: 13px 30px;
+            box-shadow: 0 4px 28px rgba(255,0,110,0.45);
+            animation: pillPulse 3s ease-in-out infinite;
+        }
+        @keyframes pillPulse {
+            0%,100% { box-shadow: 0 4px 28px rgba(255,0,110,0.45); }
+            50%      { box-shadow: 0 4px 40px rgba(255,0,110,0.7); }
+        }
+        .pill-meta {
+            background: rgba(255,0,110,0.06);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        /* ── Arc Visual ── */
+        .arc-section {
+            display: grid;
+            grid-template-columns: 1fr 300px 1fr;
+            gap: 24px;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .arc-col {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .arc-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+        .arc-col.right .arc-item {
+            flex-direction: row-reverse;
+            text-align: right;
+        }
+        .arc-col.right .arc-item-body {
+            text-align: right;
+            align-items: flex-end;
+        }
+
+        .arc-num {
+            flex-shrink: 0;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            color: white;
+            box-shadow: 0 0 18px rgba(255,0,110,0.5), 0 0 6px rgba(255,0,110,0.3);
+            flex-shrink: 0;
+        }
+
+        .arc-item-body {
+            display: flex;
+            flex-direction: column;
+        }
+        .arc-item-title {
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 3px;
+        }
+        .arc-item-sub {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.45;
+        }
+        .arc-badge {
+            display: inline-block;
+            margin-top: 5px;
+            padding: 2px 8px;
+            background: rgba(255,0,110,0.1);
+            border: 1px solid rgba(255,0,110,0.3);
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            align-self: flex-start;
+        }
+        .arc-col.right .arc-badge { align-self: flex-end; }
+
+        /* ── SVG Arc ── */
+        .arc-wrap {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+        .arc-svg { width: 100%; height: 100%; overflow: visible; }
+
+        .arc-track {
+            fill: none;
+            stroke: rgba(255,0,110,0.07);
+            stroke-width: 22;
+            stroke-dasharray: 519 173;
+            transform-origin: 150px 150px;
+            transform: rotate(135deg);
+        }
+
+        .arc-live {
+            fill: none;
+            stroke: url(#arcGrad);
+            stroke-width: 22;
+            stroke-linecap: round;
+            filter: url(#arcGlow);
+            stroke-dasharray: 519 173;
+            stroke-dashoffset: 519;
+            transform-origin: 150px 150px;
+            transform: rotate(135deg);
+            animation: drawArc 2.2s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards;
+        }
+
+        @keyframes drawArc {
+            from { stroke-dashoffset: 519; }
+            to   { stroke-dashoffset: 0; }
+        }
+
+        /* Spinning highlight dot that runs along the arc */
+        .arc-dot {
+            fill: white;
+            r: 8;
+            filter: drop-shadow(0 0 6px rgba(255,0,110,0.9));
+            opacity: 0;
+            animation: dotAppear 0.1s 2.8s forwards;
+        }
+        @keyframes dotAppear {
+            to { opacity: 1; }
+        }
+
+        /* Price in center */
+        .arc-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -52%);
+            text-align: center;
+            pointer-events: none;
+        }
+        .arc-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 6px;
+        }
+        .arc-price {
+            font-size: 2.4rem;
+            font-weight: 900;
+            line-height: 1;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .arc-freq {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        /* ── Account Manager strip ── */
+        .am-strip {
+            text-align: center;
+            margin-bottom: 72px;
+            padding: 16px;
+            background: rgba(255,0,110,0.04);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+        .am-strip span {
+            font-size: 14px;
+            color: var(--muted);
+        }
+        .am-strip strong {
+            color: var(--text);
+            font-weight: 700;
+        }
+        .am-strip .plus {
+            color: var(--accent);
+            font-weight: 900;
+            font-size: 18px;
+            margin-right: 6px;
+        }
+
+        /* ── Terms ── */
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .terms-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 64px;
+        }
+        .term-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px 16px;
+            text-align: center;
+        }
+        .term-val {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+        .term-lbl {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+        /* ── Form ── */
+        .form-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .form-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border-radius: 22px 22px 0 0;
+        }
+        .form-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(255,0,110,0.03) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .form-head { margin-bottom: 28px; }
+        .form-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
+        .form-sub { font-size: 14px; color: var(--muted); }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .fg { display: flex; flex-direction: column; gap: 6px; }
+        .fg.span2 { grid-column: 1 / -1; }
+
+        label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        input, select {
+            padding: 13px 14px;
+            background: rgba(255,255,255,0.03);
+            border: 1.5px solid rgba(255,255,255,0.07);
+            border-radius: 11px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255,0,110,0.12), 0 0 16px rgba(255,0,110,0.08);
+            background: rgba(255,0,110,0.03);
+        }
+        input::placeholder { color: #444; }
+        select option { background: #1a1a1a; }
+
+        .bay-note {
+            font-size: 11px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-top: 4px;
+            display: none;
+            animation: fadeUp 0.3s ease;
+        }
+        .bay-note.show { display: block; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(4px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border: none;
+            border-radius: 13px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 28px rgba(255,0,110,0.45);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.01em;
+        }
+        .submit-btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+            transform: skewX(-20deg);
+            animation: shine 4s ease-in-out infinite;
+        }
+        @keyframes shine {
+            0%,70%,100% { left: -100%; }
+            40%          { left: 150%; }
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 36px rgba(255,0,110,0.6);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 860px) {
+            .arc-section {
+                grid-template-columns: 1fr;
+                gap: 36px;
+            }
+            .arc-wrap { margin: 0 auto; }
+            .arc-col.right .arc-item { flex-direction: row; text-align: left; }
+            .arc-col.right .arc-item-body { align-items: flex-start; text-align: left; }
+            .arc-col.right .arc-badge { align-self: flex-start; }
+            .terms-row { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 560px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .fg.span2 { grid-column: auto; }
+            .terms-row { grid-template-columns: 1fr 1fr; }
+            .hero-title { font-size: 2.6rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- Brand bar -->
+    <div class="brand-bar">
+        <div class="brand-name">SLIQ</div>
+        <div class="brand-tag">Sales Proposal · Confidential</div>
+    </div>
+
+    <!-- Hero -->
+    <h1 class="hero-title">
+        The <span class="accent">Lead-Gen</span><br>Package
+    </h1>
+    <div class="pricing-pills">
+        <div class="pill pill-price">$3,500 / month</div>
+        <div class="pill pill-meta">3-Month Minimum</div>
+        <div class="pill pill-meta">Min. $5K Ad Spend</div>
+        <div class="pill pill-meta">Recommended $10K Spend</div>
+    </div>
+
+    <!-- Arc Visual -->
+    <div class="arc-section">
+
+        <!-- Left items -->
+        <div class="arc-col left">
+            <div class="arc-item">
+                <div class="arc-num">1</div>
+                <div class="arc-item-body">
+                    <div class="arc-item-title">Creative & Offer Setup</div>
+                    <div class="arc-item-sub">Canva + client-provided content. On-location shoot with Will for Bay Area clients.</div>
+                </div>
+            </div>
+            <div class="arc-item">
+                <div class="arc-num">2</div>
+                <div class="arc-item-body">
+                    <div class="arc-item-title">Meta Ads Setup & Activation</div>
+                    <div class="arc-item-sub">Full campaign build, pixel setup, and launch-ready.</div>
+                    <span class="arc-badge">≤ 10 days</span>
+                </div>
+            </div>
+            <div class="arc-item">
+                <div class="arc-num">3</div>
+                <div class="arc-item-body">
+                    <div class="arc-item-title">Landing Page Development</div>
+                    <div class="arc-item-sub">Conversion-optimised page built on Claude AI.</div>
+                    <span class="arc-badge">In parallel</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Arc SVG -->
+        <div class="arc-wrap">
+            <svg class="arc-svg" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%"   stop-color="#5c0028"/>
+                        <stop offset="35%"  stop-color="#cc0055"/>
+                        <stop offset="70%"  stop-color="#ff006e"/>
+                        <stop offset="100%" stop-color="#ff4d94"/>
+                    </linearGradient>
+                    <filter id="arcGlow" x="-40%" y="-40%" width="180%" height="180%">
+                        <feGaussianBlur stdDeviation="7" result="blur"/>
+                        <feMerge>
+                            <feMergeNode in="blur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                    <filter id="dotGlow" x="-100%" y="-100%" width="300%" height="300%">
+                        <feGaussianBlur stdDeviation="4" result="blur"/>
+                        <feMerge>
+                            <feMergeNode in="blur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+
+                <!-- Background track (full horseshoe shape, dimmed) -->
+                <circle cx="150" cy="150" r="110"
+                    class="arc-track"/>
+
+                <!-- Animated gradient arc -->
+                <circle cx="150" cy="150" r="110"
+                    class="arc-live"/>
+
+                <!-- End-point dot that appears after draw -->
+                <!-- Positioned at the bottom-right endpoint of the arc (45° from right = bottom-right) -->
+                <circle cx="227.8" cy="227.8" r="8"
+                    fill="#ff4d94"
+                    filter="url(#dotGlow)"
+                    class="arc-dot"/>
+            </svg>
+            <!-- Center text -->
+            <div class="arc-center">
+                <span class="arc-label">Investment</span>
+                <div class="arc-price">$3,500</div>
+                <div class="arc-freq">per month</div>
+            </div>
+        </div>
+
+        <!-- Right items -->
+        <div class="arc-col right">
+            <div class="arc-item">
+                <div class="arc-num">4</div>
+                <div class="arc-item-body">
+                    <div class="arc-item-title">CRM Creation & Sync</div>
+                    <div class="arc-item-sub">Built from scratch and synced with your existing CRM.</div>
+                    <span class="arc-badge">In parallel</span>
+                </div>
+            </div>
+            <div class="arc-item">
+                <div class="arc-num">5</div>
+                <div class="arc-item-body">
+                    <div class="arc-item-title">Meta Ads Maintenance</div>
+                    <div class="arc-item-sub">Ongoing optimisation, A/B testing, budget scaling.</div>
+                </div>
+            </div>
+            <div class="arc-item">
+                <div class="arc-num">6</div>
+                <div class="arc-item-body">
+                    <div class="arc-item-title">Analytics Dashboard & Reports</div>
+                    <div class="arc-item-sub">Dashboard setup + monthly report with weekly updates.</div>
+                    <span class="arc-badge">≤ 10 days</span>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /arc-section -->
+
+    <!-- Account manager strip -->
+    <div class="am-strip">
+        <span><span class="plus">+</span> <strong>Dedicated Account Manager</strong> — direct line, included in every engagement</span>
+    </div>
+
+    <!-- Terms -->
+    <p class="section-label">Engagement Terms</p>
+    <div class="terms-row">
+        <div class="term-card">
+            <div class="term-val">$3,500</div>
+            <div class="term-lbl">Monthly Management Fee</div>
+        </div>
+        <div class="term-card">
+            <div class="term-val">3 mo</div>
+            <div class="term-lbl">Minimum Commitment</div>
+        </div>
+        <div class="term-card">
+            <div class="term-val">$5K+</div>
+            <div class="term-lbl">Minimum Ad Spend</div>
+        </div>
+        <div class="term-card">
+            <div class="term-val">$10K</div>
+            <div class="term-lbl">Recommended Ad Spend</div>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <p class="section-label">Get Started</p>
+    <div class="form-card">
+        <div class="form-head">
+            <div class="form-title">Confirm Your Proposal</div>
+            <div class="form-sub">We'll kick off onboarding within 48 hours and have your campaigns live in ≤ 10 days.</div>
+        </div>
+        <form id="proposalForm">
+            <div class="form-grid">
+                <div class="fg">
+                    <label>First Name</label>
+                    <input type="text" placeholder="John" required/>
+                </div>
+                <div class="fg">
+                    <label>Last Name</label>
+                    <input type="text" placeholder="Smith" required/>
+                </div>
+                <div class="fg">
+                    <label>Business / Firm Name</label>
+                    <input type="text" placeholder="Smith Law Firm" required/>
+                </div>
+                <div class="fg">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="john@smithlaw.com" required/>
+                </div>
+                <div class="fg">
+                    <label>Phone Number</label>
+                    <input type="tel" placeholder="(555) 000-0000" required/>
+                </div>
+                <div class="fg">
+                    <label>City / Location</label>
+                    <input type="text" id="locationInput" placeholder="e.g. San Francisco, CA" oninput="checkBayArea(this.value)" required/>
+                    <div class="bay-note" id="bayNote">📍 Great news — Will can arrange an on-location content shoot for you!</div>
+                </div>
+                <div class="fg">
+                    <label>Monthly Ad Budget</label>
+                    <select required>
+                        <option value="">Select range...</option>
+                        <option>$5,000 – $7,499</option>
+                        <option>$7,500 – $9,999</option>
+                        <option>$10,000 – $14,999</option>
+                        <option>$15,000+</option>
+                    </select>
+                </div>
+                <div class="fg">
+                    <label>Existing CRM?</label>
+                    <select>
+                        <option value="">Select...</option>
+                        <option>Yes — Salesforce</option>
+                        <option>Yes — HubSpot</option>
+                        <option>Yes — Clio</option>
+                        <option>Yes — Other</option>
+                        <option>No CRM yet</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="submit-btn">Confirm Proposal &amp; Book Onboarding Call →</button>
+        </form>
+    </div>
+
+</div><!-- /page -->
+
+<script>
+    /* Bay Area detection */
+    const BAY_AREA = ['san francisco','sf','bay area','oakland','san jose','san josé','berkeley',
+        'palo alto','fremont','santa clara','sunnyvale','san mateo','marin','walnut creek',
+        'concord','hayward','east bay','south bay','peninsula','daly city','redwood city',
+        'mountain view','cupertino','milpitas','pleasanton','livermore','san leandro'];
+
+    function checkBayArea(val) {
+        const lower = val.toLowerCase();
+        const hit = BAY_AREA.some(k => lower.includes(k));
+        document.getElementById('bayNote').classList.toggle('show', hit);
+    }
+
+    /* Simple form submit */
+    document.getElementById('proposalForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = this.querySelector('.submit-btn');
+        btn.textContent = '✓ Proposal Confirmed — We\'ll be in touch within 24 hours';
+        btn.style.background = 'linear-gradient(135deg, #00c47a, #00e88a)';
+        btn.style.boxShadow = '0 4px 28px rgba(0,200,122,0.45)';
+        btn.disabled = true;
+    });
+</script>
+</body>
+</html>
