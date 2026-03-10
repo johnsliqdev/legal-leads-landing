@@ -58,7 +58,7 @@
 
     <style>
     /* ══════════════════════════════════════════════════════════════
-       LEGAL SIMPLIFIED — same structure as general-contractors
+       LEGAL SIMPLIFIED
     ══════════════════════════════════════════════════════════════ */
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -77,7 +77,6 @@
             radial-gradient(ellipse 70% 30% at 50% 50%, rgba(255,0,110,0.05) 0%, transparent 70%);
         animation: lsGlow 14s ease-in-out infinite;
     }
-
     .ls-bg::before {
         content: '';
         position: absolute;
@@ -90,30 +89,18 @@
         background-size: 40px 40px, 40px 40px, 200px 200px, 200px 200px;
         animation: lsGridDrift 40s linear infinite;
     }
-
     .ls-bg::after {
         content: '';
         position: absolute;
-        top: -120%;
-        left: 0;
-        width: 100%;
-        height: 220px;
-        background: linear-gradient(
-            to bottom,
-            transparent 0%,
-            rgba(255,0,110,0.06) 30%,
-            rgba(148,0,211,0.08) 50%,
-            rgba(255,0,110,0.06) 70%,
-            transparent 100%
-        );
+        top: -120%; left: 0;
+        width: 100%; height: 220px;
+        background: linear-gradient(to bottom,
+            transparent 0%, rgba(255,0,110,0.06) 30%,
+            rgba(148,0,211,0.08) 50%, rgba(255,0,110,0.06) 70%, transparent 100%);
         box-shadow: 0 0 100px rgba(255,0,110,0.12);
         animation: lsScan 12s linear infinite;
     }
-
-    @keyframes lsGlow {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.7; }
-    }
+    @keyframes lsGlow { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
     @keyframes lsGridDrift {
         from { background-position: 0 0, 0 0, 0 0, 0 0; }
         to   { background-position: 40px 40px, 40px 40px, 200px 200px, 200px 200px; }
@@ -131,7 +118,7 @@
         overflow-x: hidden;
     }
 
-    /* ── Layout ──────────────────────────────────────────────────── */
+    /* ── Two-column layout ───────────────────────────────────────── */
     .ls-page {
         min-height: calc(100vh - 74px);
         display: grid;
@@ -148,7 +135,7 @@
 
     /* ── Left: Hero ──────────────────────────────────────────────── */
     .ls-hero {
-        padding: 32px 0 32px;
+        padding: 32px 0;
         position: sticky;
         top: 0;
         max-height: 100vh;
@@ -177,9 +164,9 @@
         width: 7px; height: 7px;
         border-radius: 50%;
         background: var(--accent-color);
-        animation: pulse 2s infinite;
+        animation: lsPulse 2s infinite;
     }
-    @keyframes pulse {
+    @keyframes lsPulse {
         0%, 100% { opacity: 1; transform: scale(1); }
         50% { opacity: 0.5; transform: scale(0.8); }
     }
@@ -206,7 +193,6 @@
         max-width: 480px;
     }
 
-    /* Quote */
     .ls-quote {
         background: var(--card-bg);
         border: 1px solid var(--border-color);
@@ -229,7 +215,6 @@
         font-weight: 600;
     }
 
-    /* Trust badges */
     .ls-trust {
         display: flex;
         gap: 10px;
@@ -251,7 +236,6 @@
     .ls-badge-stars { color: #f4c430; font-size: 12px; letter-spacing: 1px; }
     .ls-badge-label { font-size: 12px; font-weight: 600; color: var(--text-primary); }
 
-    /* Stats */
     .ls-stats {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -276,22 +260,16 @@
     .ls-stat-num {
         font-size: 24px;
         font-weight: 900;
-        color: var(--text-primary);
         letter-spacing: -0.02em;
         line-height: 1;
         margin-bottom: 4px;
     }
     .ls-stat-num span { color: var(--accent-color); }
-    .ls-stat-label {
-        font-size: 12px;
-        color: var(--text-secondary);
-        font-weight: 500;
-        line-height: 1.4;
-    }
+    .ls-stat-label { font-size: 12px; color: var(--text-secondary); font-weight: 500; line-height: 1.4; }
     .ls-stat--guarantee {
         border-color: rgba(255,0,110,0.45);
         background: rgba(255,0,110,0.07);
-        box-shadow: 0 0 24px rgba(255,0,110,0.15), inset 0 1px 0 rgba(255,0,110,0.1);
+        box-shadow: 0 0 24px rgba(255,0,110,0.15);
     }
     .ls-stat--guarantee::before {
         width: 100%; height: 3px;
@@ -309,13 +287,8 @@
     }
 
     /* ── Right: Form card ────────────────────────────────────────── */
-    .ls-form-col {
-        padding: 52px 0 80px;
-        position: relative;
-    }
-    @media (max-width: 900px) {
-        .ls-form-col { padding: 24px 0 60px; }
-    }
+    .ls-form-col { padding: 52px 0 80px; }
+    @media (max-width: 900px) { .ls-form-col { padding: 24px 0 60px; } }
 
     .ls-form-card {
         background: var(--card-bg);
@@ -325,12 +298,7 @@
         box-shadow: 0 20px 60px rgba(0,0,0,0.4);
     }
 
-    /* Progress bar */
-    .ls-progress-bar {
-        height: 4px;
-        background: var(--secondary-bg);
-        position: relative;
-    }
+    .ls-progress-bar { height: 4px; background: var(--secondary-bg); }
     .ls-progress-fill {
         height: 100%;
         background: linear-gradient(90deg, #ff006e, #cc00ff);
@@ -338,7 +306,6 @@
         border-radius: 0 4px 4px 0;
     }
 
-    /* Step counter */
     .ls-step-counter {
         display: flex;
         align-items: center;
@@ -346,74 +313,51 @@
         padding: 18px 32px 0;
     }
     .ls-step-label {
-        font-size: 12px;
-        font-weight: 700;
+        font-size: 12px; font-weight: 700;
         color: var(--text-secondary);
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        text-transform: uppercase; letter-spacing: 1px;
     }
-    .ls-step-nums {
-        font-size: 12px;
-        color: var(--text-secondary);
-        font-weight: 600;
-    }
+    .ls-step-nums { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
     .ls-step-nums b { color: var(--accent-color); }
 
-    /* Step body */
     .ls-step-body {
         padding: 28px 32px 36px;
         min-height: 420px;
-        position: relative;
     }
     @media (max-width: 600px) {
         .ls-step-body { padding: 24px 20px 28px; }
         .ls-step-counter { padding: 16px 20px 0; }
     }
 
-    /* Slide transitions */
-    .ls-slide {
-        display: none;
-        animation: lsSlideIn 0.35s cubic-bezier(0.4,0,0.2,1);
-    }
+    .ls-slide { display: none; animation: lsSlideIn 0.35s cubic-bezier(0.4,0,0.2,1); }
     .ls-slide.active { display: block; }
     @keyframes lsSlideIn {
         from { opacity: 0; transform: translateX(24px); }
         to   { opacity: 1; transform: translateX(0); }
     }
-    .ls-slide.slide-back {
-        animation: lsSlideInBack 0.35s cubic-bezier(0.4,0,0.2,1);
-    }
+    .ls-slide.slide-back { animation: lsSlideInBack 0.35s cubic-bezier(0.4,0,0.2,1); }
     @keyframes lsSlideInBack {
         from { opacity: 0; transform: translateX(-24px); }
         to   { opacity: 1; transform: translateX(0); }
     }
 
     .ls-q-label {
-        font-size: 11px;
-        font-weight: 700;
+        font-size: 11px; font-weight: 700;
         color: var(--accent-color);
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
+        text-transform: uppercase; letter-spacing: 1.5px;
         margin-bottom: 12px;
     }
     .ls-q-text {
         font-size: clamp(18px, 2.5vw, 22px);
-        font-weight: 800;
-        line-height: 1.3;
+        font-weight: 800; line-height: 1.3;
         margin-bottom: 28px;
         color: var(--text-primary);
     }
 
     /* Option cards */
-    .ls-options {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
+    .ls-options { display: flex; flex-direction: column; gap: 10px; }
     .ls-option {
-        display: flex;
-        align-items: center;
-        gap: 14px;
+        display: flex; align-items: center; gap: 14px;
         padding: 16px 18px;
         border-radius: 12px;
         border: 2px solid var(--border-color);
@@ -442,11 +386,10 @@
         border: 1.5px solid var(--border-color);
         display: flex; align-items: center; justify-content: center;
         flex-shrink: 0;
-        font-size: 11px;
-        font-weight: 700;
+        font-size: 11px; font-weight: 700;
         color: var(--text-secondary);
-        transition: all 0.15s;
         background: var(--card-bg);
+        transition: all 0.15s;
     }
     .ls-option.sel .ls-option-key {
         background: var(--accent-color);
@@ -454,27 +397,14 @@
         color: #fff;
     }
     .ls-option.sel-disq .ls-option-key {
-        background: #dc3545;
-        border-color: #dc3545;
-        color: #fff;
+        background: #dc3545; border-color: #dc3545; color: #fff;
     }
-    .ls-option-text {
-        font-size: 15px;
-        font-weight: 500;
-        color: var(--text-primary);
-        line-height: 1.4;
-    }
-    .ls-option-sub {
-        font-size: 12px;
-        color: var(--text-secondary);
-        margin-top: 2px;
-    }
+    .ls-option-text { font-size: 15px; font-weight: 500; color: var(--text-primary); line-height: 1.4; }
+    .ls-option-sub { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
 
     /* Scenario cards */
     .ls-scenario {
-        display: flex;
-        align-items: center;
-        gap: 16px;
+        display: flex; align-items: center; gap: 16px;
         padding: 20px;
         border-radius: 14px;
         border: 2px solid var(--border-color);
@@ -502,16 +432,10 @@
         color: var(--accent-color);
     }
     .ls-scenario-body strong {
-        display: block;
-        font-size: 15px;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-bottom: 3px;
+        display: block; font-size: 15px; font-weight: 700;
+        color: var(--text-primary); margin-bottom: 3px;
     }
-    .ls-scenario-body span {
-        font-size: 13px;
-        color: var(--text-secondary);
-    }
+    .ls-scenario-body span { font-size: 13px; color: var(--text-secondary); }
     .ls-scenario-check {
         margin-left: auto;
         width: 24px; height: 24px;
@@ -519,14 +443,11 @@
         border: 2px solid var(--border-color);
         display: flex; align-items: center; justify-content: center;
         flex-shrink: 0;
-        font-size: 12px;
-        color: transparent;
+        font-size: 12px; color: transparent;
         transition: all 0.15s;
     }
     .ls-scenario.sel .ls-scenario-check {
-        background: var(--accent-color);
-        border-color: var(--accent-color);
-        color: #fff;
+        background: var(--accent-color); border-color: var(--accent-color); color: #fff;
     }
 
     /* Disqualification alert */
@@ -537,84 +458,61 @@
         border-radius: 10px;
         padding: 14px 16px;
         margin-top: 14px;
-        font-size: 13px;
-        color: #ff6b6b;
-        line-height: 1.6;
-        text-align: center;
+        font-size: 13px; color: #ff6b6b;
+        line-height: 1.6; text-align: center;
     }
 
     /* Nav buttons */
-    .ls-nav {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-top: 28px;
-    }
+    .ls-nav { display: flex; align-items: center; gap: 12px; margin-top: 28px; }
     .ls-btn-back {
-        display: flex;
-        align-items: center;
-        gap: 6px;
+        display: flex; align-items: center; gap: 6px;
         background: none;
         border: 1.5px solid var(--border-color);
         border-radius: 10px;
         padding: 12px 18px;
         color: var(--text-secondary);
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s;
+        font-size: 14px; font-weight: 600;
+        cursor: pointer; transition: all 0.2s;
     }
     .ls-btn-back:hover { border-color: var(--text-secondary); color: var(--text-primary); }
     .ls-btn-next {
         flex: 1;
         padding: 14px 24px;
         background: linear-gradient(135deg, #ff006e 0%, #cc00ff 100%);
-        border: none;
-        border-radius: 10px;
-        color: #fff;
-        font-size: 15px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.2s;
+        border: none; border-radius: 10px;
+        color: #fff; font-size: 15px; font-weight: 700;
+        cursor: pointer; transition: all 0.2s;
         box-shadow: 0 4px 20px rgba(255,0,110,0.3);
     }
-    .ls-btn-next:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 28px rgba(255,0,110,0.4);
-    }
-    .ls-btn-next:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-    }
+    .ls-btn-next:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,0,110,0.4); }
+    .ls-btn-next:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
     /* Inputs */
     .ls-input-group { margin-bottom: 16px; }
     .ls-input-group label {
-        display: block;
-        font-size: 13px;
-        font-weight: 600;
-        margin-bottom: 8px;
-        color: var(--text-primary);
+        display: block; font-size: 13px; font-weight: 600;
+        margin-bottom: 8px; color: var(--text-primary);
     }
     .ls-input-group input {
-        width: 100%;
-        padding: 14px 16px;
+        width: 100%; padding: 14px 16px;
         background: var(--secondary-bg);
         border: 2px solid var(--border-color);
         border-radius: 10px;
         color: var(--text-primary);
-        font-size: 15px;
-        font-family: 'Inter', sans-serif;
-        transition: border-color 0.2s;
-        outline: none;
+        font-size: 15px; font-family: 'Inter', sans-serif;
+        transition: border-color 0.2s; outline: none;
     }
     .ls-input-group input:focus {
         border-color: var(--accent-color);
         box-shadow: 0 0 0 3px rgba(255,0,110,0.1);
     }
+    .ls-input-group input.invalid { border-color: #dc3545; }
     .ls-input-group input::placeholder { color: var(--text-secondary); opacity: 0.6; }
+    .ls-field-err {
+        display: none;
+        font-size: 12px; color: #ff6b6b;
+        margin-top: 5px;
+    }
     .ls-opt-tag { font-size: 11px; font-weight: 400; color: var(--text-secondary); margin-left: 6px; }
 
     /* Booking intro */
@@ -622,41 +520,54 @@
         background: rgba(255,0,110,0.06);
         border: 1px solid rgba(255,0,110,0.15);
         border-radius: 12px;
-        padding: 16px 18px;
-        margin-bottom: 24px;
-        text-align: center;
-        font-size: 14px;
-        color: var(--text-secondary);
-        line-height: 1.6;
+        padding: 16px 18px; margin-bottom: 24px;
+        text-align: center; font-size: 14px;
+        color: var(--text-secondary); line-height: 1.6;
     }
 
-    /* ── Video section ───────────────────────────────────────────── */
-    .ls-video-section {
+    /* ── Post-booking: case study + video side by side ───────────── */
+    #lsPostBooking {
+        display: none;
         max-width: 1280px;
-        margin: 0 auto;
-        padding: 40px 24px 0;
+        margin: 56px auto 0;
+        padding: 0 24px 60px;
     }
-    .ls-video-heading {
-        font-size: clamp(20px, 2.5vw, 28px);
+    .ls-post-heading {
+        font-size: clamp(22px, 2.5vw, 30px);
         font-weight: 800;
         text-align: center;
-        margin-bottom: 24px;
+        margin-bottom: 32px;
         letter-spacing: -0.01em;
     }
-    .ls-video-heading span {
+    .ls-post-heading span {
         background: linear-gradient(135deg, #ff006e, #cc00ff);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
     }
+    .ls-post-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+        align-items: start;
+    }
+    @media (max-width: 860px) {
+        .ls-post-grid { grid-template-columns: 1fr; }
+        #lsPostBooking { padding: 0 16px 60px; }
+    }
+
+    /* Video */
     .ls-video-wrap {
-        max-width: 760px;
-        margin: 0 auto;
         background: var(--card-bg);
         border: 1px solid var(--border-color);
         border-radius: 20px;
         overflow: hidden;
         box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .ls-video-label {
+        padding: 18px 20px 14px;
+        font-size: 15px; font-weight: 700;
+        border-bottom: 1px solid var(--border-color);
     }
     .ls-video-container {
         position: relative;
@@ -695,13 +606,11 @@
                 We build and run your complete Meta ad system. You fund the spend. We guarantee 30 qualified personal injury leads in 90 days — or we keep working at zero management fee until you do.
             </p>
 
-            <!-- Quote -->
             <div class="ls-quote">
                 <p class="ls-quote-text">"Their amazing communication and flexibility are most impressive."</p>
                 <p class="ls-quote-author">— Director, Karma Injury Law</p>
             </div>
 
-            <!-- Trust badges -->
             <div class="ls-trust">
                 <a href="https://maps.app.goo.gl/jZJwBzY5DwK7GHhY6" target="_blank" rel="noopener noreferrer" class="ls-badge">
                     <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
@@ -728,7 +637,6 @@
                 </a>
             </div>
 
-            <!-- Stats -->
             <div class="ls-stats">
                 <div class="ls-stat">
                     <div class="ls-stat-num"><span>30</span></div>
@@ -753,25 +661,47 @@
 
         <!-- ══════════ RIGHT: Form card ══════════ -->
         <div class="ls-form-col">
-
             <div class="ls-form-card">
 
-                <!-- Progress bar -->
                 <div class="ls-progress-bar">
-                    <div class="ls-progress-fill" id="lsProgressFill" style="width:14%;"></div>
+                    <div class="ls-progress-fill" id="lsProgressFill" style="width:17%;"></div>
                 </div>
-
-                <!-- Step counter -->
                 <div class="ls-step-counter">
-                    <div class="ls-step-label" id="lsStepLabel">Situation</div>
-                    <div class="ls-step-nums"><b id="lsStepCur">1</b> / 7</div>
+                    <div class="ls-step-label" id="lsStepLabel">Your Info</div>
+                    <div class="ls-step-nums"><b id="lsStepCur">1</b> / 6</div>
                 </div>
 
                 <div class="ls-step-body">
 
-                    <!-- ── Slide 1: Scenario ── -->
+                    <!-- ── Slide 1: Basic info ── -->
                     <div class="ls-slide active" id="lsS1">
-                        <div class="ls-q-label">Step 1 of 7</div>
+                        <div class="ls-q-label">Step 1 of 6</div>
+                        <div class="ls-q-text">Let's start with your details</div>
+                        <div class="ls-input-group">
+                            <label>Full Name</label>
+                            <input type="text" id="lsName" placeholder="Jane Smith" autocomplete="name">
+                        </div>
+                        <div class="ls-input-group">
+                            <label>Email Address</label>
+                            <input type="email" id="lsEmail" placeholder="jane@smithinjurylaw.com" autocomplete="email">
+                        </div>
+                        <div class="ls-input-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="lsPhone" placeholder="(555) 000-0000" autocomplete="tel">
+                        </div>
+                        <div class="ls-input-group">
+                            <label>Law Firm Website</label>
+                            <input type="text" id="lsWebsite" placeholder="smithinjurylaw.com" autocomplete="url">
+                            <div class="ls-field-err" id="lsWebsiteErr">Please enter a valid website (e.g. smithlaw.com)</div>
+                        </div>
+                        <div class="ls-nav">
+                            <button class="ls-btn-next" id="lsN1" onclick="lsSubmitInfo()" disabled>Continue →</button>
+                        </div>
+                    </div>
+
+                    <!-- ── Slide 2: Scenario ── -->
+                    <div class="ls-slide" id="lsS2">
+                        <div class="ls-q-label">Step 2 of 6</div>
                         <div class="ls-q-text">Which best describes your practice right now?</div>
                         <div class="ls-options" style="gap:12px;" id="lsScenarios">
                             <div class="ls-scenario" data-value="Getting cases but want to scale volume" onclick="lsSelectScenario(this)">
@@ -790,7 +720,7 @@
                                 </div>
                                 <div class="ls-scenario-body">
                                     <strong>Relying on referrals</strong>
-                                    <span>Want to add a predictable digital intake channel</span>
+                                    <span>Want a predictable digital intake channel</span>
                                 </div>
                                 <div class="ls-scenario-check">✓</div>
                             </div>
@@ -800,48 +730,9 @@
                                 </div>
                                 <div class="ls-scenario-body">
                                     <strong>Running ads but not converting</strong>
-                                    <span>Spending money on ads with poor lead quality</span>
+                                    <span>Spending on ads with poor lead quality</span>
                                 </div>
                                 <div class="ls-scenario-check">✓</div>
-                            </div>
-                        </div>
-                        <div class="ls-nav">
-                            <button class="ls-btn-next" id="lsN1" onclick="lsNext(2)" disabled>Continue →</button>
-                        </div>
-                    </div>
-
-                    <!-- ── Slide 2: Case volume ── -->
-                    <div class="ls-slide" id="lsS2">
-                        <div class="ls-q-label">Step 2 of 7</div>
-                        <div class="ls-q-text">How many qualified PI leads are you currently generating per month?</div>
-                        <div class="ls-options" id="lsQ1">
-                            <div class="ls-option" data-q="lsq1" data-value="Fewer than 5" onclick="lsSelectOpt(this)">
-                                <div class="ls-option-key">A</div>
-                                <div>
-                                    <div class="ls-option-text">Fewer than 5</div>
-                                    <div class="ls-option-sub">Mostly referrals or inconsistent</div>
-                                </div>
-                            </div>
-                            <div class="ls-option" data-q="lsq1" data-value="5–15" onclick="lsSelectOpt(this)">
-                                <div class="ls-option-key">B</div>
-                                <div>
-                                    <div class="ls-option-text">5 – 15</div>
-                                    <div class="ls-option-sub">Some digital, some referral</div>
-                                </div>
-                            </div>
-                            <div class="ls-option" data-q="lsq1" data-value="15–30" onclick="lsSelectOpt(this)">
-                                <div class="ls-option-key">C</div>
-                                <div>
-                                    <div class="ls-option-text">15 – 30</div>
-                                    <div class="ls-option-sub">Solid pipeline, want to scale</div>
-                                </div>
-                            </div>
-                            <div class="ls-option" data-q="lsq1" data-value="30+" onclick="lsSelectOpt(this)">
-                                <div class="ls-option-key">D</div>
-                                <div>
-                                    <div class="ls-option-text">30+</div>
-                                    <div class="ls-option-sub">Strong pipeline, focused on quality</div>
-                                </div>
                             </div>
                         </div>
                         <div class="ls-nav">
@@ -852,31 +743,27 @@
 
                     <!-- ── Slide 3: Budget ── -->
                     <div class="ls-slide" id="lsS3">
-                        <div class="ls-q-label">Step 3 of 7</div>
-                        <div class="ls-q-text">Can you commit $5,000–$10,000/mo in ad spend for 90 days?</div>
+                        <div class="ls-q-label">Step 3 of 6</div>
+                        <div class="ls-q-text">What's your monthly Meta ad budget for the next 90 days?</div>
                         <div class="ls-options" id="lsQ2">
-                            <div class="ls-option" data-q="lsq2" data-value="Yes, ready to invest" onclick="lsSelectOpt(this)">
+                            <div class="ls-option" data-q="lsq2" data-value="$10,000+/month" onclick="lsSelectOpt(this)">
                                 <div class="ls-option-key">A</div>
                                 <div>
-                                    <div class="ls-option-text">Yes, ready to invest</div>
+                                    <div class="ls-option-text">$10,000+ per month</div>
+                                    <div class="ls-option-sub">Full guarantee program</div>
                                 </div>
                             </div>
-                            <div class="ls-option" data-q="lsq2" data-value="Yes, but need to see the plan first" onclick="lsSelectOpt(this)">
+                            <div class="ls-option" data-q="lsq2" data-value="$5,000–$9,999/month" onclick="lsSelectOpt(this)">
                                 <div class="ls-option-key">B</div>
                                 <div>
-                                    <div class="ls-option-text">Yes, but need to see the plan first</div>
+                                    <div class="ls-option-text">$5,000 – $9,999 per month</div>
+                                    <div class="ls-option-sub">Minimum spend for our guarantee</div>
                                 </div>
                             </div>
-                            <div class="ls-option" data-q="lsq2" data-value="Maybe, depends on ROI" onclick="lsSelectOpt(this)">
+                            <div class="ls-option" data-q="lsq2" data-value="Less than $5,000/month" data-disq="true" onclick="lsSelectOpt(this)">
                                 <div class="ls-option-key">C</div>
                                 <div>
-                                    <div class="ls-option-text">Maybe — depends on ROI</div>
-                                </div>
-                            </div>
-                            <div class="ls-option" data-q="lsq2" data-value="No, outside budget" data-disq="true" onclick="lsSelectOpt(this)">
-                                <div class="ls-option-key">D</div>
-                                <div>
-                                    <div class="ls-option-text">No, outside my budget right now</div>
+                                    <div class="ls-option-text">Less than $5,000 per month</div>
                                 </div>
                             </div>
                         </div>
@@ -889,27 +776,28 @@
                         </div>
                     </div>
 
-                    <!-- ── Slide 4: Response time ── -->
+                    <!-- ── Slide 4: CRM ── -->
                     <div class="ls-slide" id="lsS4">
-                        <div class="ls-q-label">Step 4 of 7</div>
-                        <div class="ls-q-text">Can your intake team respond to new leads within 24 hours?</div>
+                        <div class="ls-q-label">Step 4 of 6</div>
+                        <div class="ls-q-text">Do you use a CRM or structured intake tracking system?</div>
                         <div class="ls-options" id="lsQ3">
-                            <div class="ls-option" data-q="lsq3" data-value="Yes, always" onclick="lsSelectOpt(this)">
+                            <div class="ls-option" data-q="lsq3" data-value="Yes" onclick="lsSelectOpt(this)">
                                 <div class="ls-option-key">A</div>
                                 <div>
-                                    <div class="ls-option-text">Yes, always</div>
+                                    <div class="ls-option-text">Yes</div>
+                                    <div class="ls-option-sub">We track leads in a CRM or system</div>
                                 </div>
                             </div>
-                            <div class="ls-option" data-q="lsq3" data-value="Usually" onclick="lsSelectOpt(this)">
+                            <div class="ls-option" data-q="lsq3" data-value="No, but open to setting one up" onclick="lsSelectOpt(this)">
                                 <div class="ls-option-key">B</div>
                                 <div>
-                                    <div class="ls-option-text">Usually</div>
+                                    <div class="ls-option-text">No, but open to setting one up</div>
                                 </div>
                             </div>
-                            <div class="ls-option" data-q="lsq3" data-value="Sometimes" onclick="lsSelectOpt(this)">
+                            <div class="ls-option" data-q="lsq3" data-value="No" onclick="lsSelectOpt(this)">
                                 <div class="ls-option-key">C</div>
                                 <div>
-                                    <div class="ls-option-text">Sometimes — we're a small team</div>
+                                    <div class="ls-option-text">No</div>
                                 </div>
                             </div>
                         </div>
@@ -919,44 +807,39 @@
                         </div>
                     </div>
 
-                    <!-- ── Slide 5: Name ── -->
+                    <!-- ── Slide 5: Intake team ── -->
                     <div class="ls-slide" id="lsS5">
-                        <div class="ls-q-label">Step 5 of 7</div>
-                        <div class="ls-q-text">What's your name?</div>
-                        <div class="ls-input-group">
-                            <input type="text" id="lsName" placeholder="Jane Smith" autocomplete="name" oninput="lsCheckName()">
+                        <div class="ls-q-label">Step 5 of 6</div>
+                        <div class="ls-q-text">Do you have a dedicated intake team or staff?</div>
+                        <div class="ls-options" id="lsQ4">
+                            <div class="ls-option" data-q="lsq4" data-value="Yes, dedicated intake staff" onclick="lsSelectOpt(this)">
+                                <div class="ls-option-key">A</div>
+                                <div>
+                                    <div class="ls-option-text">Yes — dedicated intake staff</div>
+                                </div>
+                            </div>
+                            <div class="ls-option" data-q="lsq4" data-value="Handled by attorneys/paralegals" onclick="lsSelectOpt(this)">
+                                <div class="ls-option-key">B</div>
+                                <div>
+                                    <div class="ls-option-text">Handled by attorneys or paralegals</div>
+                                </div>
+                            </div>
+                            <div class="ls-option" data-q="lsq4" data-value="No formal intake process yet" onclick="lsSelectOpt(this)">
+                                <div class="ls-option-key">C</div>
+                                <div>
+                                    <div class="ls-option-text">No formal intake process yet</div>
+                                </div>
+                            </div>
                         </div>
                         <div class="ls-nav">
                             <button class="ls-btn-back" onclick="lsBack(4)">← Back</button>
-                            <button class="ls-btn-next" id="lsN5" onclick="lsNext(6)" disabled>Continue →</button>
+                            <button class="ls-btn-next" id="lsN5" onclick="lsSubmitLead()" disabled>Reserve My Spot →</button>
                         </div>
                     </div>
 
-                    <!-- ── Slide 6: Contact ── -->
+                    <!-- ── Slide 6: Booking ── -->
                     <div class="ls-slide" id="lsS6">
-                        <div class="ls-q-label">Step 6 of 7</div>
-                        <div class="ls-q-text">How do we reach you?</div>
-                        <div class="ls-input-group">
-                            <label>Email Address</label>
-                            <input type="email" id="lsEmail" placeholder="jane@smithinjurylaw.com" autocomplete="email" oninput="lsCheckContact()">
-                        </div>
-                        <div class="ls-input-group">
-                            <label>Phone Number</label>
-                            <input type="tel" id="lsPhone" placeholder="(555) 000-0000" autocomplete="tel" oninput="lsCheckContact()">
-                        </div>
-                        <div class="ls-input-group">
-                            <label>Law Firm Name <span class="ls-opt-tag">(optional)</span></label>
-                            <input type="text" id="lsFirm" placeholder="Smith Injury Law">
-                        </div>
-                        <div class="ls-nav">
-                            <button class="ls-btn-back" onclick="lsBack(5)">← Back</button>
-                            <button class="ls-btn-next" id="lsN6" onclick="lsSubmitLead()" disabled>Reserve My Spot →</button>
-                        </div>
-                    </div>
-
-                    <!-- ── Slide 7: Booking ── -->
-                    <div class="ls-slide" id="lsS7">
-                        <div class="ls-q-label">Step 7 of 7</div>
+                        <div class="ls-q-label">Step 6 of 6</div>
                         <div class="ls-q-text">Book your free strategy call</div>
                         <div class="ls-booking-intro">
                             30 mins · No pitch · We'll map out exactly how to get you 30 qualified PI leads in 90 days
@@ -973,54 +856,33 @@
 
     </div><!-- /.ls-page -->
 
-    <!-- ══════════ VIDEO ══════════ -->
-    <div class="ls-video-section">
-        <div class="ls-video-heading">Watch This <span>Quick 2-Minute Overview</span></div>
-        <div class="ls-video-wrap">
-            <div class="ls-video-container">
-                <div id="lsYtPlayer"></div>
-            </div>
-        </div>
-    </div>
+    <!-- ══════════ POST-BOOKING: case study + video (hidden until booking) ══════════ -->
+    <div id="lsPostBooking">
+        <div class="ls-post-heading">While You Wait — <span>See the Results We Get</span></div>
+        <div class="ls-post-grid">
 
-    <!-- ══════════ CASE STUDY ══════════ -->
-    <section id="case-study" class="case-study-section">
-        <div class="container">
-            <h3 class="section-heading">How We Did It</h3>
-            <p class="section-desc">How an Injury Law Firm Signed 125 Cases with a High-Converting Brand and Digital Funnel</p>
+            <!-- Left: Case study -->
             <a href="https://sliqbydesign.com/case_studies/karma-injury/" target="_blank" rel="noopener noreferrer" class="case-study-link">
             <div class="case-study-card">
                 <div class="case-study-stats">
-                    <div class="case-stat">
-                        <div class="case-stat-value">125+</div>
-                        <div class="case-stat-label">Signed Cases</div>
-                    </div>
-                    <div class="case-stat">
-                        <div class="case-stat-value">55</div>
-                        <div class="case-stat-label">Leads Generated</div>
-                    </div>
-                    <div class="case-stat">
-                        <div class="case-stat-value">39%</div>
-                        <div class="case-stat-label">CPL Reduction</div>
-                    </div>
-                    <div class="case-stat">
-                        <div class="case-stat-value">581%</div>
-                        <div class="case-stat-label">CTR Increase</div>
-                    </div>
+                    <div class="case-stat"><div class="case-stat-value">125+</div><div class="case-stat-label">Signed Cases</div></div>
+                    <div class="case-stat"><div class="case-stat-value">55</div><div class="case-stat-label">Leads Generated</div></div>
+                    <div class="case-stat"><div class="case-stat-value">39%</div><div class="case-stat-label">CPL Reduction</div></div>
+                    <div class="case-stat"><div class="case-stat-value">581%</div><div class="case-stat-label">CTR Increase</div></div>
                 </div>
                 <div class="case-study-narrative">
                     <h4>Karma Injury Law — Full-Scale Transformation</h4>
                     <div class="case-study-block">
                         <h5>The Challenge</h5>
-                        <p>A personal injury firm specializing in high-impact cases — shootings, vehicle collisions, workplace injuries — needed a full-scale transformation: a rebrand, website, SEO, and lead generation system to become the most trusted name in their market.</p>
+                        <p>A personal injury firm specializing in high-impact cases needed a full-scale transformation: rebrand, website, SEO, and a lead generation system to become the most trusted name in their market.</p>
                     </div>
                     <div class="case-study-block">
                         <h5>What We Did</h5>
-                        <p>New identity, bilingual site, and conversion-driven content. We built a complete digital funnel with SEO, paid ads, and a high-converting brand designed to dominate their market.</p>
+                        <p>New identity, bilingual site, and conversion-driven content. We built a complete digital funnel with SEO, paid ads, and a high-converting brand.</p>
                     </div>
                     <div class="case-study-block">
                         <h5>The Result</h5>
-                        <p>350K+ Google impressions, 4,480+ organic clicks. On just $10K ad spend, CPL dropped 39%, CTR surged 581%, generating 55 leads and 125+ signed cases.</p>
+                        <p>350K+ Google impressions, 4,480+ organic clicks. On just $10K ad spend, CPL dropped 39%, CTR surged 581% — 55 leads and 125+ signed cases.</p>
                     </div>
                 </div>
                 <div class="case-study-testimonial">
@@ -1030,12 +892,21 @@
                 <div class="case-study-read-more">Read Full Case Study →</div>
             </div>
             </a>
+
+            <!-- Right: Video -->
+            <div class="ls-video-wrap">
+                <div class="ls-video-label">Watch This Quick 2-Minute Overview</div>
+                <div class="ls-video-container">
+                    <div id="lsYtPlayer"></div>
+                </div>
+            </div>
+
         </div>
-    </section>
+    </div>
 
     <div class="disclaimer-banner">
         <div class="container">
-            <p>* The 30-lead guarantee assumes a minimum monthly ad spend of $5,000. Results are based on qualified personal injury leads as defined above. Individual results may vary based on market, geography, and case type.</p>
+            <p>* The 30-lead guarantee assumes a minimum monthly ad spend of $5,000. Results are based on qualified personal injury leads. Individual results may vary based on market, geography, and case type.</p>
         </div>
     </div>
 

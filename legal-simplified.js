@@ -1,20 +1,23 @@
 // ── Legal Simplified — one-question-at-a-time flow ──
 
 var lsState = {
+    name:             null,
+    email:            null,
+    phone:            null,
+    website:          null,
     selectedScenario: null,
-    caseVolume:       null,
     budgetCommitment: null,
-    responseTime:     null
+    hasCRM:           null,
+    hasIntake:        null
 };
 
 var LS_STEPS = {
-    1: { pct: '14%',  label: 'Situation',    cur: 1 },
-    2: { pct: '28%',  label: 'Case Volume',  cur: 2 },
-    3: { pct: '42%',  label: 'Ad Budget',    cur: 3 },
-    4: { pct: '56%',  label: 'Response',     cur: 4 },
-    5: { pct: '70%',  label: 'Your Name',    cur: 5 },
-    6: { pct: '84%',  label: 'Contact',      cur: 6 },
-    7: { pct: '100%', label: 'Book a Call',  cur: 7 }
+    1: { pct: '17%',  label: 'Your Info',    cur: 1 },
+    2: { pct: '33%',  label: 'Situation',    cur: 2 },
+    3: { pct: '50%',  label: 'Ad Budget',    cur: 3 },
+    4: { pct: '67%',  label: 'CRM',          cur: 4 },
+    5: { pct: '83%',  label: 'Intake',       cur: 5 },
+    6: { pct: '100%', label: 'Book a Call',  cur: 6 }
 };
 
 var lsCurrentSlide = 1;
@@ -59,6 +62,53 @@ function lsBack(n) {
     lsShowSlide(n, 'back');
 }
 
+// ── Step 1: Basic info validation ────────────────────────────────────────────
+
+function lsValidateDomain(val) {
+    var cleaned = val.trim().replace(/^https?:\/\//i, '').replace(/^www\./i, '');
+    // Must contain at least one dot with a valid TLD (2–10 chars)
+    return /^[a-zA-Z0-9]([a-zA-Z0-9\-]*\.)+[a-zA-Z]{2,10}(\/.*)?$/.test(cleaned);
+}
+
+function lsCheckInfo() {
+    var name    = document.getElementById('lsName').value.trim();
+    var email   = document.getElementById('lsEmail').value.trim();
+    var phone   = document.getElementById('lsPhone').value.trim();
+    var website = document.getElementById('lsWebsite').value.trim();
+
+    var emailOk   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    var phoneOk   = phone.replace(/\D/g, '').length === 10;
+    var websiteOk = lsValidateDomain(website);
+    var nameOk    = name.length >= 2;
+
+    var websiteErr = document.getElementById('lsWebsiteErr');
+    if (website.length > 0 && !websiteOk) {
+        websiteErr.style.display = 'block';
+    } else {
+        websiteErr.style.display = 'none';
+    }
+
+    if (nameOk && emailOk && phoneOk && websiteOk) {
+        lsEnableBtn('lsN1');
+    } else {
+        lsDisableBtn('lsN1');
+    }
+}
+
+function lsSubmitInfo() {
+    var name    = document.getElementById('lsName').value.trim();
+    var email   = document.getElementById('lsEmail').value.trim();
+    var phone   = document.getElementById('lsPhone').value.trim();
+    var website = document.getElementById('lsWebsite').value.trim();
+
+    lsState.name    = name;
+    lsState.email   = email;
+    lsState.phone   = phone;
+    lsState.website = website;
+
+    lsNext(2);
+}
+
 // ── Scenario selection ────────────────────────────────────────────────────────
 
 function lsSelectScenario(card) {
@@ -67,7 +117,7 @@ function lsSelectScenario(card) {
     });
     card.classList.add('sel');
     lsState.selectedScenario = card.getAttribute('data-value');
-    lsEnableBtn('lsN1');
+    lsEnableBtn('lsN2');
 }
 
 // ── Option selection ──────────────────────────────────────────────────────────
@@ -81,9 +131,9 @@ function lsSelectOpt(card) {
     var isDisq = card.getAttribute('data-disq') === 'true';
     card.classList.add(isDisq ? 'sel-disq' : 'sel');
 
-    if (q === 'lsq1') lsState.caseVolume       = card.getAttribute('data-value');
-    if (q === 'lsq2') lsState.budgetCommitment  = card.getAttribute('data-value');
-    if (q === 'lsq3') lsState.responseTime      = card.getAttribute('data-value');
+    if (q === 'lsq2') lsState.budgetCommitment = card.getAttribute('data-value');
+    if (q === 'lsq3') lsState.hasCRM           = card.getAttribute('data-value');
+    if (q === 'lsq4') lsState.hasIntake        = card.getAttribute('data-value');
 
     if (q === 'lsq2') {
         var disqual = document.getElementById('lsBudgetDisqual');
@@ -97,42 +147,14 @@ function lsSelectOpt(card) {
         return;
     }
 
-    var nextMap = { lsq1: 'lsN2', lsq3: 'lsN4' };
+    var nextMap = { lsq3: 'lsN4', lsq4: 'lsN5' };
     if (nextMap[q]) lsEnableBtn(nextMap[q]);
 }
 
-// ── Name validation ───────────────────────────────────────────────────────────
-
-function lsCheckName() {
-    var name = document.getElementById('lsName').value.trim();
-    if (name.length >= 2) lsEnableBtn('lsN5');
-    else lsDisableBtn('lsN5');
-}
-
-// ── Contact validation ────────────────────────────────────────────────────────
-
-function lsCheckContact() {
-    var email = document.getElementById('lsEmail').value.trim();
-    var phone = document.getElementById('lsPhone').value.trim();
-    var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    var phoneOk = phone.replace(/\D/g, '').length === 10;
-    if (emailOk && phoneOk) lsEnableBtn('lsN6');
-    else lsDisableBtn('lsN6');
-}
-
-// ── Submit ────────────────────────────────────────────────────────────────────
+// ── Submit & advance to booking ───────────────────────────────────────────────
 
 function lsSubmitLead() {
-    var name    = document.getElementById('lsName').value.trim();
-    var email   = document.getElementById('lsEmail').value.trim();
-    var phone   = document.getElementById('lsPhone').value.trim();
-    var firm    = document.getElementById('lsFirm').value.trim();
-
-    var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    var phoneOk = phone.replace(/\D/g, '').length === 10;
-    if (!name || !emailOk || !phoneOk) { lsNotify('Please fill in all required fields.', 'error'); return; }
-
-    var btn = document.getElementById('lsN6');
+    var btn = document.getElementById('lsN5');
     btn.disabled = true;
     btn.textContent = 'Submitting…';
 
@@ -144,18 +166,18 @@ function lsSubmitLead() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             source:           'legal-simplified',
+            name:             lsState.name,
+            email:            lsState.email,
+            phone:            lsState.phone,
+            website:          lsState.website,
             selectedScenario: lsState.selectedScenario,
-            caseVolume:       lsState.caseVolume,
             budgetCommitment: lsState.budgetCommitment,
-            responseTime:     lsState.responseTime,
-            name:    name,
-            email:   email,
-            phone:   phone,
-            firm:    firm || null
+            hasCRM:           lsState.hasCRM,
+            hasIntake:        lsState.hasIntake
         })
     }).catch(function (err) { console.error('Lead POST failed:', err); });
 
-    lsNext(7);
+    lsNext(6);
     lsLoadBooking();
 }
 
@@ -172,6 +194,13 @@ function lsLoadBooking() {
             document.body.appendChild(s);
         }
     }
+    // Reveal the post-booking section (case study + video)
+    var postSection = document.getElementById('lsPostBooking');
+    if (postSection) {
+        postSection.style.display = 'block';
+        // Init video now that the container is visible
+        lsInitVideo();
+    }
 }
 
 // ── Phone masking ─────────────────────────────────────────────────────────────
@@ -185,7 +214,7 @@ function lsInitPhone() {
         else if (v.length >= 3) v = '(' + v.slice(0,3) + ') ' + v.slice(3);
         else if (v.length > 0)  v = '(' + v;
         e.target.value = v;
-        lsCheckContact();
+        lsCheckInfo();
     });
 }
 
@@ -198,9 +227,9 @@ function lsInitKeyboard() {
         if (!(key in keyMap)) return;
 
         var activeCards = null;
-        if (lsCurrentSlide === 2) activeCards = document.querySelectorAll('#lsQ1 .ls-option');
         if (lsCurrentSlide === 3) activeCards = document.querySelectorAll('#lsQ2 .ls-option');
         if (lsCurrentSlide === 4) activeCards = document.querySelectorAll('#lsQ3 .ls-option');
+        if (lsCurrentSlide === 5) activeCards = document.querySelectorAll('#lsQ4 .ls-option');
         if (!activeCards) return;
 
         var idx = keyMap[key];
@@ -242,12 +271,12 @@ var lsYtPlayer = null;
 
 window.onYouTubeIframeAPIReady = function () {
     lsYtApiReady = true;
-    lsInitVideo();
 };
 
 function lsInitVideo() {
     if (lsYtPlayer) return;
-    if (!lsYtApiReady || typeof YT === 'undefined' || !YT.Player) return;
+    if (!lsYtApiReady && !(typeof YT !== 'undefined' && YT.Player)) return;
+    lsYtApiReady = true;
     var container = document.getElementById('lsYtPlayer');
     if (!container) return;
     lsYtPlayer = new YT.Player('lsYtPlayer', {
@@ -263,9 +292,9 @@ function lsInitVideo() {
 document.addEventListener('DOMContentLoaded', function () {
     lsInitPhone();
     lsInitKeyboard();
-    // Attempt video init if API already loaded
-    if (typeof YT !== 'undefined' && YT.Player) {
-        lsYtApiReady = true;
-        lsInitVideo();
-    }
+    // Wire all info-field inputs to validation
+    ['lsName','lsEmail','lsWebsite'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.addEventListener('input', lsCheckInfo);
+    });
 });
