@@ -369,81 +369,65 @@
             .terms-row { grid-template-columns: 1fr 1fr; }
             .hero-title { font-size: 2.6rem; }
         }
-        /* ── Client selector ── */
-        .client-selector-section {
-            margin-bottom: 48px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 32px 36px;
-            position: relative;
-            overflow: hidden;
-        }
-        .client-selector-section::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            border-radius: 20px 20px 0 0;
-        }
-        .cs-label {
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 8px;
-        }
-        .cs-heading {
-            font-size: 1.25rem;
-            font-weight: 800;
-            margin-bottom: 6px;
-        }
-        .cs-sub {
-            font-size: 13px;
-            color: var(--muted);
-            margin-bottom: 20px;
-        }
-        .cs-search-row {
+        /* ── Client selector gate ── */
+        #cs-gate {
+            position: fixed;
+            inset: 0;
+            background: #080808;
             display: flex;
-            gap: 10px;
             align-items: center;
+            justify-content: center;
+            z-index: 9998;
+            padding: 24px;
         }
+        #cs-gate.hidden { display: none; }
+        .cs-box {
+            background: #131313;
+            border: 1px solid rgba(255,0,110,0.25);
+            border-radius: 20px;
+            padding: 44px 40px;
+            width: 100%;
+            max-width: 560px;
+        }
+        .cs-box-logo { margin-bottom: 28px; }
+        .cs-box-logo img { height: 56px; width: auto; }
+        .cs-box-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
+        .cs-box-sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; line-height: 1.5; }
+        .cs-search-wrap { position: relative; }
         .cs-search-input {
-            flex: 1;
-            padding: 12px 16px;
+            width: 100%;
+            padding: 14px 16px;
             background: rgba(255,255,255,0.04);
             border: 1.5px solid rgba(255,255,255,0.08);
-            border-radius: 10px;
+            border-radius: 11px;
             color: white;
             font-family: 'Inter', sans-serif;
-            font-size: 14px;
+            font-size: 15px;
             transition: border-color 0.2s;
+            margin-bottom: 12px;
         }
         .cs-search-input:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(255,0,110,0.1);
+            box-shadow: 0 0 0 3px rgba(255,0,110,0.12);
         }
-        .cs-search-input::placeholder { color: #555; }
+        .cs-search-input::placeholder { color: #444; }
         .cs-dropdown {
             position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: #1a1a1a;
+            top: calc(100% - 8px);
+            left: 0; right: 0;
+            background: #1e1e1e;
             border: 1px solid rgba(255,0,110,0.25);
-            border-radius: 10px;
-            margin-top: 4px;
-            z-index: 100;
-            max-height: 260px;
+            border-radius: 12px;
+            z-index: 10;
+            max-height: 280px;
             overflow-y: auto;
             display: none;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
         }
         .cs-dropdown.open { display: block; }
         .cs-dropdown-item {
-            padding: 12px 16px;
+            padding: 14px 18px;
             cursor: pointer;
             border-bottom: 1px solid rgba(255,255,255,0.05);
             transition: background 0.15s;
@@ -451,14 +435,18 @@
         .cs-dropdown-item:last-child { border-bottom: none; }
         .cs-dropdown-item:hover { background: rgba(255,0,110,0.08); }
         .cs-item-email { font-size: 14px; font-weight: 600; color: white; }
-        .cs-item-meta { font-size: 12px; color: #777; margin-top: 2px; }
-        .cs-search-wrap { position: relative; flex: 1; }
-        .cs-no-results {
-            padding: 20px;
+        .cs-item-meta { font-size: 12px; color: #666; margin-top: 3px; }
+        .cs-no-results { padding: 20px; text-align: center; font-size: 13px; color: #555; }
+        .cs-skip {
+            margin-top: 16px;
             text-align: center;
             font-size: 13px;
             color: #555;
+            cursor: pointer;
+            transition: color 0.2s;
         }
+        .cs-skip:hover { color: #888; }
+        .cs-skip span { text-decoration: underline; }
 
         /* ── Client analysis panel ── */
         #clientAnalysis {
@@ -652,20 +640,21 @@
     </div>
 </div>
 
-<div class="page">
-
-    <!-- Client selector -->
-    <div class="client-selector-section">
-        <div class="cs-label">Personalise This Proposal</div>
-        <div class="cs-heading">Select a Client</div>
-        <div class="cs-sub">Search by email or website to pull in their CPQL data and build a tailored analysis.</div>
-        <div class="cs-search-row">
-            <div class="cs-search-wrap">
-                <input class="cs-search-input" id="csSearch" type="text" placeholder="Search by email or website…" autocomplete="off" oninput="csFilter()" onfocus="csOpenDropdown()"/>
-                <div class="cs-dropdown" id="csDropdown"></div>
-            </div>
+<!-- Client selector gate -->
+<div id="cs-gate" class="hidden">
+    <div class="cs-box">
+        <div class="cs-box-logo"><img src="images/Sliq logo white.png" alt="Sliq"/></div>
+        <div class="cs-box-title">Who's on the call?</div>
+        <div class="cs-box-sub">Search for a client by email or website to personalise this proposal with their CPQL data. Or skip to view the generic proposal.</div>
+        <div class="cs-search-wrap">
+            <input class="cs-search-input" id="csSearch" type="text" placeholder="Search by email or website…" autocomplete="off" oninput="csFilter()" onfocus="csOpenDropdown()"/>
+            <div class="cs-dropdown" id="csDropdown"></div>
         </div>
+        <div class="cs-skip" onclick="skipClientSelect()">No client data available — <span>skip and view proposal</span></div>
     </div>
+</div>
+
+<div class="page">
 
     <!-- Client analysis (shown after selection) -->
     <div id="clientAnalysis">
@@ -890,7 +879,7 @@
     (function() {
         if (sessionStorage.getItem(SESSION_KEY) === '1') {
             document.getElementById('pw-gate').classList.add('hidden');
-            loadLeads();
+            showClientGate();
         }
     })();
 
@@ -899,13 +888,26 @@
         if (val === PROPOSAL_PW) {
             sessionStorage.setItem(SESSION_KEY, '1');
             document.getElementById('pw-gate').classList.add('hidden');
-            loadLeads();
+            showClientGate();
         } else {
             const err = document.getElementById('pw-error');
             err.textContent = 'Incorrect password. Please try again.';
             document.getElementById('pw-input').value = '';
             document.getElementById('pw-input').focus();
         }
+    }
+
+    function showClientGate() {
+        document.getElementById('cs-gate').classList.remove('hidden');
+        loadLeads();
+        // Focus after short delay so transition is visible
+        setTimeout(function() {
+            document.getElementById('csSearch').focus();
+        }, 150);
+    }
+
+    function skipClientSelect() {
+        document.getElementById('cs-gate').classList.add('hidden');
     }
 
     document.getElementById('pw-input').addEventListener('keydown', function(e) {
@@ -971,6 +973,7 @@
 
         document.getElementById('csDropdown').classList.remove('open');
         document.getElementById('csSearch').value = lead.email || lead.website || 'Client #' + lead.id;
+        document.getElementById('cs-gate').classList.add('hidden');
 
         // Populate analysis
         document.getElementById('caClientTag').textContent = lead.email || lead.website || 'Client #' + lead.id;
