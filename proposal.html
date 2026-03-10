@@ -355,119 +355,6 @@
             line-height: 1.4;
         }
 
-        /* ── Form ── */
-        .form-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 22px;
-            padding: 40px;
-            position: relative;
-            overflow: hidden;
-        }
-        .form-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            border-radius: 22px 22px 0 0;
-        }
-        .form-card::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, rgba(255,0,110,0.03) 0%, transparent 60%);
-            pointer-events: none;
-        }
-
-        .form-head { margin-bottom: 28px; }
-        .form-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
-        .form-sub { font-size: 14px; color: var(--muted); }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-        .fg { display: flex; flex-direction: column; gap: 6px; }
-        .fg.span2 { grid-column: 1 / -1; }
-
-        label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #aaa;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        input, select {
-            padding: 13px 14px;
-            background: rgba(255,255,255,0.03);
-            border: 1.5px solid rgba(255,255,255,0.07);
-            border-radius: 11px;
-            color: white;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(255,0,110,0.12), 0 0 16px rgba(255,0,110,0.08);
-            background: rgba(255,0,110,0.03);
-        }
-        input::placeholder { color: #444; }
-        select option { background: #1a1a1a; }
-
-        .bay-note {
-            font-size: 11px;
-            color: var(--accent);
-            font-weight: 600;
-            margin-top: 4px;
-            display: none;
-            animation: fadeUp 0.3s ease;
-        }
-        .bay-note.show { display: block; }
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(4px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            border: none;
-            border-radius: 13px;
-            color: white;
-            font-family: 'Inter', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 4px 28px rgba(255,0,110,0.45);
-            transition: transform 0.2s, box-shadow 0.2s;
-            position: relative;
-            overflow: hidden;
-            letter-spacing: 0.01em;
-        }
-        .submit-btn::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 60%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
-            transform: skewX(-20deg);
-            animation: shine 4s ease-in-out infinite;
-        }
-        @keyframes shine {
-            0%,70%,100% { left: -100%; }
-            40%          { left: 150%; }
-        }
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 36px rgba(255,0,110,0.6);
-        }
-
         /* ── Responsive ── */
         @media (max-width: 860px) {
             .arc-section {
@@ -481,8 +368,6 @@
             .terms-row { grid-template-columns: 1fr 1fr; }
         }
         @media (max-width: 560px) {
-            .form-grid { grid-template-columns: 1fr; }
-            .fg.span2 { grid-column: auto; }
             .terms-row { grid-template-columns: 1fr 1fr; }
             .hero-title { font-size: 2.6rem; }
         }
@@ -642,90 +527,8 @@
         </div>
     </div>
 
-    <!-- Form -->
-    <p class="section-label">Get Started</p>
-    <div class="form-card">
-        <div class="form-head">
-            <div class="form-title">Confirm Your Proposal</div>
-            <div class="form-sub">We'll kick off onboarding within 48 hours and have your campaigns live in ≤ 10 days.</div>
-        </div>
-        <form id="proposalForm">
-            <div class="form-grid">
-                <div class="fg">
-                    <label>First Name</label>
-                    <input type="text" placeholder="John" required/>
-                </div>
-                <div class="fg">
-                    <label>Last Name</label>
-                    <input type="text" placeholder="Smith" required/>
-                </div>
-                <div class="fg">
-                    <label>Business / Firm Name</label>
-                    <input type="text" placeholder="Smith Law Firm" required/>
-                </div>
-                <div class="fg">
-                    <label>Email Address</label>
-                    <input type="email" placeholder="john@smithlaw.com" required/>
-                </div>
-                <div class="fg">
-                    <label>Phone Number</label>
-                    <input type="tel" placeholder="(555) 000-0000" required/>
-                </div>
-                <div class="fg">
-                    <label>City / Location</label>
-                    <input type="text" id="locationInput" placeholder="e.g. San Francisco, CA" oninput="checkBayArea(this.value)" required/>
-                    <div class="bay-note" id="bayNote">📍 Great news — Will can arrange an on-location content shoot for you!</div>
-                </div>
-                <div class="fg">
-                    <label>Monthly Ad Budget</label>
-                    <select required>
-                        <option value="">Select range...</option>
-                        <option>$5,000 – $7,499</option>
-                        <option>$7,500 – $9,999</option>
-                        <option>$10,000 – $14,999</option>
-                        <option>$15,000+</option>
-                    </select>
-                </div>
-                <div class="fg">
-                    <label>Existing CRM?</label>
-                    <select>
-                        <option value="">Select...</option>
-                        <option>Yes — Salesforce</option>
-                        <option>Yes — HubSpot</option>
-                        <option>Yes — Clio</option>
-                        <option>Yes — Other</option>
-                        <option>No CRM yet</option>
-                    </select>
-                </div>
-            </div>
-            <button type="submit" class="submit-btn">Confirm Proposal &amp; Book Onboarding Call →</button>
-        </form>
-    </div>
-
 </div><!-- /page -->
 
-<script>
-    /* Bay Area detection */
-    const BAY_AREA = ['san francisco','sf','bay area','oakland','san jose','san josé','berkeley',
-        'palo alto','fremont','santa clara','sunnyvale','san mateo','marin','walnut creek',
-        'concord','hayward','east bay','south bay','peninsula','daly city','redwood city',
-        'mountain view','cupertino','milpitas','pleasanton','livermore','san leandro'];
-
-    function checkBayArea(val) {
-        const lower = val.toLowerCase();
-        const hit = BAY_AREA.some(k => lower.includes(k));
-        document.getElementById('bayNote').classList.toggle('show', hit);
-    }
-
-    /* Simple form submit */
-    document.getElementById('proposalForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const btn = this.querySelector('.submit-btn');
-        btn.textContent = '✓ Proposal Confirmed — We\'ll be in touch within 24 hours';
-        btn.style.background = 'linear-gradient(135deg, #00c47a, #00e88a)';
-        btn.style.boxShadow = '0 4px 28px rgba(0,200,122,0.45)';
-        btn.disabled = true;
-    });
-</script>
+<script></script>
 </body>
 </html>
