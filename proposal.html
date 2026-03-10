@@ -551,6 +551,57 @@
             .cs-right { padding: 40px 28px; justify-content: flex-start; padding-top: 80px; }
         }
 
+        /* ── CPQL Calculator ── */
+        .calc-inputs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        @media (max-width: 640px) { .calc-inputs { grid-template-columns: 1fr; } }
+        .calc-field { display: flex; flex-direction: column; gap: 8px; }
+        .calc-label {
+            font-size: 12px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.08em; color: var(--muted);
+        }
+        .calc-input-wrap {
+            display: flex; align-items: center;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 10px; padding: 0 14px; height: 52px;
+            transition: border-color 0.2s;
+        }
+        .calc-input-wrap:focus-within { border-color: var(--accent); }
+        .calc-prefix { color: var(--muted); font-size: 16px; margin-right: 6px; }
+        .calc-input {
+            background: none; border: none; outline: none;
+            color: var(--text); font-family: 'Inter', sans-serif;
+            font-size: 20px; font-weight: 700; width: 100%;
+        }
+        .calc-input::-webkit-outer-spin-button,
+        .calc-input::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
+        .calc-input[type=number] { -moz-appearance: textfield; }
+        .calc-results {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+        }
+        @media (max-width: 720px) { .calc-results { grid-template-columns: repeat(2, 1fr); } }
+        .calc-result-card {
+            background: var(--card); border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px; padding: 28px 20px; text-align: center;
+        }
+        .calc-result-card.highlight-card {
+            border-color: var(--border);
+            background: linear-gradient(135deg, rgba(255,0,110,0.12), rgba(255,64,129,0.06));
+        }
+        .calc-result-val { font-size: 30px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+        .calc-result-card.highlight-card .calc-result-val {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .calc-result-lbl {
+            font-size: 11px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.08em; color: var(--muted);
+        }
+
         /* ── Client analysis panel ── */
         #clientAnalysis {
             display: none;
@@ -1028,6 +1079,51 @@
         </div>
     </div>
 
+
+    <!-- CPQL Calculator -->
+    <p class="section-label" style="margin-top: 60px;">Project Your Results</p>
+    <div class="calc-inputs">
+        <div class="calc-field">
+            <label class="calc-label">Target CPQL</label>
+            <div class="calc-input-wrap">
+                <span class="calc-prefix">$</span>
+                <input class="calc-input" id="calcCpql" type="number" min="1" value="120" oninput="calcUpdate()">
+            </div>
+        </div>
+        <div class="calc-field">
+            <label class="calc-label">Monthly Ad Budget</label>
+            <div class="calc-input-wrap">
+                <span class="calc-prefix">$</span>
+                <input class="calc-input" id="calcAdBudget" type="number" min="1" value="10000" oninput="calcUpdate()">
+            </div>
+        </div>
+        <div class="calc-field">
+            <label class="calc-label">Management Fee</label>
+            <div class="calc-input-wrap">
+                <span class="calc-prefix">$</span>
+                <input class="calc-input" id="calcMgmtFee" type="number" min="1" value="3500" oninput="calcUpdate()">
+            </div>
+        </div>
+    </div>
+    <div class="calc-results">
+        <div class="calc-result-card highlight-card">
+            <div class="calc-result-val" id="calcLeadsMo">—</div>
+            <div class="calc-result-lbl">Leads / Month</div>
+        </div>
+        <div class="calc-result-card">
+            <div class="calc-result-val" id="calcTotalMo">—</div>
+            <div class="calc-result-lbl">Total Monthly Cost</div>
+        </div>
+        <div class="calc-result-card highlight-card">
+            <div class="calc-result-val" id="calcLeadsYr">—</div>
+            <div class="calc-result-lbl">Leads / Year</div>
+        </div>
+        <div class="calc-result-card">
+            <div class="calc-result-val" id="calcTotalYr">—</div>
+            <div class="calc-result-lbl">Annual Investment</div>
+        </div>
+    </div>
+
 </div><!-- /page -->
 
 <script>
@@ -1184,6 +1280,30 @@
         const el = document.getElementById(id);
         if (el) el.textContent = val;
     }
+
+    // ── CPQL Calculator ───────────────────────────────────────────
+    function calcUpdate() {
+        const cpql   = parseFloat(document.getElementById('calcCpql').value)     || 0;
+        const budget = parseFloat(document.getElementById('calcAdBudget').value) || 0;
+        const fee    = parseFloat(document.getElementById('calcMgmtFee').value)  || 0;
+
+        if (!cpql || !budget) {
+            ['calcLeadsMo','calcTotalMo','calcLeadsYr','calcTotalYr'].forEach(function(id) { setText(id, '—'); });
+            return;
+        }
+
+        const leadsPerMonth = Math.floor(budget / cpql);
+        const totalMonthly  = budget + fee;
+        const leadsPerYear  = leadsPerMonth * 12;
+        const totalAnnual   = totalMonthly  * 12;
+
+        setText('calcLeadsMo', leadsPerMonth.toLocaleString());
+        setText('calcTotalMo', '$' + totalMonthly.toLocaleString());
+        setText('calcLeadsYr', leadsPerYear.toLocaleString());
+        setText('calcTotalYr', '$' + totalAnnual.toLocaleString());
+    }
+
+    calcUpdate();
 </script>
 </body>
 </html>
