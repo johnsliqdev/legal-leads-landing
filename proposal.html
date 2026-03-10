@@ -554,11 +554,36 @@
         /* ── Client analysis panel ── */
         #clientAnalysis {
             display: none;
+            min-height: 100vh;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 24px;
+        }
+        #clientAnalysis.visible {
+            display: flex;
+        }
+        .ca-inner {
             width: 100%;
             max-width: 860px;
-            margin: 0 auto 56px;
-            padding: 0 24px;
         }
+        .ca-scroll-btn {
+            display: block;
+            margin: 40px auto 0;
+            padding: 16px 36px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 28px rgba(255,0,110,0.45);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+        .ca-scroll-btn:hover { opacity: 0.88; transform: translateY(-2px); }
         .ca-header {
             display: flex;
             align-items: center;
@@ -786,6 +811,7 @@
 
 <!-- Client analysis (outside page, full-width centering) -->
 <div id="clientAnalysis">
+    <div class="ca-inner">
         <div class="ca-header">
             <div class="ca-title">Client Analysis</div>
             <div class="ca-client-tag" id="caClientTag"></div>
@@ -844,9 +870,12 @@
                 <div class="ca-saving-lbl">Annual Savings</div>
             </div>
         </div>
+
+        <button class="ca-scroll-btn" onclick="document.getElementById('proposal-start').scrollIntoView({behavior:'smooth'})">View Proposal ↓</button>
+    </div>
 </div>
 
-<div class="page">
+<div class="page" id="proposal-start">
 
     <!-- Brand bar -->
     <div class="brand-bar">
@@ -1147,7 +1176,7 @@
         setText('caMonthlySavings',    lead.calc_monthly_savings || '—');
         setText('caAnnualSavings',     lead.calc_annual_savings || '—');
 
-        document.getElementById('clientAnalysis').style.display = 'block';
+        document.getElementById('clientAnalysis').classList.add('visible');
         document.getElementById('clientAnalysis').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
