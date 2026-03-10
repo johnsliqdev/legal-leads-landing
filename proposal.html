@@ -371,9 +371,99 @@
             .terms-row { grid-template-columns: 1fr 1fr; }
             .hero-title { font-size: 2.6rem; }
         }
+        /* ── Password gate ── */
+        #pw-gate {
+            position: fixed;
+            inset: 0;
+            background: #080808;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        #pw-gate.hidden { display: none; }
+        .pw-box {
+            background: #131313;
+            border: 1px solid rgba(255,0,110,0.25);
+            border-radius: 20px;
+            padding: 44px 40px;
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+        }
+        .pw-logo {
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: 0.15em;
+            color: #ff006e;
+            margin-bottom: 24px;
+        }
+        .pw-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+        .pw-sub {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 28px;
+        }
+        .pw-input {
+            width: 100%;
+            padding: 13px 16px;
+            background: rgba(255,255,255,0.04);
+            border: 1.5px solid rgba(255,255,255,0.08);
+            border-radius: 11px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            margin-bottom: 14px;
+            text-align: center;
+            letter-spacing: 0.05em;
+            transition: border-color 0.2s;
+        }
+        .pw-input:focus {
+            outline: none;
+            border-color: #ff006e;
+            box-shadow: 0 0 0 3px rgba(255,0,110,0.12);
+        }
+        .pw-btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #ff006e, #ff4081);
+            border: none;
+            border-radius: 11px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 24px rgba(255,0,110,0.4);
+            transition: opacity 0.2s;
+        }
+        .pw-btn:hover { opacity: 0.88; }
+        .pw-error {
+            font-size: 12px;
+            color: #ff4d4d;
+            margin-top: 10px;
+            min-height: 18px;
+        }
     </style>
 </head>
 <body>
+
+<!-- Password gate -->
+<div id="pw-gate">
+    <div class="pw-box">
+        <div class="pw-logo">SLIQ</div>
+        <div class="pw-title">Confidential Proposal</div>
+        <div class="pw-sub">Enter the password to view this document.</div>
+        <input class="pw-input" id="pw-input" type="password" placeholder="Password" autocomplete="off"/>
+        <button class="pw-btn" onclick="checkPassword()">View Proposal →</button>
+        <div class="pw-error" id="pw-error"></div>
+    </div>
+</div>
+
 <div class="page">
 
     <!-- Brand bar -->
@@ -529,6 +619,31 @@
 
 </div><!-- /page -->
 
-<script></script>
+<script>
+    const SESSION_KEY = 'sliq_proposal_auth';
+
+    (function() {
+        if (sessionStorage.getItem(SESSION_KEY) === '1') {
+            document.getElementById('pw-gate').classList.add('hidden');
+        }
+    })();
+
+    function checkPassword() {
+        const val = document.getElementById('pw-input').value;
+        if (val === 'sliq@proposal1234') {
+            sessionStorage.setItem(SESSION_KEY, '1');
+            document.getElementById('pw-gate').classList.add('hidden');
+        } else {
+            const err = document.getElementById('pw-error');
+            err.textContent = 'Incorrect password. Please try again.';
+            document.getElementById('pw-input').value = '';
+            document.getElementById('pw-input').focus();
+        }
+    }
+
+    document.getElementById('pw-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') checkPassword();
+    });
+</script>
 </body>
 </html>
