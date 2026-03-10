@@ -554,8 +554,10 @@
         /* ── Client analysis panel ── */
         #clientAnalysis {
             display: none;
+            width: 100%;
             max-width: 860px;
-            margin: 0 auto 48px;
+            margin: 0 auto 56px;
+            padding: 0 24px;
         }
         .ca-header {
             display: flex;
@@ -782,10 +784,8 @@
     </div>
 </div>
 
-<div class="page">
-
-    <!-- Client analysis (shown after selection) -->
-    <div id="clientAnalysis">
+<!-- Client analysis (outside page, full-width centering) -->
+<div id="clientAnalysis">
         <div class="ca-header">
             <div class="ca-title">Client Analysis</div>
             <div class="ca-client-tag" id="caClientTag"></div>
@@ -844,7 +844,9 @@
                 <div class="ca-saving-lbl">Annual Savings</div>
             </div>
         </div>
-    </div>
+</div>
+
+<div class="page">
 
     <!-- Brand bar -->
     <div class="brand-bar">
