@@ -1,5 +1,12 @@
 // Main script for legal leads landing page
 
+const adSource = (function() {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('fbclid'))    return 'meta';
+    if (p.get('li_fat_id')) return 'linkedin';
+    return p.get('utm_source') || 'organic';
+})();
+
 let lastCalculation = null;
 let cpqlTarget = 700;
 let contactFormData = null;
@@ -562,7 +569,7 @@ function initializeContactForm() {
             fetch('/api/leads', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ website, email, phone })
+                body: JSON.stringify({ website, email, phone, ad_source: adSource })
             })
                 .then(async (res) => {
                     if (!res.ok) throw new Error(`POST failed: ${res.status}`);

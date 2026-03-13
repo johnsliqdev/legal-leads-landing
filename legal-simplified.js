@@ -1,5 +1,12 @@
 // ── Legal Simplified — one-question-at-a-time flow ──
 
+var adSource = (function() {
+    var p = new URLSearchParams(window.location.search);
+    if (p.get('fbclid'))    return 'meta';
+    if (p.get('li_fat_id')) return 'linkedin';
+    return p.get('utm_source') || 'organic';
+})();
+
 var lsState = {
     name:             null,
     email:            null,
@@ -166,6 +173,7 @@ function lsSubmitLead() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             source:           'legal-simplified',
+            ad_source:        adSource,
             name:             lsState.name,
             email:            lsState.email,
             phone:            lsState.phone,
