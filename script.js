@@ -570,7 +570,7 @@ function initializeContactForm() {
             fetch('/api/leads', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ website, email, phone, ad_source: adSource })
+                body: JSON.stringify({ website, email, phone, ad_source: adSource, funnel: 'CPQL Legal Funnel' })
             })
                 .then(async (res) => {
                     if (!res.ok) throw new Error(`POST failed: ${res.status}`);

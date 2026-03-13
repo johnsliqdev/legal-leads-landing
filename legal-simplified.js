@@ -174,6 +174,7 @@ function lsSubmitLead() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             source:           'legal-simplified',
+            funnel:           'Simple Legal Funnel',
             ad_source:        adSource,
             name:             lsState.name,
             email:            lsState.email,

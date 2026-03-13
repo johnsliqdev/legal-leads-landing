@@ -97,6 +97,7 @@ async function ensureSchema(poolInstance) {
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS video_watch_seconds INTEGER DEFAULT 0;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS video_watch_percent INTEGER DEFAULT 0;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS ad_source TEXT;`;
+  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS funnel TEXT;`;
 
   // Drop unused columns (never collected)
   await poolInstance.sql`ALTER TABLE leads DROP COLUMN IF EXISTS first_name;`;
@@ -118,7 +119,7 @@ export default async function handler(req, res) {
           calc_current_monthly_spend, calc_current_cpql, calc_guaranteed_cpql,
           calc_new_monthly_spend, calc_monthly_savings, calc_annual_savings,
           calc_cpql_reduction, calc_leads_count, calc_same_budget_leads,
-          requested_callback, ad_source
+          requested_callback, ad_source, funnel
         ) VALUES (
           ${body.email || null}, ${body.phone || null},
           ${body.website === '' ? '' : (body.website || null)},
@@ -127,7 +128,7 @@ export default async function handler(req, res) {
           ${body.calcMonthlySavings || null}, ${body.calcAnnualSavings || null},
           ${body.calcCpqlReduction || null}, ${body.calcLeadsCount || null},
           ${body.calcSameBudgetLeads || null}, ${body.requestedCallback || false},
-          ${body.ad_source || null}
+          ${body.ad_source || null}, ${body.funnel || null}
         )
         RETURNING id;
       `;
@@ -140,6 +141,7 @@ export default async function handler(req, res) {
         phone: body.phone || '',
         website: body.website || '',
         ad_source: body.ad_source || 'organic',
+        funnel: body.funnel || '',
       });
 
       return json(res, 200, { success: true, id: insertedId });
