@@ -4,7 +4,8 @@ const adSource = (function() {
     const p = new URLSearchParams(window.location.search);
     if (p.get('fbclid'))    return 'meta';
     if (p.get('li_fat_id')) return 'linkedin';
-    return p.get('utm_source') || 'organic';
+    if (p.get('utm_source')) return p.get('utm_source');
+    return document.referrer ? 'organic' : 'direct';
 })();
 
 let lastCalculation = null;
