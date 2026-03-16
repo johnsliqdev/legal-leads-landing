@@ -474,56 +474,135 @@
     }
     .gc-stat-label { font-size: 13px; color: var(--muted); line-height: 1.5; }
 
-    /* Client screenshots strip */
-    .gc-clients {
+    /* ── Website showcase carousel ───────────────────────────── */
+    .gc-showcase {
         position: relative; z-index: 1;
         padding: 80px 32px; text-align: center;
+        overflow: hidden;
     }
     .gc-section-eyebrow {
         font-size: 11px; font-weight: 700;
         text-transform: uppercase; letter-spacing: 2px;
-        color: var(--muted); margin-bottom: 24px;
+        color: var(--muted); margin-bottom: 16px;
     }
-    .gc-clients-grid {
-        display: flex; flex-wrap: wrap;
-        justify-content: center;
-        gap: 20px;
-        max-width: 1160px; margin: 0 auto;
+
+    /* The browser window frame */
+    .gc-window-wrap {
+        position: relative;
+        max-width: 1020px; margin: 0 auto;
+        border-radius: 16px; overflow: hidden;
+        box-shadow:
+            0 0 0 1px rgba(255,255,255,0.07),
+            0 40px 100px rgba(0,0,0,0.75),
+            0 0 80px rgba(255,0,110,0.08);
+        background: #1a1a1c;
     }
-    .gc-client-card {
-        width: calc(33.333% - 14px);
-        min-width: 300px;
-        border-radius: 14px; overflow: hidden;
-        background: #1c1c1e;
-        text-decoration: none;
-        display: block;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06);
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .gc-client-card:hover { transform: translateY(-8px); box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,0,110,0.2); }
-    @media (max-width: 700px) { .gc-client-card { width: calc(50% - 10px); min-width: 0; } }
-    @media (max-width: 460px) { .gc-client-card { width: 100%; } }
-    /* Browser chrome */
-    .gc-browser-bar {
-        background: #2a2a2c; padding: 9px 14px;
-        display: flex; align-items: center; gap: 10px;
+
+    /* macOS title bar */
+    .gc-win-bar {
+        background: #252527; padding: 11px 16px;
+        display: flex; align-items: center; gap: 12px;
         border-bottom: 1px solid rgba(255,255,255,0.06);
+        flex-shrink: 0;
     }
-    .gc-browser-dots { display: flex; gap: 5px; flex-shrink: 0; }
-    .gc-browser-dot { width: 10px; height: 10px; border-radius: 50%; }
-    .gc-browser-dot:nth-child(1) { background: #ff5f57; }
-    .gc-browser-dot:nth-child(2) { background: #febc2e; }
-    .gc-browser-dot:nth-child(3) { background: #28c840; }
-    .gc-browser-url {
+    .gc-win-dots { display: flex; gap: 6px; flex-shrink: 0; }
+    .gc-win-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .gc-win-dot:nth-child(1) { background: #ff5f57; }
+    .gc-win-dot:nth-child(2) { background: #febc2e; }
+    .gc-win-dot:nth-child(3) { background: #28c840; }
+    .gc-win-url {
         flex: 1; background: rgba(255,255,255,0.07);
-        border-radius: 5px; padding: 4px 10px;
-        font-size: 11px; color: #666;
-        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        border-radius: 6px; padding: 5px 12px;
+        font-size: 12px; color: #888;
+        text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        transition: color 0.3s;
     }
-    .gc-client-shot {
-        width: 100%; aspect-ratio: 16/11; object-fit: cover; object-position: top center;
-        display: block; background: var(--card2);
+    .gc-win-url strong { color: #ccc; font-weight: 500; }
+
+    /* Slides viewport */
+    .gc-slides-viewport {
+        overflow: hidden;
+        position: relative;
+        height: 560px;
     }
+    @media (max-width: 768px) { .gc-slides-viewport { height: 340px; } }
+    @media (max-width: 480px) { .gc-slides-viewport { height: 240px; } }
+
+    .gc-slides-track {
+        display: flex;
+        height: 100%;
+        transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .gc-slide-item {
+        flex: 0 0 100%; height: 100%; position: relative;
+    }
+    .gc-slide-item img {
+        width: 100%; height: 100%;
+        object-fit: cover; object-position: top center;
+        display: block;
+    }
+    /* Subtle gradient fade at bottom of screenshot */
+    .gc-slide-item::after {
+        content: '';
+        position: absolute; bottom: 0; left: 0; right: 0;
+        height: 80px;
+        background: linear-gradient(to bottom, transparent, rgba(26,26,28,0.6));
+        pointer-events: none;
+    }
+
+    /* Prev / next arrows */
+    .gc-arrow {
+        position: absolute; top: 50%; transform: translateY(-50%);
+        z-index: 10;
+        width: 44px; height: 44px; border-radius: 50%;
+        border: 1.5px solid rgba(255,255,255,0.15);
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(8px);
+        color: #fff; font-size: 18px;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; transition: all 0.2s;
+        text-decoration: none; user-select: none;
+    }
+    .gc-arrow:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-50%) scale(1.08); }
+    .gc-arrow-prev { left: -22px; }
+    .gc-arrow-next { right: -22px; }
+    @media (max-width: 600px) {
+        .gc-arrow-prev { left: 8px; }
+        .gc-arrow-next { right: 8px; }
+    }
+
+    /* Domain tabs below */
+    .gc-site-tabs {
+        display: flex; flex-wrap: wrap;
+        justify-content: center; gap: 8px;
+        margin-top: 28px;
+    }
+    .gc-site-tab {
+        padding: 8px 16px; border-radius: 999px;
+        border: 1.5px solid rgba(255,255,255,0.1);
+        background: var(--card);
+        font-size: 13px; font-weight: 600; color: var(--muted);
+        cursor: pointer; transition: all 0.2s;
+        font-family: 'Inter', sans-serif;
+    }
+    .gc-site-tab:hover { border-color: rgba(255,255,255,0.25); color: var(--text); }
+    .gc-site-tab.active {
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        border-color: transparent; color: #fff;
+        box-shadow: 0 4px 20px rgba(255,0,110,0.35);
+    }
+
+    /* Dot indicators */
+    .gc-dots {
+        display: flex; justify-content: center; gap: 6px;
+        margin-top: 20px;
+    }
+    .gc-dot {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: rgba(255,255,255,0.2);
+        cursor: pointer; transition: all 0.2s;
+    }
+    .gc-dot.active { background: var(--accent); width: 20px; border-radius: 3px; }
 
     /* Case studies */
     .gc-cases {
@@ -800,48 +879,69 @@
 
     <div class="gc-divider"></div>
 
-    <!-- ── Client work strip ── -->
-    <section class="gc-clients">
+    <!-- ── Website showcase carousel ── -->
+    <section class="gc-showcase">
         <div class="gc-section-eyebrow">Our Work</div>
         <h2 class="gc-section-heading" style="font-size:clamp(28px,4vw,52px);margin-bottom:12px">Websites That Win the Job<br>Before You Show Up</h2>
-        <p class="gc-section-sub" style="margin-bottom:48px">Every site below is live, ranking on Google, and generating leads for a contractor right now.</p>
-        <div class="gc-clients-grid">
-            <a href="https://adusanmateo.com/" target="_blank" rel="noopener" class="gc-client-card">
-                <div class="gc-browser-bar">
-                    <div class="gc-browser-dots"><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div></div>
-                    <div class="gc-browser-url">adusanmateo.com</div>
+        <p class="gc-section-sub" style="margin-bottom:40px">Every site below is live, ranking on Google, and generating leads right now.</p>
+
+        <div class="gc-window-wrap">
+            <!-- Title bar -->
+            <div class="gc-win-bar">
+                <div class="gc-win-dots">
+                    <div class="gc-win-dot"></div>
+                    <div class="gc-win-dot"></div>
+                    <div class="gc-win-dot"></div>
                 </div>
-                <img class="gc-client-shot" src="https://api.microlink.io/?url=https://adusanmateo.com&screenshot=true&meta=false&embed=screenshot.url&viewport.width=1440&viewport.height=900" alt="ADU San Mateo" loading="lazy">
-            </a>
-            <a href="https://brightlinehomes.com/" target="_blank" rel="noopener" class="gc-client-card">
-                <div class="gc-browser-bar">
-                    <div class="gc-browser-dots"><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div></div>
-                    <div class="gc-browser-url">brightlinehomes.com</div>
+                <div class="gc-win-url" id="gcWinUrl"><strong>adusanmateo.com</strong></div>
+            </div>
+
+            <!-- Slides -->
+            <div class="gc-slides-viewport">
+                <div class="gc-slides-track" id="gcSlidesTrack">
+                    <div class="gc-slide-item">
+                        <img src="https://image.thum.io/get/width/1440/crop/900/https://adusanmateo.com" alt="ADU San Mateo" loading="eager">
+                    </div>
+                    <div class="gc-slide-item">
+                        <img src="https://image.thum.io/get/width/1440/crop/900/https://brightlinehomes.com" alt="Brightline Homes" loading="lazy">
+                    </div>
+                    <div class="gc-slide-item">
+                        <img src="https://image.thum.io/get/width/1440/crop/900/https://craftsmensguild.com" alt="Craftsmen's Guild" loading="lazy">
+                    </div>
+                    <div class="gc-slide-item">
+                        <img src="https://image.thum.io/get/width/1440/crop/900/https://bloomhomeconstruction.com" alt="Bloom Home Construction" loading="lazy">
+                    </div>
+                    <div class="gc-slide-item">
+                        <img src="https://image.thum.io/get/width/1440/crop/900/https://thepaintinggroup.com" alt="The Painting Group" loading="lazy">
+                    </div>
                 </div>
-                <img class="gc-client-shot" src="https://api.microlink.io/?url=https://brightlinehomes.com&screenshot=true&meta=false&embed=screenshot.url&viewport.width=1440&viewport.height=900" alt="Brightline Homes" loading="lazy">
-            </a>
-            <a href="http://craftsmensguild.com/" target="_blank" rel="noopener" class="gc-client-card">
-                <div class="gc-browser-bar">
-                    <div class="gc-browser-dots"><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div></div>
-                    <div class="gc-browser-url">craftsmensguild.com</div>
-                </div>
-                <img class="gc-client-shot" src="https://api.microlink.io/?url=https://craftsmensguild.com&screenshot=true&meta=false&embed=screenshot.url&viewport.width=1440&viewport.height=900" alt="Craftsmen's Guild" loading="lazy">
-            </a>
-            <a href="https://bloomhomeconstruction.com/" target="_blank" rel="noopener" class="gc-client-card">
-                <div class="gc-browser-bar">
-                    <div class="gc-browser-dots"><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div></div>
-                    <div class="gc-browser-url">bloomhomeconstruction.com</div>
-                </div>
-                <img class="gc-client-shot" src="https://api.microlink.io/?url=https://bloomhomeconstruction.com&screenshot=true&meta=false&embed=screenshot.url&viewport.width=1440&viewport.height=900" alt="Bloom Home Construction" loading="lazy">
-            </a>
-            <a href="https://thepaintinggroup.com/" target="_blank" rel="noopener" class="gc-client-card">
-                <div class="gc-browser-bar">
-                    <div class="gc-browser-dots"><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div></div>
-                    <div class="gc-browser-url">thepaintinggroup.com</div>
-                </div>
-                <img class="gc-client-shot" src="https://api.microlink.io/?url=https://thepaintinggroup.com&screenshot=true&meta=false&embed=screenshot.url&viewport.width=1440&viewport.height=900" alt="The Painting Group" loading="lazy">
-            </a>
+            </div>
+
+            <!-- Arrows -->
+            <button class="gc-arrow gc-arrow-prev" id="gcPrev" aria-label="Previous">&#8592;</button>
+            <button class="gc-arrow gc-arrow-next" id="gcNext" aria-label="Next">&#8594;</button>
         </div>
+
+        <!-- Dot indicators -->
+        <div class="gc-dots" id="gcDots">
+            <div class="gc-dot active" onclick="gcGoTo(0)"></div>
+            <div class="gc-dot" onclick="gcGoTo(1)"></div>
+            <div class="gc-dot" onclick="gcGoTo(2)"></div>
+            <div class="gc-dot" onclick="gcGoTo(3)"></div>
+            <div class="gc-dot" onclick="gcGoTo(4)"></div>
+        </div>
+
+        <!-- Site tabs -->
+        <div class="gc-site-tabs" id="gcSiteTabs">
+            <button class="gc-site-tab active" onclick="gcGoTo(0)">adusanmateo.com</button>
+            <button class="gc-site-tab" onclick="gcGoTo(1)">brightlinehomes.com</button>
+            <button class="gc-site-tab" onclick="gcGoTo(2)">craftsmensguild.com</button>
+            <button class="gc-site-tab" onclick="gcGoTo(3)">bloomhomeconstruction.com</button>
+            <button class="gc-site-tab" onclick="gcGoTo(4)">thepaintinggroup.com</button>
+        </div>
+
+        <!-- Click-through hint -->
+        <p style="margin-top:18px;font-size:13px;color:var(--muted)">Click any site to visit it live ↗</p>
     </section>
 
     <div class="gc-divider"></div>
@@ -1188,5 +1288,62 @@
     <div class="gc-footer">&copy; 2026 Sliq. All rights reserved.</div>
 
     <script src="general-contractors.js"></script>
+    <script>
+    // ── Website showcase carousel ────────────────────────────────────────────
+    (function() {
+        var sites = [
+            { domain: 'adusanmateo.com',         href: 'https://adusanmateo.com/' },
+            { domain: 'brightlinehomes.com',      href: 'https://brightlinehomes.com/' },
+            { domain: 'craftsmensguild.com',      href: 'http://craftsmensguild.com/' },
+            { domain: 'bloomhomeconstruction.com',href: 'https://bloomhomeconstruction.com/' },
+            { domain: 'thepaintinggroup.com',     href: 'https://thepaintinggroup.com/' }
+        ];
+
+        var current = 0;
+        var total   = sites.length;
+        var autoTimer;
+
+        var track  = document.getElementById('gcSlidesTrack');
+        var urlBar = document.getElementById('gcWinUrl');
+        var dots   = document.querySelectorAll('#gcDots .gc-dot');
+        var tabs   = document.querySelectorAll('#gcSiteTabs .gc-site-tab');
+
+        function update(idx) {
+            current = (idx + total) % total;
+            track.style.transform = 'translateX(-' + (current * 100) + '%)';
+            urlBar.innerHTML = '<strong>' + sites[current].domain + '</strong>';
+            dots.forEach(function(d, i) { d.classList.toggle('active', i === current); });
+            tabs.forEach(function(t, i) { t.classList.toggle('active', i === current); });
+        }
+
+        window.gcGoTo = function(idx) { resetTimer(); update(idx); };
+
+        document.getElementById('gcPrev').addEventListener('click', function() {
+            resetTimer(); update(current - 1);
+        });
+        document.getElementById('gcNext').addEventListener('click', function() {
+            resetTimer(); update(current + 1);
+        });
+
+        // Click on the browser window → open the current site
+        document.getElementById('gcSlidesTrack').addEventListener('click', function() {
+            window.open(sites[current].href, '_blank', 'noopener');
+        });
+        document.getElementById('gcSlidesTrack').style.cursor = 'pointer';
+
+        // Auto-advance
+        function startTimer() {
+            autoTimer = setInterval(function() { update(current + 1); }, 4500);
+        }
+        function resetTimer() { clearInterval(autoTimer); startTimer(); }
+
+        // Pause on hover
+        var wrap = document.querySelector('.gc-window-wrap');
+        wrap.addEventListener('mouseenter', function() { clearInterval(autoTimer); });
+        wrap.addEventListener('mouseleave', startTimer);
+
+        startTimer();
+    })();
+    </script>
 </body>
 </html>
