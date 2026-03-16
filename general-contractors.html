@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fill Your Pipeline with $100K+ Projects — Sliq</title>
-    <meta name="description" content="We guarantee qualified commercial leads for general contractors within 90 days — or we keep working at zero management fee until you hit target.">
+    <title>Free Website Audit — Get More Jobs Online | Sliq</title>
+    <meta name="description" content="We audit your website, build you a new one in 24 hours, and get it live in 48. Apply to see if you qualify.">
     <link rel="icon" type="image/png" href="images/sliq-logo.png">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -39,10 +39,26 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "vo4e8qgw1b");
     </script>
+    <!-- LinkedIn Insight Tag -->
+    <script type="text/javascript">
+    _linkedin_partner_id = "8770170";
+    window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+    window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+    </script>
+    <script type="text/javascript">
+    (function(l) {
+    if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
+    window.lintrk.q=[]}
+    var s = document.getElementsByTagName("script")[0];
+    var b = document.createElement("script");
+    b.type = "text/javascript";b.async = true;
+    b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+    s.parentNode.insertBefore(b, s);})(window.lintrk);
+    </script>
 
     <style>
     /* ══════════════════════════════════════════════════════════════
-       GENERAL CONTRACTORS — Full redesign
+       GENERAL CONTRACTORS — Website Audit Funnel
     ══════════════════════════════════════════════════════════════ */
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -55,44 +71,24 @@
         z-index: -1;
         pointer-events: none;
         overflow: hidden;
-        /* Warm site-floodlight glows — elliptical, not soft orbs */
         background:
             radial-gradient(ellipse 55% 45% at 8% 90%, rgba(255,107,53,0.13) 0%, transparent 70%),
             radial-gradient(ellipse 45% 55% at 92% 10%, rgba(255,0,110,0.11) 0%, transparent 70%),
             radial-gradient(ellipse 70% 30% at 50% 50%, rgba(255,0,110,0.05) 0%, transparent 70%);
         animation: siteGlow 14s ease-in-out infinite;
     }
-
-    /* Blueprint grid: fine 40px + major 200px lines */
     .gc-bg::before {
         content: '';
         position: absolute;
         inset: 0;
         background-image:
-            /* Fine grid */
             linear-gradient(rgba(255,0,110,0.045) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255,0,110,0.045) 1px, transparent 1px),
-            /* Major grid */
             linear-gradient(rgba(255,0,110,0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,0,110,0.1) 1px, transparent 1px),
-            /* Blueprint diagonal hatch (cross-section indicator) */
-            repeating-linear-gradient(
-                -45deg,
-                transparent,
-                transparent 38px,
-                rgba(255,107,53,0.025) 38px,
-                rgba(255,107,53,0.025) 39px
-            );
-        background-size:
-            40px 40px,
-            40px 40px,
-            200px 200px,
-            200px 200px,
-            100% 100%;
+            linear-gradient(90deg, rgba(255,0,110,0.1) 1px, transparent 1px);
+        background-size: 40px 40px, 40px 40px, 200px 200px, 200px 200px;
         animation: gridDrift 40s linear infinite;
     }
-
-    /* Construction scan beam — warmer, wider than the generic one */
     .gc-bg::after {
         content: '';
         position: absolute;
@@ -100,32 +96,20 @@
         left: 0;
         width: 100%;
         height: 280px;
-        background: linear-gradient(
-            to bottom,
-            transparent 0%,
-            rgba(255,107,53,0.04) 20%,
-            rgba(255,0,110,0.1) 50%,
-            rgba(255,107,53,0.04) 80%,
-            transparent 100%
-        );
+        background: linear-gradient(to bottom, transparent 0%, rgba(255,107,53,0.04) 20%, rgba(255,0,110,0.1) 50%, rgba(255,107,53,0.04) 80%, transparent 100%);
         box-shadow: 0 0 120px rgba(255,0,110,0.15), 0 0 40px rgba(255,107,53,0.1);
         animation: constructionScan 10s linear infinite;
     }
-
     .gc-bg-structure {
         position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
     }
-
-    @keyframes siteGlow {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.65; }
-    }
+    @keyframes siteGlow { 0%, 100% { opacity: 1; } 50% { opacity: 0.65; } }
     @keyframes gridDrift {
-        from { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; }
-        to   { background-position: 40px 40px, 40px 40px, 200px 200px, 200px 200px, 0 0; }
+        from { background-position: 0 0, 0 0, 0 0, 0 0; }
+        to   { background-position: 40px 40px, 40px 40px, 200px 200px, 200px 200px; }
     }
     @keyframes constructionScan {
         0%   { transform: translateY(0); }
@@ -157,14 +141,17 @@
 
     /* ── Left: Hero ─────────────────────────────────────────────── */
     .gc-hero {
-        padding: 32px 0 32px;
+        padding: 48px 0 32px;
         position: sticky;
         top: 0;
-        max-height: 100vh;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         overflow: hidden;
     }
     @media (max-width: 900px) {
-        .gc-hero { position: static; padding: 32px 0 8px; max-height: none; }
+        .gc-hero { position: static; height: auto; padding: 32px 0 8px; }
     }
 
     .gc-eyebrow {
@@ -180,7 +167,7 @@
         color: var(--accent-color);
         text-transform: uppercase;
         letter-spacing: 1px;
-        margin-bottom: 12px;
+        margin-bottom: 16px;
     }
     .gc-eyebrow-dot {
         width: 7px; height: 7px;
@@ -188,17 +175,14 @@
         background: var(--accent-color);
         animation: pulse 2s infinite;
     }
-    @keyframes pulse {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.5; transform: scale(0.8); }
-    }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
 
     .gc-headline {
-        font-size: clamp(32px, 3.5vw, 48px);
+        font-size: clamp(28px, 3.2vw, 46px);
         font-weight: 900;
         line-height: 1.1;
         letter-spacing: -0.02em;
-        margin-bottom: 12px;
+        margin-bottom: 14px;
     }
     .gc-headline .hl {
         background: linear-gradient(135deg, #ff006e 0%, #ff6b35 100%);
@@ -211,114 +195,76 @@
         font-size: 15px;
         color: var(--text-secondary);
         line-height: 1.6;
-        margin-bottom: 16px;
+        margin-bottom: 20px;
         max-width: 480px;
     }
 
-    /* Impact stats */
-    .gc-stats {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+    /* Offer checklist */
+    .gc-checklist {
+        display: flex;
+        flex-direction: column;
         gap: 10px;
-        margin-bottom: 0;
+        margin-bottom: 22px;
+        max-width: 460px;
     }
-    .gc-stat {
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 14px;
-        padding: 14px 16px;
-        transition: border-color 0.2s;
-        position: relative;
-        overflow: hidden;
-    }
-    .gc-stat::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0;
-        width: 3px; height: 100%;
-        background: var(--accent-color);
-        border-radius: 3px 0 0 3px;
-    }
-    .gc-stat-num {
-        font-size: 24px;
-        font-weight: 900;
-        color: var(--text-primary);
-        letter-spacing: -0.02em;
-        line-height: 1;
-        margin-bottom: 4px;
-    }
-    .gc-stat-num span { color: var(--accent-color); }
-    .gc-stat-label {
-        font-size: 12px;
-        color: var(--text-secondary);
+    .gc-check-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        font-size: 14px;
         font-weight: 500;
+        color: var(--text-primary);
         line-height: 1.4;
     }
-    .gc-stat--guarantee {
-        border-color: rgba(255,0,110,0.45);
-        background: rgba(255,0,110,0.07);
-        box-shadow: 0 0 24px rgba(255,0,110,0.15), inset 0 1px 0 rgba(255,0,110,0.1);
-    }
-    .gc-stat--guarantee::before {
-        width: 100%;
-        height: 3px;
-        top: 0;
-        bottom: auto;
-        border-radius: 3px 3px 0 0;
-        background: linear-gradient(90deg, #ff006e, #ff6b35);
-    }
-    .gc-guarantee-tag {
-        font-size: 9px;
-        font-weight: 800;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
+    .gc-check-icon {
+        flex-shrink: 0;
+        width: 20px; height: 20px;
+        border-radius: 50%;
+        background: rgba(255,0,110,0.12);
+        border: 1.5px solid rgba(255,0,110,0.4);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 10px;
         color: var(--accent-color);
-        margin-bottom: 6px;
+        margin-top: 1px;
+        font-weight: 900;
     }
 
-    /* Trust badges */
-    .gc-trust {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-    .gc-badge {
-        display: flex;
-        align-items: center;
-        gap: 8px;
+    /* Quote block */
+    .gc-quote {
         background: var(--card-bg);
         border: 1px solid var(--border-color);
+        border-left: 3px solid var(--accent-color);
         border-radius: 10px;
-        padding: 8px 14px;
-        text-decoration: none;
-        transition: border-color 0.2s, transform 0.2s;
+        padding: 14px 18px;
+        margin-bottom: 20px;
+        max-width: 460px;
+    }
+    .gc-quote-text { font-size: 14px; font-style: italic; color: var(--text-primary); line-height: 1.5; margin-bottom: 6px; }
+    .gc-quote-author { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+
+    /* Trust badges */
+    .gc-trust { display: flex; gap: 10px; flex-wrap: wrap; }
+    .gc-badge {
+        display: flex; align-items: center; gap: 8px;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 10px; padding: 8px 14px;
+        text-decoration: none; transition: border-color 0.2s, transform 0.2s;
     }
     .gc-badge:hover { border-color: var(--accent-color); transform: translateY(-1px); }
     .gc-badge-stars { color: #f4c430; font-size: 12px; letter-spacing: 1px; }
     .gc-badge-label { font-size: 12px; font-weight: 600; color: var(--text-primary); }
 
     /* ── Right: Form card ───────────────────────────────────────── */
-    .gc-form-col {
-        padding: 52px 0 80px;
-        position: relative;
-    }
-
-    /* Hard hat decoration */
+    .gc-form-col { padding: 52px 0 80px; position: relative; }
     .gc-hardhat {
-        position: absolute;
-        top: 18px;
-        right: -28px;
-        width: 96px;
-        height: 72px;
-        transform: rotate(18deg);
-        z-index: 2;
-        filter: drop-shadow(0 4px 14px rgba(255,107,53,0.4));
+        position: absolute; top: 18px; right: -28px;
+        width: 96px; height: 72px; transform: rotate(18deg);
+        z-index: 2; filter: drop-shadow(0 4px 14px rgba(255,107,53,0.4));
         pointer-events: none;
     }
     @media (max-width: 900px) {
         .gc-hardhat { display: none; }
-    }
-    @media (max-width: 900px) {
         .gc-form-col { padding: 24px 0 60px; }
     }
 
@@ -330,12 +276,7 @@
         box-shadow: 0 20px 60px rgba(0,0,0,0.4);
     }
 
-    /* Progress bar (top of card) */
-    .gc-progress-bar {
-        height: 4px;
-        background: var(--secondary-bg);
-        position: relative;
-    }
+    .gc-progress-bar { height: 4px; background: var(--secondary-bg); }
     .gc-progress-fill {
         height: 100%;
         background: linear-gradient(90deg, #ff006e, #ff6b35);
@@ -343,356 +284,203 @@
         border-radius: 0 4px 4px 0;
     }
 
-    /* Step counter */
-    .gc-step-counter {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 18px 32px 0;
-    }
-    .gc-step-label {
-        font-size: 12px;
-        font-weight: 700;
-        color: var(--text-secondary);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    .gc-step-nums {
-        font-size: 12px;
-        color: var(--text-secondary);
-        font-weight: 600;
-    }
+    .gc-step-counter { display: flex; align-items: center; justify-content: space-between; padding: 18px 32px 0; }
+    .gc-step-label { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+    .gc-step-nums { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
     .gc-step-nums b { color: var(--accent-color); }
 
-    /* Step body */
-    .gc-step-body {
-        padding: 28px 32px 36px;
-        min-height: 420px;
-        position: relative;
-    }
+    .gc-step-body { padding: 28px 32px 36px; min-height: 420px; }
     @media (max-width: 600px) {
         .gc-step-body { padding: 24px 20px 28px; }
         .gc-step-counter { padding: 16px 20px 0; }
     }
 
-    /* Slide transitions */
-    .gc-slide {
-        display: none;
-        animation: slideIn 0.35s cubic-bezier(0.4,0,0.2,1);
-    }
+    .gc-slide { display: none; animation: slideIn 0.35s cubic-bezier(0.4,0,0.2,1); }
     .gc-slide.active { display: block; }
-    @keyframes slideIn {
-        from { opacity: 0; transform: translateX(24px); }
-        to   { opacity: 1; transform: translateX(0); }
-    }
-    .gc-slide.slide-back {
-        animation: slideInBack 0.35s cubic-bezier(0.4,0,0.2,1);
-    }
-    @keyframes slideInBack {
-        from { opacity: 0; transform: translateX(-24px); }
-        to   { opacity: 1; transform: translateX(0); }
-    }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
+    .gc-slide.slide-back { animation: slideInBack 0.35s cubic-bezier(0.4,0,0.2,1); }
+    @keyframes slideInBack { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: translateX(0); } }
 
-    .gc-q-label {
-        font-size: 11px;
-        font-weight: 700;
-        color: var(--accent-color);
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        margin-bottom: 12px;
-    }
-    .gc-q-text {
-        font-size: clamp(18px, 2.5vw, 22px);
-        font-weight: 800;
-        line-height: 1.3;
-        margin-bottom: 28px;
-        color: var(--text-primary);
-    }
+    .gc-q-label { font-size: 11px; font-weight: 700; color: var(--accent-color); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+    .gc-q-text { font-size: clamp(18px, 2.5vw, 22px); font-weight: 800; line-height: 1.3; margin-bottom: 28px; color: var(--text-primary); }
 
-    /* Option cards (Jotform-style) */
-    .gc-options {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
+    /* Option cards */
+    .gc-options { display: flex; flex-direction: column; gap: 10px; }
     .gc-option {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 16px 18px;
-        border-radius: 12px;
+        display: flex; align-items: center; gap: 14px;
+        padding: 16px 18px; border-radius: 12px;
         border: 2px solid var(--border-color);
         background: var(--secondary-bg);
-        cursor: pointer;
-        transition: all 0.15s ease;
-        user-select: none;
-        position: relative;
+        cursor: pointer; transition: all 0.15s ease; user-select: none;
     }
-    .gc-option:hover {
-        border-color: rgba(255,0,110,0.5);
-        background: rgba(255,0,110,0.04);
-        transform: translateY(-1px);
-    }
-    .gc-option.sel {
-        border-color: var(--accent-color);
-        background: rgba(255,0,110,0.08);
-        box-shadow: 0 0 0 1px rgba(255,0,110,0.2);
-    }
-    .gc-option.sel-disq {
-        border-color: #dc3545;
-        background: rgba(220,53,69,0.07);
-    }
+    .gc-option:hover { border-color: rgba(255,0,110,0.5); background: rgba(255,0,110,0.04); transform: translateY(-1px); }
+    .gc-option.sel { border-color: var(--accent-color); background: rgba(255,0,110,0.08); box-shadow: 0 0 0 1px rgba(255,0,110,0.2); }
+    .gc-option.sel-disq { border-color: #dc3545; background: rgba(220,53,69,0.07); }
     .gc-option-key {
-        width: 28px; height: 28px;
-        border-radius: 8px;
+        width: 28px; height: 28px; border-radius: 8px;
         border: 1.5px solid var(--border-color);
         display: flex; align-items: center; justify-content: center;
-        flex-shrink: 0;
-        font-size: 11px;
-        font-weight: 700;
-        color: var(--text-secondary);
-        transition: all 0.15s;
-        background: var(--card-bg);
+        flex-shrink: 0; font-size: 11px; font-weight: 700;
+        color: var(--text-secondary); background: var(--card-bg); transition: all 0.15s;
     }
-    .gc-option.sel .gc-option-key {
-        background: var(--accent-color);
-        border-color: var(--accent-color);
-        color: #fff;
-    }
-    .gc-option.sel-disq .gc-option-key {
-        background: #dc3545;
-        border-color: #dc3545;
-        color: #fff;
-    }
-    .gc-option-text {
-        font-size: 15px;
-        font-weight: 500;
-        color: var(--text-primary);
-        line-height: 1.4;
-    }
-    .gc-option-sub {
-        font-size: 12px;
-        color: var(--text-secondary);
-        margin-top: 2px;
-    }
+    .gc-option.sel .gc-option-key { background: var(--accent-color); border-color: var(--accent-color); color: #fff; }
+    .gc-option.sel-disq .gc-option-key { background: #dc3545; border-color: #dc3545; color: #fff; }
+    .gc-option-text { font-size: 15px; font-weight: 500; color: var(--text-primary); line-height: 1.4; }
+    .gc-option-sub { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
 
-    /* Scenario cards (bigger, with icon) */
+    /* Scenario cards */
     .gc-scenario {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        padding: 20px 20px;
-        border-radius: 14px;
+        display: flex; align-items: center; gap: 16px;
+        padding: 18px 20px; border-radius: 14px;
         border: 2px solid var(--border-color);
         background: var(--secondary-bg);
-        cursor: pointer;
-        transition: all 0.15s ease;
-        user-select: none;
+        cursor: pointer; transition: all 0.15s ease; user-select: none;
     }
-    .gc-scenario:hover {
-        border-color: rgba(255,0,110,0.5);
-        background: rgba(255,0,110,0.04);
-        transform: translateY(-1px);
-    }
-    .gc-scenario.sel {
-        border-color: var(--accent-color);
-        background: rgba(255,0,110,0.08);
-        box-shadow: 0 0 0 1px rgba(255,0,110,0.2);
-    }
+    .gc-scenario:hover { border-color: rgba(255,0,110,0.5); background: rgba(255,0,110,0.04); transform: translateY(-1px); }
+    .gc-scenario.sel { border-color: var(--accent-color); background: rgba(255,0,110,0.08); box-shadow: 0 0 0 1px rgba(255,0,110,0.2); }
     .gc-scenario-icon {
-        flex-shrink: 0;
-        width: 44px;
-        height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255,0,110,0.1);
-        border-radius: 10px;
-        color: var(--accent-color);
+        flex-shrink: 0; width: 44px; height: 44px;
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(255,0,110,0.1); border-radius: 10px; color: var(--accent-color);
     }
-    .gc-scenario-body strong {
-        display: block;
-        font-size: 15px;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-bottom: 3px;
-    }
-    .gc-scenario-body span {
-        font-size: 13px;
-        color: var(--text-secondary);
-    }
+    .gc-scenario-body strong { display: block; font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 3px; }
+    .gc-scenario-body span { font-size: 13px; color: var(--text-secondary); }
     .gc-scenario-check {
-        margin-left: auto;
-        width: 24px; height: 24px;
-        border-radius: 50%;
+        margin-left: auto; width: 24px; height: 24px; border-radius: 50%;
         border: 2px solid var(--border-color);
         display: flex; align-items: center; justify-content: center;
-        flex-shrink: 0;
-        font-size: 12px;
-        color: transparent;
-        transition: all 0.15s;
+        flex-shrink: 0; font-size: 12px; color: transparent; transition: all 0.15s;
     }
-    .gc-scenario.sel .gc-scenario-check {
-        background: var(--accent-color);
-        border-color: var(--accent-color);
-        color: #fff;
-    }
+    .gc-scenario.sel .gc-scenario-check { background: var(--accent-color); border-color: var(--accent-color); color: #fff; }
 
     /* Disqualification alert */
     .gc-disqual {
         display: none;
         background: rgba(220,53,69,0.08);
         border: 1px solid rgba(220,53,69,0.3);
-        border-radius: 10px;
-        padding: 14px 16px;
-        margin-top: 14px;
-        font-size: 13px;
-        color: #ff6b6b;
-        line-height: 1.6;
-        text-align: center;
+        border-radius: 10px; padding: 14px 16px; margin-top: 14px;
+        font-size: 13px; color: #ff6b6b; line-height: 1.6; text-align: center;
     }
 
     /* Nav buttons */
-    .gc-nav {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-top: 28px;
-    }
+    .gc-nav { display: flex; align-items: center; gap: 12px; margin-top: 28px; }
     .gc-btn-back {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        background: none;
-        border: 1.5px solid var(--border-color);
-        border-radius: 10px;
-        padding: 12px 18px;
-        color: var(--text-secondary);
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s;
+        display: flex; align-items: center; gap: 6px;
+        background: none; border: 1.5px solid var(--border-color);
+        border-radius: 10px; padding: 12px 18px;
+        color: var(--text-secondary); font-size: 14px; font-weight: 600;
+        cursor: pointer; transition: all 0.2s;
     }
     .gc-btn-back:hover { border-color: var(--text-secondary); color: var(--text-primary); }
     .gc-btn-next {
-        flex: 1;
-        padding: 14px 24px;
+        flex: 1; padding: 14px 24px;
         background: linear-gradient(135deg, #ff006e 0%, #ff4081 100%);
-        border: none;
-        border-radius: 10px;
-        color: #fff;
-        font-size: 15px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.2s;
+        border: none; border-radius: 10px;
+        color: #fff; font-size: 15px; font-weight: 700;
+        cursor: pointer; transition: all 0.2s;
         box-shadow: 0 4px 20px rgba(255,0,110,0.3);
     }
-    .gc-btn-next:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 28px rgba(255,0,110,0.4);
-    }
-    .gc-btn-next:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-    }
+    .gc-btn-next:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,0,110,0.4); }
+    .gc-btn-next:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
-    /* Contact form inputs */
-    .gc-input-group {
-        margin-bottom: 16px;
-    }
-    .gc-input-group label {
-        display: block;
-        font-size: 13px;
-        font-weight: 600;
-        margin-bottom: 8px;
-        color: var(--text-primary);
-    }
+    /* Inputs */
+    .gc-input-group { margin-bottom: 16px; }
+    .gc-input-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-primary); }
     .gc-input-group input {
-        width: 100%;
-        padding: 14px 16px;
+        width: 100%; padding: 14px 16px;
         background: var(--secondary-bg);
         border: 2px solid var(--border-color);
-        border-radius: 10px;
-        color: var(--text-primary);
-        font-size: 15px;
-        font-family: 'Inter', sans-serif;
-        transition: border-color 0.2s;
-        outline: none;
+        border-radius: 10px; color: var(--text-primary);
+        font-size: 15px; font-family: 'Inter', sans-serif;
+        transition: border-color 0.2s; outline: none;
     }
-    .gc-input-group input:focus {
-        border-color: var(--accent-color);
-        box-shadow: 0 0 0 3px rgba(255,0,110,0.1);
-    }
+    .gc-input-group input:focus { border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(255,0,110,0.1); }
     .gc-input-group input::placeholder { color: var(--text-secondary); opacity: 0.6; }
-    .gc-input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    @media (max-width: 520px) { .gc-input-row { grid-template-columns: 1fr; } }
+    .gc-field-err { display: none; font-size: 12px; color: #ff6b6b; margin-top: 5px; }
     .gc-opt-tag { font-size: 11px; font-weight: 400; color: var(--text-secondary); margin-left: 6px; }
 
-    /* Booking section */
+    /* Booking intro */
     .gc-booking-intro {
         background: rgba(255,0,110,0.06);
         border: 1px solid rgba(255,0,110,0.15);
-        border-radius: 12px;
-        padding: 16px 18px;
-        margin-bottom: 24px;
-        text-align: center;
-        font-size: 14px;
-        color: var(--text-secondary);
-        line-height: 1.6;
+        border-radius: 12px; padding: 16px 18px; margin-bottom: 24px;
+        text-align: center; font-size: 14px;
+        color: var(--text-secondary); line-height: 1.6;
     }
+    .gc-meet-note {
+        margin-top: 14px;
+        font-size: 13px; color: var(--text-secondary);
+        text-align: center; line-height: 1.6;
+    }
+    .gc-meet-note strong { color: var(--text-primary); }
 
-    /* Success checkmark */
-    .gc-success-icon {
-        width: 64px; height: 64px;
-        border-radius: 50%;
-        background: rgba(0,255,136,0.1);
-        border: 2px solid #00ff88;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 28px;
-        margin: 0 auto 20px;
+    /* ── Post-booking: What Happens Next ─────────────────────────── */
+    #gcPostBooking {
+        display: none;
+        max-width: 860px;
+        margin: 56px auto 0;
+        padding: 0 24px 80px;
     }
+    .gc-post-heading {
+        font-size: clamp(22px, 2.5vw, 30px);
+        font-weight: 800; text-align: center; margin-bottom: 32px;
+        letter-spacing: -0.01em;
+    }
+    .gc-post-heading span {
+        background: linear-gradient(135deg, #ff006e, #ff6b35);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .gc-timeline {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+    @media (max-width: 640px) { .gc-timeline { grid-template-columns: 1fr; } }
+    .gc-timeline-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 18px; padding: 28px 24px;
+        text-align: center; position: relative; overflow: hidden;
+    }
+    .gc-timeline-card::before {
+        content: '';
+        position: absolute; top: 0; left: 0; right: 0; height: 3px;
+        background: linear-gradient(90deg, #ff006e, #ff6b35);
+    }
+    .gc-timeline-time {
+        font-size: 11px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: 1.5px; color: var(--accent-color); margin-bottom: 10px;
+    }
+    .gc-timeline-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+    .gc-timeline-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
     </style>
 </head>
 <body>
     <div class="gc-bg">
-        <!-- Structural I-beam silhouettes -->
+        <!-- Blueprint I-beam silhouettes -->
         <svg class="gc-bg-structure" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <!-- Left vertical column -->
             <rect x="60" y="0" width="6" height="900" fill="rgba(255,0,110,0.07)"/>
             <rect x="50" y="0" width="26" height="8" fill="rgba(255,0,110,0.07)"/>
             <rect x="50" y="892" width="26" height="8" fill="rgba(255,0,110,0.07)"/>
-            <!-- Horizontal beam upper -->
             <rect x="0" y="180" width="1400" height="5" fill="rgba(255,0,110,0.05)"/>
             <rect x="0" y="173" width="1400" height="4" fill="rgba(255,0,110,0.03)"/>
             <rect x="0" y="182" width="1400" height="4" fill="rgba(255,0,110,0.03)"/>
-            <!-- Horizontal beam lower -->
             <rect x="0" y="680" width="1400" height="5" fill="rgba(255,0,110,0.05)"/>
             <rect x="0" y="673" width="1400" height="4" fill="rgba(255,0,110,0.03)"/>
             <rect x="0" y="682" width="1400" height="4" fill="rgba(255,0,110,0.03)"/>
-            <!-- Right vertical column -->
             <rect x="1334" y="0" width="6" height="900" fill="rgba(255,0,110,0.07)"/>
             <rect x="1324" y="0" width="26" height="8" fill="rgba(255,0,110,0.07)"/>
             <rect x="1324" y="892" width="26" height="8" fill="rgba(255,0,110,0.07)"/>
-            <!-- Diagonal bracing (left) -->
             <line x1="66" y1="185" x2="66" y2="680" stroke="rgba(255,107,53,0.06)" stroke-width="1" stroke-dasharray="4 8"/>
-            <!-- Measurement tick marks along bottom beam -->
             <line x1="200" y1="680" x2="200" y2="700" stroke="rgba(255,0,110,0.08)" stroke-width="1"/>
             <line x1="400" y1="680" x2="400" y2="700" stroke="rgba(255,0,110,0.08)" stroke-width="1"/>
             <line x1="600" y1="680" x2="600" y2="700" stroke="rgba(255,0,110,0.08)" stroke-width="1"/>
             <line x1="800" y1="680" x2="800" y2="700" stroke="rgba(255,0,110,0.08)" stroke-width="1"/>
             <line x1="1000" y1="680" x2="1000" y2="700" stroke="rgba(255,0,110,0.08)" stroke-width="1"/>
             <line x1="1200" y1="680" x2="1200" y2="700" stroke="rgba(255,0,110,0.08)" stroke-width="1"/>
-            <!-- Corner brackets (top-left) -->
             <path d="M0 40 L40 40 M40 40 L40 0" stroke="rgba(255,0,110,0.12)" stroke-width="1.5" fill="none"/>
-            <!-- Corner brackets (top-right) -->
             <path d="M1400 40 L1360 40 M1360 40 L1360 0" stroke="rgba(255,0,110,0.12)" stroke-width="1.5" fill="none"/>
-            <!-- Corner brackets (bottom-left) -->
             <path d="M0 860 L40 860 M40 860 L40 900" stroke="rgba(255,0,110,0.12)" stroke-width="1.5" fill="none"/>
-            <!-- Corner brackets (bottom-right) -->
             <path d="M1400 860 L1360 860 M1360 860 L1360 900" stroke="rgba(255,0,110,0.12)" stroke-width="1.5" fill="none"/>
         </svg>
     </div>
@@ -704,21 +492,48 @@
 
             <div class="gc-eyebrow">
                 <div class="gc-eyebrow-dot"></div>
-                For General Contractors
+                For General Contractors · $500K–$5M Revenue
             </div>
 
             <h1 class="gc-headline">
-                Fill Your Pipeline<br>
-                with <span class="hl">$100K+ Projects</span><br>
-                — Guaranteed.
+                Your Competitors Are Getting<br>
+                <span class="hl">the Jobs You Should</span><br>
+                Be Closing.
             </h1>
 
             <p class="gc-sub">
-                We build and run your Meta ad system from scratch. You fund the spend. We guarantee qualified commercial leads in 90 days — or we keep working until you hit the number, no management fee.
+                We audit your website, build you a new one in 24 hours, and get it live in 48. Then we get leads into your pipeline within 7 days. This doesn't apply to everyone — apply below to see if you qualify.
             </p>
 
-            <!-- Trust badges -->
-            <div class="gc-trust" style="margin-bottom: 20px;">
+            <div class="gc-checklist">
+                <div class="gc-check-item">
+                    <div class="gc-check-icon">✓</div>
+                    <span>Custom website built in 24 hours</span>
+                </div>
+                <div class="gc-check-item">
+                    <div class="gc-check-icon">✓</div>
+                    <span>Site live and ranking in 48 hours</span>
+                </div>
+                <div class="gc-check-item">
+                    <div class="gc-check-icon">✓</div>
+                    <span>Full competitor strategy breakdown</span>
+                </div>
+                <div class="gc-check-item">
+                    <div class="gc-check-icon">✓</div>
+                    <span>Sales funnel review &amp; SEO deep-dive</span>
+                </div>
+                <div class="gc-check-item">
+                    <div class="gc-check-icon">✓</div>
+                    <span>First leads in your pipeline within 7 days</span>
+                </div>
+            </div>
+
+            <div class="gc-quote">
+                <p class="gc-quote-text">"We were losing jobs to competitors with better websites. Sliq had us live in 2 days and our phone hasn't stopped."</p>
+                <p class="gc-quote-author">— Owner, General Contracting Client</p>
+            </div>
+
+            <div class="gc-trust">
                 <a href="https://maps.app.goo.gl/jZJwBzY5DwK7GHhY6" target="_blank" rel="noopener noreferrer" class="gc-badge">
                     <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
                         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
@@ -744,34 +559,12 @@
                 </a>
             </div>
 
-            <!-- Impact stats -->
-            <div class="gc-stats">
-                <div class="gc-stat">
-                    <div class="gc-stat-num">10<span>–15</span></div>
-                    <div class="gc-stat-label">Qualified project leads per month</div>
-                </div>
-                <div class="gc-stat gc-stat--guarantee">
-                    <div class="gc-guarantee-tag">Guaranteed</div>
-                    <div class="gc-stat-num">$<span>0</span></div>
-                    <div class="gc-stat-label">Management fee if we miss the target</div>
-                </div>
-                <div class="gc-stat">
-                    <div class="gc-stat-num"><span>90</span></div>
-                    <div class="gc-stat-label">Day guaranteed delivery window</div>
-                </div>
-                <div class="gc-stat">
-                    <div class="gc-stat-num">$<span>100K</span><span style="font-size:18px;">+</span></div>
-                    <div class="gc-stat-label">Avg project value we target for you</div>
-                </div>
-            </div>
-
-
         </div><!-- /.gc-hero -->
 
         <!-- ══════════ RIGHT: Form card ══════════ -->
         <div class="gc-form-col">
 
-            <!-- Hard hat hung over the form card -->
+            <!-- Hard hat decoration -->
             <svg class="gc-hardhat" viewBox="0 0 110 72" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <defs>
                     <linearGradient id="hg" x1="20%" y1="0%" x2="80%" y2="100%">
@@ -783,109 +576,82 @@
                         <stop offset="100%" stop-color="#aa004a"/>
                     </linearGradient>
                 </defs>
-                <!-- Dome drop shadow -->
                 <path d="M16 50 Q16 6 55 4 Q94 6 94 50 Z" fill="rgba(0,0,0,0.25)" transform="translate(2,4)"/>
-                <!-- Dome — wide low hemisphere, not pointed -->
                 <path d="M16 50 Q16 6 55 4 Q94 6 94 50 Z" fill="url(#hg)"/>
-                <!-- Center rib -->
                 <line x1="55" y1="4" x2="55" y2="50" stroke="rgba(0,0,0,0.08)" stroke-width="2"/>
-                <!-- Dome highlight -->
                 <path d="M26 42 Q26 16 55 12" stroke="rgba(255,255,255,0.22)" stroke-width="3" fill="none" stroke-linecap="round"/>
-                <!-- Suspension band -->
                 <path d="M20 36 Q55 42 90 36" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                <!-- Brim — flat rect, wide, industrial -->
                 <rect x="2" y="49" width="106" height="10" rx="3" fill="url(#hgd)"/>
-                <!-- Brim top edge highlight -->
                 <rect x="2" y="49" width="106" height="2" rx="1" fill="rgba(255,255,255,0.12)"/>
-                <!-- Top knob -->
                 <ellipse cx="55" cy="5" rx="5" ry="3" fill="rgba(255,255,255,0.2)"/>
             </svg>
 
             <div class="gc-form-card">
 
-                <!-- Progress bar -->
                 <div class="gc-progress-bar">
-                    <div class="gc-progress-fill" id="gcProgressFill" style="width:14%;"></div>
+                    <div class="gc-progress-fill" id="gcProgressFill" style="width:25%;"></div>
                 </div>
-
-                <!-- Step counter -->
                 <div class="gc-step-counter">
-                    <div class="gc-step-label" id="gcStepLabel">Scenario</div>
-                    <div class="gc-step-nums"><b id="gcStepCur">1</b> / 7</div>
+                    <div class="gc-step-label" id="gcStepLabel">Your Info</div>
+                    <div class="gc-step-nums"><b id="gcStepCur">1</b> / 4</div>
                 </div>
 
                 <div class="gc-step-body">
 
-                    <!-- ── Slide 1: Scenario ── -->
+                    <!-- ── Slide 1: Basic info ── -->
                     <div class="gc-slide active" id="gcS1">
-                        <div class="gc-q-label">Step 1 of 7</div>
-                        <div class="gc-q-text">Which best describes where you're at right now?</div>
-                        <div class="gc-options" style="gap:12px;" id="gcScenarios">
-                            <div class="gc-scenario" data-value="I'm booking 2-3 projects a month, want to double that" onclick="gcSelectScenario(this)">
-                                <div class="gc-scenario-icon">
-                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-                                </div>
-                                <div class="gc-scenario-body">
-                                    <strong>Booking 2–3 projects/month</strong>
-                                    <span>Consistent but want to double volume</span>
-                                </div>
-                                <div class="gc-scenario-check">✓</div>
-                            </div>
-                            <div class="gc-scenario" data-value="I'm turning away small jobs, want only $150K+ projects" onclick="gcSelectScenario(this)">
-                                <div class="gc-scenario-icon">
-                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="12" rx="1"/><path d="M3 9l9-6 9 6"/><line x1="9" y1="21" x2="9" y2="12"/><line x1="15" y1="21" x2="15" y2="12"/></svg>
-                                </div>
-                                <div class="gc-scenario-body">
-                                    <strong>Turning away small jobs</strong>
-                                    <span>Only want $150K+ commercial projects</span>
-                                </div>
-                                <div class="gc-scenario-check">✓</div>
-                            </div>
-                            <div class="gc-scenario" data-value="My schedule has gaps, especially in winter" onclick="gcSelectScenario(this)">
-                                <div class="gc-scenario-icon">
-                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                                </div>
-                                <div class="gc-scenario-body">
-                                    <strong>Schedule gaps in winter</strong>
-                                    <span>Need a consistent year-round pipeline</span>
-                                </div>
-                                <div class="gc-scenario-check">✓</div>
-                            </div>
+                        <div class="gc-q-label">Step 1 of 4</div>
+                        <div class="gc-q-text">Let's see if you qualify</div>
+                        <div class="gc-input-group">
+                            <label>Full Name</label>
+                            <input type="text" id="gcName" placeholder="John Smith" autocomplete="name">
+                        </div>
+                        <div class="gc-input-group">
+                            <label>Email Address</label>
+                            <input type="email" id="gcEmail" placeholder="john@smithcontracting.com" autocomplete="email">
+                        </div>
+                        <div class="gc-input-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="gcPhone" placeholder="(555) 000-0000" autocomplete="tel">
+                        </div>
+                        <div class="gc-input-group">
+                            <label>Company Website</label>
+                            <input type="text" id="gcWebsite" placeholder="smithcontracting.com" autocomplete="url">
+                            <div class="gc-field-err" id="gcWebsiteErr">Please enter a valid website (e.g. smithcontracting.com)</div>
                         </div>
                         <div class="gc-nav">
-                            <button class="gc-btn-next" id="gcN1" onclick="gcNext(2)" disabled>Continue →</button>
+                            <button class="gc-btn-next" id="gcN1" onclick="gcSubmitInfo()" disabled>Check My Eligibility →</button>
                         </div>
                     </div>
 
-                    <!-- ── Slide 2: Avg project value ── -->
+                    <!-- ── Slide 2: Revenue qualifier ── -->
                     <div class="gc-slide" id="gcS2">
-                        <div class="gc-q-label">Step 2 of 7</div>
-                        <div class="gc-q-text">What's your average project value?</div>
+                        <div class="gc-q-label">Step 2 of 4</div>
+                        <div class="gc-q-text">What's your contracting business doing annually?</div>
                         <div class="gc-options" id="gcQ1">
-                            <div class="gc-option" data-q="q1" data-value="$50K-$100K" onclick="gcSelectOpt(this)">
+                            <div class="gc-option" data-value="$1M–$5M/year" onclick="gcSelectRevenue(this)">
                                 <div class="gc-option-key">A</div>
                                 <div>
-                                    <div class="gc-option-text">$50K – $100K</div>
+                                    <div class="gc-option-text">$1M – $5M / year</div>
+                                    <div class="gc-option-sub">Established business, ready to dominate online</div>
                                 </div>
                             </div>
-                            <div class="gc-option" data-q="q1" data-value="$100K-$200K" onclick="gcSelectOpt(this)">
+                            <div class="gc-option" data-value="$500K–$999K/year" onclick="gcSelectRevenue(this)">
                                 <div class="gc-option-key">B</div>
                                 <div>
-                                    <div class="gc-option-text">$100K – $200K</div>
+                                    <div class="gc-option-text">$500K – $999K / year</div>
+                                    <div class="gc-option-sub">Scaling up, need a stronger digital presence</div>
                                 </div>
                             </div>
-                            <div class="gc-option" data-q="q1" data-value="$200K-$500K" onclick="gcSelectOpt(this)">
+                            <div class="gc-option" data-value="Under $500K/year" data-disq="true" onclick="gcSelectRevenue(this)">
                                 <div class="gc-option-key">C</div>
                                 <div>
-                                    <div class="gc-option-text">$200K – $500K</div>
+                                    <div class="gc-option-text">Under $500K / year</div>
                                 </div>
                             </div>
-                            <div class="gc-option" data-q="q1" data-value="$500K+" onclick="gcSelectOpt(this)">
-                                <div class="gc-option-key">D</div>
-                                <div>
-                                    <div class="gc-option-text">$500K+</div>
-                                </div>
-                            </div>
+                        </div>
+                        <div class="gc-disqual" id="gcRevenueDisqual">
+                            Our program is built for established contractors doing $500K+. Bookmark this page — we'd love to work with you when you're there.
                         </div>
                         <div class="gc-nav">
                             <button class="gc-btn-back" onclick="gcBack(1)">← Back</button>
@@ -893,121 +659,73 @@
                         </div>
                     </div>
 
-                    <!-- ── Slide 3: Budget ── -->
+                    <!-- ── Slide 3: Situation ── -->
                     <div class="gc-slide" id="gcS3">
-                        <div class="gc-q-label">Step 3 of 7</div>
-                        <div class="gc-q-text">Can you commit $3,000–$5,000/mo in ad spend for 90 days?</div>
-                        <div class="gc-options" id="gcQ2">
-                            <div class="gc-option" data-q="q2" data-value="Yes, ready to invest" onclick="gcSelectOpt(this)">
-                                <div class="gc-option-key">A</div>
-                                <div>
-                                    <div class="gc-option-text">Yes, ready to invest</div>
+                        <div class="gc-q-label">Step 3 of 4</div>
+                        <div class="gc-q-text">What's costing you jobs right now?</div>
+                        <div class="gc-options" style="gap:12px;" id="gcScenarios">
+                            <div class="gc-scenario" data-value="No real online presence" onclick="gcSelectSituation(this)">
+                                <div class="gc-scenario-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                                 </div>
-                            </div>
-                            <div class="gc-option" data-q="q2" data-value="Yes, but need to see plan first" onclick="gcSelectOpt(this)">
-                                <div class="gc-option-key">B</div>
-                                <div>
-                                    <div class="gc-option-text">Yes, but need to see the plan first</div>
+                                <div class="gc-scenario-body">
+                                    <strong>No real online presence</strong>
+                                    <span>Competitors Google you — and nothing shows up</span>
                                 </div>
+                                <div class="gc-scenario-check">✓</div>
                             </div>
-                            <div class="gc-option" data-q="q2" data-value="Maybe, depends on ROI" onclick="gcSelectOpt(this)">
-                                <div class="gc-option-key">C</div>
-                                <div>
-                                    <div class="gc-option-text">Maybe — depends on ROI</div>
+                            <div class="gc-scenario" data-value="Website looks outdated" onclick="gcSelectSituation(this)">
+                                <div class="gc-scenario-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
                                 </div>
-                            </div>
-                            <div class="gc-option" data-q="q2" data-value="No, outside budget" data-disq="true" onclick="gcSelectOpt(this)">
-                                <div class="gc-option-key">D</div>
-                                <div>
-                                    <div class="gc-option-text">No, outside my budget right now</div>
+                                <div class="gc-scenario-body">
+                                    <strong>Website looks outdated</strong>
+                                    <span>Site doesn't reflect the quality of your work</span>
                                 </div>
+                                <div class="gc-scenario-check">✓</div>
                             </div>
-                        </div>
-                        <div class="gc-disqual" id="gcBudgetDisqual">
-                            $3K/mo minimum is required for our guarantee. Bookmark this page for when your budget is ready — we'd love to work with you then.
+                            <div class="gc-scenario" data-value="Not showing up on Google" onclick="gcSelectSituation(this)">
+                                <div class="gc-scenario-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                </div>
+                                <div class="gc-scenario-body">
+                                    <strong>Not showing up on Google</strong>
+                                    <span>Invisible when homeowners search locally</span>
+                                </div>
+                                <div class="gc-scenario-check">✓</div>
+                            </div>
+                            <div class="gc-scenario" data-value="All of the above" onclick="gcSelectSituation(this)">
+                                <div class="gc-scenario-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                                </div>
+                                <div class="gc-scenario-body">
+                                    <strong>All of the above</strong>
+                                    <span>Falling behind on every front</span>
+                                </div>
+                                <div class="gc-scenario-check">✓</div>
+                            </div>
                         </div>
                         <div class="gc-nav">
                             <button class="gc-btn-back" onclick="gcBack(2)">← Back</button>
-                            <button class="gc-btn-next" id="gcN3" onclick="gcNext(4)" disabled>Continue →</button>
+                            <button class="gc-btn-next" id="gcN3" onclick="gcSubmitLead()" disabled>Reserve My Audit Spot →</button>
                         </div>
                     </div>
 
-                    <!-- ── Slide 4: Response time ── -->
+                    <!-- ── Slide 4: Booking ── -->
                     <div class="gc-slide" id="gcS4">
-                        <div class="gc-q-label">Step 4 of 7</div>
-                        <div class="gc-q-text">Can you respond to new leads within 24 hours?</div>
-                        <div class="gc-options" id="gcQ3">
-                            <div class="gc-option" data-q="q3" data-value="Yes, always" onclick="gcSelectOpt(this)">
-                                <div class="gc-option-key">A</div>
-                                <div>
-                                    <div class="gc-option-text">Yes, always</div>
-                                </div>
-                            </div>
-                            <div class="gc-option" data-q="q3" data-value="Usually" onclick="gcSelectOpt(this)">
-                                <div class="gc-option-key">B</div>
-                                <div>
-                                    <div class="gc-option-text">Usually</div>
-                                </div>
-                            </div>
-                            <div class="gc-option" data-q="q3" data-value="Sometimes" onclick="gcSelectOpt(this)">
-                                <div class="gc-option-key">C</div>
-                                <div>
-                                    <div class="gc-option-text">Sometimes — I get busy on job sites</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="gc-nav">
-                            <button class="gc-btn-back" onclick="gcBack(3)">← Back</button>
-                            <button class="gc-btn-next" id="gcN4" onclick="gcNext(5)" disabled>Continue →</button>
-                        </div>
-                    </div>
-
-                    <!-- ── Slide 5: Name ── -->
-                    <div class="gc-slide" id="gcS5">
-                        <div class="gc-q-label">Step 5 of 7</div>
-                        <div class="gc-q-text">What's your name?</div>
-                        <div class="gc-input-group">
-                            <input type="text" id="gcName" placeholder="John Smith" autocomplete="name" oninput="gcCheckName()">
-                        </div>
-                        <div class="gc-nav">
-                            <button class="gc-btn-back" onclick="gcBack(4)">← Back</button>
-                            <button class="gc-btn-next" id="gcN5" onclick="gcNext(6)" disabled>Continue →</button>
-                        </div>
-                    </div>
-
-                    <!-- ── Slide 6: Email + Phone ── -->
-                    <div class="gc-slide" id="gcS6">
-                        <div class="gc-q-label">Step 6 of 7</div>
-                        <div class="gc-q-text">How do we reach you?</div>
-                        <div class="gc-input-group">
-                            <label>Email Address</label>
-                            <input type="email" id="gcEmail" placeholder="john@smithcontracting.com" autocomplete="email" oninput="gcCheckContact()">
-                        </div>
-                        <div class="gc-input-group">
-                            <label>Phone Number</label>
-                            <input type="tel" id="gcPhone" placeholder="(555) 000-0000" autocomplete="tel" oninput="gcCheckContact()">
-                        </div>
-                        <div class="gc-input-group">
-                            <label>Company Website <span class="gc-opt-tag">(optional)</span></label>
-                            <input type="text" id="gcWebsite" placeholder="smithcontracting.com" autocomplete="url">
-                        </div>
-                        <div class="gc-nav">
-                            <button class="gc-btn-back" onclick="gcBack(5)">← Back</button>
-                            <button class="gc-btn-next" id="gcN6" onclick="gcSubmitLead()" disabled>Reserve My Spot →</button>
-                        </div>
-                    </div>
-
-                    <!-- ── Slide 7: Booking ── -->
-                    <div class="gc-slide" id="gcS7">
-                        <div class="gc-q-label">Step 7 of 7</div>
-                        <div class="gc-q-text">Book your free strategy call</div>
+                        <div class="gc-q-label">Step 4 of 4</div>
+                        <div class="gc-q-text">Reserve your audit spot</div>
                         <div class="gc-booking-intro">
-                            30 mins · No pitch · We'll map out exactly how to fill your pipeline with $100K+ projects in 90 days
+                            Spots are limited. Book your call to lock in your free website build + audit package.<br>
+                            <strong style="color:var(--accent-color);">Book within 24 hours to guarantee your audit — no matter what.</strong>
                         </div>
                         <iframe id="gcBookingIframe"
                             style="width:100%;border:none;overflow:hidden;min-height:900px;"
                             scrolling="no">
                         </iframe>
+                        <p class="gc-meet-note">
+                            <strong>We use Google Meet.</strong> You'll get a calendar invite with a link. At the scheduled time, just click it to join — no downloads needed.
+                        </p>
                     </div>
 
                 </div><!-- /.gc-step-body -->
@@ -1015,6 +733,40 @@
         </div><!-- /.gc-form-col -->
 
     </div><!-- /.gc-page -->
+
+    <!-- ══════════ POST-BOOKING: What Happens Next ══════════ -->
+    <div id="gcPostBooking">
+        <div class="gc-post-heading">Here's <span>What Happens Next</span></div>
+        <div class="gc-timeline">
+            <div class="gc-timeline-card">
+                <div class="gc-timeline-time">Within 24 Hours</div>
+                <div class="gc-timeline-title">Your New Website Is Built</div>
+                <div class="gc-timeline-desc">We build your custom, conversion-optimised site. Competitor analysis and SEO audit are complete.</div>
+            </div>
+            <div class="gc-timeline-card">
+                <div class="gc-timeline-time">Within 48 Hours</div>
+                <div class="gc-timeline-title">Site Goes Live</div>
+                <div class="gc-timeline-desc">Your new site is deployed, SEO configured, and indexed. We review everything on your call.</div>
+            </div>
+            <div class="gc-timeline-card">
+                <div class="gc-timeline-time">Within 7 Days</div>
+                <div class="gc-timeline-title">First Leads in Your Pipeline</div>
+                <div class="gc-timeline-desc">Your site starts driving enquiries. Your pipeline is moving and your phone starts ringing.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="disclaimer-banner">
+        <div class="container">
+            <p>* Results vary based on market, location, and competition. The 48-hour website build applies to standard contractor packages. Individual timelines may vary.</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Sliq. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script src="general-contractors.js"></script>
 </body>

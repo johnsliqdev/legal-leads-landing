@@ -98,6 +98,8 @@ async function ensureSchema(poolInstance) {
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS video_watch_percent INTEGER DEFAULT 0;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS ad_source TEXT;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS funnel TEXT;`;
+  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS revenue_range TEXT;`;
+  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS situation TEXT;`;
 
   // Drop unused columns (never collected)
   await poolInstance.sql`ALTER TABLE leads DROP COLUMN IF EXISTS first_name;`;
@@ -119,7 +121,7 @@ export default async function handler(req, res) {
           calc_current_monthly_spend, calc_current_cpql, calc_guaranteed_cpql,
           calc_new_monthly_spend, calc_monthly_savings, calc_annual_savings,
           calc_cpql_reduction, calc_leads_count, calc_same_budget_leads,
-          requested_callback, ad_source, funnel
+          requested_callback, ad_source, funnel, revenue_range, situation
         ) VALUES (
           ${body.email || null}, ${body.phone || null},
           ${body.website === '' ? '' : (body.website || null)},
@@ -128,7 +130,8 @@ export default async function handler(req, res) {
           ${body.calcMonthlySavings || null}, ${body.calcAnnualSavings || null},
           ${body.calcCpqlReduction || null}, ${body.calcLeadsCount || null},
           ${body.calcSameBudgetLeads || null}, ${body.requestedCallback || false},
-          ${body.ad_source || null}, ${body.funnel || null}
+          ${body.ad_source || null}, ${body.funnel || null},
+          ${body.revenue_range || null}, ${body.situation || null}
         )
         RETURNING id;
       `;
@@ -137,11 +140,13 @@ export default async function handler(req, res) {
 
       // Fire GHL webhook on every new lead (contact form submission)
       await fireGhlWebhook({
-        email: body.email || '',
-        phone: body.phone || '',
-        website: body.website || '',
-        ad_source: body.ad_source || 'organic',
-        funnel: body.funnel || '',
+        email:         body.email || '',
+        phone:         body.phone || '',
+        website:       body.website || '',
+        ad_source:     body.ad_source || 'organic',
+        funnel:        body.funnel || '',
+        revenue_range: body.revenue_range || '',
+        situation:     body.situation || '',
       });
 
       return json(res, 200, { success: true, id: insertedId });
