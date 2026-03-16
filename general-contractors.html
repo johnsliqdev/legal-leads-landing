@@ -488,14 +488,14 @@
 
     /* The browser window frame */
     .gc-window-wrap {
-        position: relative;
         max-width: 1020px; margin: 0 auto;
-        border-radius: 16px; overflow: hidden;
+        border-radius: 16px;
         box-shadow:
             0 0 0 1px rgba(255,255,255,0.07),
             0 40px 100px rgba(0,0,0,0.75),
             0 0 80px rgba(255,0,110,0.08);
         background: #1a1a1c;
+        /* No overflow:hidden here — arrows live outside the clipping boundary */
     }
 
     /* macOS title bar */
@@ -504,6 +504,7 @@
         display: flex; align-items: center; gap: 12px;
         border-bottom: 1px solid rgba(255,255,255,0.06);
         flex-shrink: 0;
+        border-radius: 16px 16px 0 0;
     }
     .gc-win-dots { display: flex; gap: 6px; flex-shrink: 0; }
     .gc-win-dot { width: 12px; height: 12px; border-radius: 50%; }
@@ -519,10 +520,20 @@
     }
     .gc-win-url strong { color: #ccc; font-weight: 500; }
 
+    /* Slides outer — position:relative for arrows, no overflow clipping */
+    .gc-slides-outer {
+        position: relative;
+        border-radius: 0 0 16px 16px;
+        overflow: hidden; /* clips slides but arrows are siblings outside this */
+    }
+    .gc-slides-outer > .gc-arrow {
+        /* re-establish stacking outside the overflow boundary */
+        position: absolute;
+    }
+
     /* Slides viewport */
     .gc-slides-viewport {
         overflow: hidden;
-        position: relative;
         height: 560px;
     }
     @media (max-width: 768px) { .gc-slides-viewport { height: 340px; } }
@@ -539,37 +550,27 @@
     .gc-slide-item img {
         width: 100%; height: 100%;
         object-fit: cover; object-position: top center;
-        display: block;
-    }
-    /* Subtle gradient fade at bottom of screenshot */
-    .gc-slide-item::after {
-        content: '';
-        position: absolute; bottom: 0; left: 0; right: 0;
-        height: 80px;
-        background: linear-gradient(to bottom, transparent, rgba(26,26,28,0.6));
-        pointer-events: none;
+        display: block; filter: none;
     }
 
-    /* Prev / next arrows */
+    /* Prev / next arrows — positioned on the OUTER wrapper, not the clipping viewport */
     .gc-arrow {
         position: absolute; top: 50%; transform: translateY(-50%);
-        z-index: 10;
-        width: 44px; height: 44px; border-radius: 50%;
-        border: 1.5px solid rgba(255,255,255,0.15);
-        background: rgba(0,0,0,0.5);
-        backdrop-filter: blur(8px);
-        color: #fff; font-size: 18px;
+        z-index: 20;
+        width: 52px; height: 52px; border-radius: 50%;
+        border: none;
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: #fff; font-size: 22px; font-weight: 700;
         display: flex; align-items: center; justify-content: center;
-        cursor: pointer; transition: all 0.2s;
-        text-decoration: none; user-select: none;
+        cursor: pointer; transition: background 0.2s, transform 0.2s;
+        user-select: none;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
-    .gc-arrow:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-50%) scale(1.08); }
-    .gc-arrow-prev { left: -22px; }
-    .gc-arrow-next { right: -22px; }
-    @media (max-width: 600px) {
-        .gc-arrow-prev { left: 8px; }
-        .gc-arrow-next { right: 8px; }
-    }
+    .gc-arrow:hover { background: var(--accent); transform: translateY(-50%) scale(1.1); }
+    .gc-arrow-prev { left: 14px; }
+    .gc-arrow-next { right: 14px; }
 
     /* Domain tabs below */
     .gc-site-tabs {
@@ -896,30 +897,32 @@
                 <div class="gc-win-url" id="gcWinUrl"><strong>adusanmateo.com</strong></div>
             </div>
 
-            <!-- Slides -->
-            <div class="gc-slides-viewport">
-                <div class="gc-slides-track" id="gcSlidesTrack">
-                    <div class="gc-slide-item">
-                        <img src="https://image.thum.io/get/width/1440/crop/900/https://adusanmateo.com" alt="ADU San Mateo" loading="eager">
-                    </div>
-                    <div class="gc-slide-item">
-                        <img src="https://image.thum.io/get/width/1440/crop/900/https://brightlinehomes.com" alt="Brightline Homes" loading="lazy">
-                    </div>
-                    <div class="gc-slide-item">
-                        <img src="https://image.thum.io/get/width/1440/crop/900/https://craftsmensguild.com" alt="Craftsmen's Guild" loading="lazy">
-                    </div>
-                    <div class="gc-slide-item">
-                        <img src="https://image.thum.io/get/width/1440/crop/900/https://bloomhomeconstruction.com" alt="Bloom Home Construction" loading="lazy">
-                    </div>
-                    <div class="gc-slide-item">
-                        <img src="https://image.thum.io/get/width/1440/crop/900/https://thepaintinggroup.com" alt="The Painting Group" loading="lazy">
+            <!-- Slides + arrows inside a shared relative wrapper that clips slides but exposes arrows -->
+            <div class="gc-slides-outer">
+                <div class="gc-slides-viewport">
+                    <div class="gc-slides-track" id="gcSlidesTrack">
+                        <div class="gc-slide-item">
+                            <img src="https://s0.wordpress.com/mshots/v1/?url=https%3A%2F%2Fadusanmateo.com&w=1440" alt="ADU San Mateo" loading="eager">
+                        </div>
+                        <div class="gc-slide-item">
+                            <img src="https://s0.wordpress.com/mshots/v1/?url=https%3A%2F%2Fbrightlinehomes.com&w=1440" alt="Brightline Homes" loading="lazy">
+                        </div>
+                        <div class="gc-slide-item">
+                            <img src="https://s0.wordpress.com/mshots/v1/?url=https%3A%2F%2Fcraftsmensguild.com&w=1440" alt="Craftsmen's Guild" loading="lazy">
+                        </div>
+                        <div class="gc-slide-item">
+                            <img src="https://s0.wordpress.com/mshots/v1/?url=https%3A%2F%2Fbloomhomeconstruction.com&w=1440" alt="Bloom Home Construction" loading="lazy">
+                        </div>
+                        <div class="gc-slide-item">
+                            <img src="https://s0.wordpress.com/mshots/v1/?url=https%3A%2F%2Fthepaintinggroup.com&w=1440" alt="The Painting Group" loading="lazy">
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Arrows -->
-            <button class="gc-arrow gc-arrow-prev" id="gcPrev" aria-label="Previous">&#8592;</button>
-            <button class="gc-arrow gc-arrow-next" id="gcNext" aria-label="Next">&#8594;</button>
+                <!-- Arrows inside the outer wrapper so they're visible over slides -->
+                <button class="gc-arrow gc-arrow-prev" id="gcPrev" aria-label="Previous">&#8592;</button>
+                <button class="gc-arrow gc-arrow-next" id="gcNext" aria-label="Next">&#8594;</button>
+            </div>
         </div>
 
         <!-- Dot indicators -->
@@ -939,9 +942,6 @@
             <button class="gc-site-tab" onclick="gcGoTo(3)">bloomhomeconstruction.com</button>
             <button class="gc-site-tab" onclick="gcGoTo(4)">thepaintinggroup.com</button>
         </div>
-
-        <!-- Click-through hint -->
-        <p style="margin-top:18px;font-size:13px;color:var(--muted)">Click any site to visit it live ↗</p>
     </section>
 
     <div class="gc-divider"></div>
@@ -1292,11 +1292,11 @@
     // ── Website showcase carousel ────────────────────────────────────────────
     (function() {
         var sites = [
-            { domain: 'adusanmateo.com',         href: 'https://adusanmateo.com/' },
-            { domain: 'brightlinehomes.com',      href: 'https://brightlinehomes.com/' },
-            { domain: 'craftsmensguild.com',      href: 'http://craftsmensguild.com/' },
-            { domain: 'bloomhomeconstruction.com',href: 'https://bloomhomeconstruction.com/' },
-            { domain: 'thepaintinggroup.com',     href: 'https://thepaintinggroup.com/' }
+            'adusanmateo.com',
+            'brightlinehomes.com',
+            'craftsmensguild.com',
+            'bloomhomeconstruction.com',
+            'thepaintinggroup.com'
         ];
 
         var current = 0;
@@ -1311,7 +1311,7 @@
         function update(idx) {
             current = (idx + total) % total;
             track.style.transform = 'translateX(-' + (current * 100) + '%)';
-            urlBar.innerHTML = '<strong>' + sites[current].domain + '</strong>';
+            urlBar.innerHTML = '<strong>' + sites[current] + '</strong>';
             dots.forEach(function(d, i) { d.classList.toggle('active', i === current); });
             tabs.forEach(function(t, i) { t.classList.toggle('active', i === current); });
         }
@@ -1324,12 +1324,6 @@
         document.getElementById('gcNext').addEventListener('click', function() {
             resetTimer(); update(current + 1);
         });
-
-        // Click on the browser window → open the current site
-        document.getElementById('gcSlidesTrack').addEventListener('click', function() {
-            window.open(sites[current].href, '_blank', 'noopener');
-        });
-        document.getElementById('gcSlidesTrack').style.cursor = 'pointer';
 
         // Auto-advance
         function startTimer() {
