@@ -492,27 +492,37 @@
     }
     .gc-client-card {
         width: calc(33.333% - 14px);
-        min-width: 280px;
-        border-radius: 16px; overflow: hidden;
-        background: var(--card);
+        min-width: 300px;
+        border-radius: 14px; overflow: hidden;
+        background: #1c1c1e;
         text-decoration: none;
         display: block;
-        box-shadow: 0 8px 40px rgba(0,0,0,0.4);
-        transition: transform 0.25s, box-shadow 0.25s;
-        border: none;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06);
+        transition: transform 0.3s, box-shadow 0.3s;
     }
-    .gc-client-card:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 16px 56px rgba(0,0,0,0.55); }
+    .gc-client-card:hover { transform: translateY(-8px); box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,0,110,0.2); }
     @media (max-width: 700px) { .gc-client-card { width: calc(50% - 10px); min-width: 0; } }
     @media (max-width: 460px) { .gc-client-card { width: 100%; } }
-    .gc-client-shot {
-        width: 100%; aspect-ratio: 4/3; object-fit: cover; object-position: top;
-        display: block; background: var(--card2);
+    /* Browser chrome */
+    .gc-browser-bar {
+        background: #2a2a2c; padding: 9px 14px;
+        display: flex; align-items: center; gap: 10px;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
     }
-    .gc-client-name {
-        padding: 11px 14px;
-        font-size: 12px; font-weight: 600; color: #999;
-        text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        background: var(--card);
+    .gc-browser-dots { display: flex; gap: 5px; flex-shrink: 0; }
+    .gc-browser-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .gc-browser-dot:nth-child(1) { background: #ff5f57; }
+    .gc-browser-dot:nth-child(2) { background: #febc2e; }
+    .gc-browser-dot:nth-child(3) { background: #28c840; }
+    .gc-browser-url {
+        flex: 1; background: rgba(255,255,255,0.07);
+        border-radius: 5px; padding: 4px 10px;
+        font-size: 11px; color: #666;
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .gc-client-shot {
+        width: 100%; aspect-ratio: 16/11; object-fit: cover; object-position: top center;
+        display: block; background: var(--card2);
     }
 
     /* Case studies */
@@ -792,27 +802,44 @@
 
     <!-- ── Client work strip ── -->
     <section class="gc-clients">
-        <div class="gc-section-eyebrow">Websites We've Built That Are Live &amp; Ranking</div>
+        <div class="gc-section-eyebrow">Our Work</div>
+        <h2 class="gc-section-heading" style="font-size:clamp(28px,4vw,52px);margin-bottom:12px">Websites That Win the Job<br>Before You Show Up</h2>
+        <p class="gc-section-sub" style="margin-bottom:48px">Every site below is live, ranking on Google, and generating leads for a contractor right now.</p>
         <div class="gc-clients-grid">
             <a href="https://adusanmateo.com/" target="_blank" rel="noopener" class="gc-client-card">
-                <img class="gc-client-shot" src="https://api.microlink.io/?url=https://adusanmateo.com&screenshot=true&meta=false&embed=screenshot.url" alt="ADU San Mateo" loading="lazy">
-                <div class="gc-client-name">adusanmateo.com</div>
+                <div class="gc-browser-bar">
+                    <div class="gc-browser-dots"><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div></div>
+                    <div class="gc-browser-url">adusanmateo.com</div>
+                </div>
+                <img class="gc-client-shot" src="https://api.microlink.io/?url=https://adusanmateo.com&screenshot=true&meta=false&embed=screenshot.url&viewport.width=1440&viewport.height=900" alt="ADU San Mateo" loading="lazy">
             </a>
             <a href="https://brightlinehomes.com/" target="_blank" rel="noopener" class="gc-client-card">
-                <img class="gc-client-shot" src="https://api.microlink.io/?url=https://brightlinehomes.com&screenshot=true&meta=false&embed=screenshot.url" alt="Brightline Homes" loading="lazy">
-                <div class="gc-client-name">brightlinehomes.com</div>
+                <div class="gc-browser-bar">
+                    <div class="gc-browser-dots"><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div></div>
+                    <div class="gc-browser-url">brightlinehomes.com</div>
+                </div>
+                <img class="gc-client-shot" src="https://api.microlink.io/?url=https://brightlinehomes.com&screenshot=true&meta=false&embed=screenshot.url&viewport.width=1440&viewport.height=900" alt="Brightline Homes" loading="lazy">
             </a>
             <a href="http://craftsmensguild.com/" target="_blank" rel="noopener" class="gc-client-card">
-                <img class="gc-client-shot" src="https://api.microlink.io/?url=https://craftsmensguild.com&screenshot=true&meta=false&embed=screenshot.url" alt="Craftsmen's Guild" loading="lazy">
-                <div class="gc-client-name">craftsmensguild.com</div>
+                <div class="gc-browser-bar">
+                    <div class="gc-browser-dots"><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div></div>
+                    <div class="gc-browser-url">craftsmensguild.com</div>
+                </div>
+                <img class="gc-client-shot" src="https://api.microlink.io/?url=https://craftsmensguild.com&screenshot=true&meta=false&embed=screenshot.url&viewport.width=1440&viewport.height=900" alt="Craftsmen's Guild" loading="lazy">
             </a>
             <a href="https://bloomhomeconstruction.com/" target="_blank" rel="noopener" class="gc-client-card">
-                <img class="gc-client-shot" src="https://api.microlink.io/?url=https://bloomhomeconstruction.com&screenshot=true&meta=false&embed=screenshot.url" alt="Bloom Home Construction" loading="lazy">
-                <div class="gc-client-name">bloomhomeconstruction.com</div>
+                <div class="gc-browser-bar">
+                    <div class="gc-browser-dots"><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div></div>
+                    <div class="gc-browser-url">bloomhomeconstruction.com</div>
+                </div>
+                <img class="gc-client-shot" src="https://api.microlink.io/?url=https://bloomhomeconstruction.com&screenshot=true&meta=false&embed=screenshot.url&viewport.width=1440&viewport.height=900" alt="Bloom Home Construction" loading="lazy">
             </a>
             <a href="https://thepaintinggroup.com/" target="_blank" rel="noopener" class="gc-client-card">
-                <img class="gc-client-shot" src="https://api.microlink.io/?url=https://thepaintinggroup.com&screenshot=true&meta=false&embed=screenshot.url" alt="The Painting Group" loading="lazy">
-                <div class="gc-client-name">thepaintinggroup.com</div>
+                <div class="gc-browser-bar">
+                    <div class="gc-browser-dots"><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div><div class="gc-browser-dot"></div></div>
+                    <div class="gc-browser-url">thepaintinggroup.com</div>
+                </div>
+                <img class="gc-client-shot" src="https://api.microlink.io/?url=https://thepaintinggroup.com&screenshot=true&meta=false&embed=screenshot.url&viewport.width=1440&viewport.height=900" alt="The Painting Group" loading="lazy">
             </a>
         </div>
     </section>
