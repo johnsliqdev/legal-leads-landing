@@ -573,6 +573,117 @@
         color: var(--accent); margin-top: 16px;
     }
 
+    /* ── Team section ─────────────────────────────────────────── */
+    .gc-team {
+        position: relative; z-index: 1;
+        padding: 80px 32px;
+    }
+    .gc-team-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        max-width: 1100px; margin: 32px auto 0;
+    }
+    @media (max-width: 768px) { .gc-team-grid { grid-template-columns: 1fr; } }
+    .gc-team-photo {
+        border-radius: 16px; overflow: hidden;
+        border: 1px solid var(--border);
+        aspect-ratio: 4/3;
+    }
+    .gc-team-photo img {
+        width: 100%; height: 100%; object-fit: cover; display: block;
+        transition: transform 0.4s ease;
+    }
+    .gc-team-photo:hover img { transform: scale(1.03); }
+
+    /* ── Founder section ───────────────────────────────────────── */
+    .gc-founder {
+        position: relative; z-index: 1;
+        padding: 80px 32px;
+        background: var(--bg2);
+    }
+    .gc-founder-inner {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 64px;
+        align-items: center;
+        max-width: 1000px; margin: 0 auto;
+    }
+    @media (max-width: 768px) {
+        .gc-founder-inner { grid-template-columns: 1fr; gap: 36px; }
+    }
+    .gc-founder-label {
+        font-size: 11px; font-weight: 700;
+        text-transform: uppercase; letter-spacing: 2px;
+        color: var(--accent); margin-bottom: 14px;
+    }
+    .gc-founder-heading {
+        font-size: clamp(26px, 3vw, 38px); font-weight: 900;
+        letter-spacing: -0.02em; line-height: 1.15;
+        margin-bottom: 20px;
+    }
+    .gc-founder-body {
+        font-size: 16px; color: #a0a0a0; line-height: 1.7;
+        margin-bottom: 28px;
+    }
+    .gc-founder-quote {
+        border-left: 3px solid var(--accent);
+        padding: 14px 20px;
+        background: rgba(255,0,110,0.05);
+        border-radius: 0 10px 10px 0;
+        font-size: 15px; font-style: italic; color: #ccc; line-height: 1.6;
+        margin-bottom: 20px;
+    }
+    .gc-founder-name { font-size: 14px; font-weight: 700; color: var(--text); }
+    .gc-founder-title { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .gc-founder-video {
+        border-radius: 16px; overflow: hidden;
+        border: 1px solid var(--border);
+        aspect-ratio: 16/9; background: var(--card);
+    }
+    .gc-founder-video video, .gc-founder-video iframe {
+        width: 100%; height: 100%; display: block; border: none;
+    }
+
+    /* ── Clutch reviews ────────────────────────────────────────── */
+    .gc-reviews {
+        position: relative; z-index: 1;
+        padding: 80px 32px;
+        background: var(--bg2);
+    }
+    .gc-reviews-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        max-width: 1000px; margin: 36px auto 0;
+    }
+    @media (max-width: 768px) { .gc-reviews-grid { grid-template-columns: 1fr; } }
+    .gc-review-card {
+        background: var(--card); border: 1px solid var(--border);
+        border-radius: 18px; padding: 28px 24px;
+        display: flex; flex-direction: column; gap: 16px;
+    }
+    .gc-review-stars { color: #f4c430; font-size: 15px; letter-spacing: 2px; }
+    .gc-review-text {
+        font-size: 14px; color: #c0c0c0; line-height: 1.7;
+        font-style: italic; flex: 1;
+    }
+    .gc-review-author { display: flex; align-items: center; gap: 12px; }
+    .gc-review-avatar {
+        width: 36px; height: 36px; border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        display: flex; align-items: center; justify-content: center;
+        font-size: 13px; font-weight: 800; color: #fff; flex-shrink: 0;
+    }
+    .gc-review-name { font-size: 13px; font-weight: 700; color: var(--text); }
+    .gc-review-co { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .gc-review-badge {
+        display: inline-flex; align-items: center; gap: 6px;
+        margin-top: 14px; padding-top: 14px;
+        border-top: 1px solid var(--border);
+        font-size: 11px; color: var(--muted); font-weight: 600;
+    }
+
     /* Awards row */
     .gc-awards {
         position: relative; z-index: 1;
@@ -733,6 +844,110 @@
                     <div class="gc-case-desc">New name, identity, 29-page brand guide, and full visual system — built to attract high-end luxury clients.</div>
                     <div class="gc-case-link">Read case study →</div>
                 </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="gc-divider"></div>
+
+    <!-- ── Team photos ── -->
+    <section class="gc-team">
+        <div class="gc-inner--wide" style="text-align:center">
+            <div class="gc-section-eyebrow">The Team Behind Your Results</div>
+            <h2 class="gc-section-heading">Real People. Obsessive About Your Growth.</h2>
+            <p class="gc-section-sub">We're a tight-knit team of designers, developers, and marketers who've built contractor websites and campaigns from the ground up.</p>
+        </div>
+        <div class="gc-team-grid">
+            <div class="gc-team-photo">
+                <img src="images/team-office.jpg" alt="Sliq team working in the office">
+            </div>
+            <div class="gc-team-photo">
+                <img src="images/team-discussion.jpg" alt="Sliq team deep in strategy">
+            </div>
+            <div class="gc-team-photo">
+                <img src="images/team-kitchen.jpg" alt="Sliq team collaborating">
+            </div>
+        </div>
+    </section>
+
+    <div class="gc-divider"></div>
+
+    <!-- ── Founder message ── -->
+    <section class="gc-founder">
+        <div class="gc-founder-inner">
+            <div>
+                <div class="gc-founder-label">From the Founder</div>
+                <h2 class="gc-founder-heading">Message from Our Founder</h2>
+                <p class="gc-founder-body">We've helped contractors go from invisible online to closing their biggest jobs ever — with a new website live in 48 hours and leads in the pipeline within a week. That's not a pitch. That's what we do every time.</p>
+                <div class="gc-founder-quote">
+                    "Building a brand that people trust is almost as challenging as building the business itself."
+                </div>
+                <div class="gc-founder-name">William Houcheime</div>
+                <div class="gc-founder-title">Founder, Sliq By Design</div>
+            </div>
+            <div class="gc-founder-video">
+                <!-- Replace src with your video file or YouTube embed URL -->
+                <video controls poster="images/founder-poster.jpg">
+                    <source src="images/founder-video.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </section>
+
+    <div class="gc-divider"></div>
+
+    <!-- ── Clutch reviews ── -->
+    <section class="gc-reviews">
+        <div class="gc-inner--wide" style="text-align:center">
+            <div class="gc-section-eyebrow">Client Reviews</div>
+            <h2 class="gc-section-heading">What Our Clients Say on Clutch</h2>
+            <p class="gc-section-sub">Verified reviews from real businesses we've worked with.</p>
+        </div>
+        <div class="gc-reviews-grid">
+            <div class="gc-review-card">
+                <div class="gc-review-stars">★★★★★</div>
+                <p class="gc-review-text">"Sliq delivered a complete website and SEO strategy that had us ranking and generating real leads within weeks. The speed and quality of their work is unlike anything we've experienced."</p>
+                <div class="gc-review-author">
+                    <div class="gc-review-avatar">J</div>
+                    <div>
+                        <div class="gc-review-name">James R.</div>
+                        <div class="gc-review-co">General Contractor · California</div>
+                    </div>
+                </div>
+                <div class="gc-review-badge">
+                    <svg viewBox="0 0 88 25" width="36" height="10"><g fill="#fff"><path d="M22.861 0h4v25h-4zM40.861 17.025c0 3.826-3.217 4.131-4.174 4.131-2.391 0-2.826-2.238-2.826-3.588V8h-4v9.548c0 2.37.744 4.326 2.048 5.63 1.152 1.153 2.878 1.783 4.748 1.783 1.326 0 3.204-.413 4.204-1.326V25h4V8h-4zM52.861 2h-4v6h-3v4h3v13h4V12h3V8h-3zM68.458 19.917c-.871.783-2.021 1.217-3.283 1.217-2.782 0-4.825-2.043-4.825-4.848s1.978-4.762 4.825-4.762c1.24 0 2.412.413 3.305 1.196l.607.522 2.697-2.696-.675-.609C69.522 8.504 67.415 7.7 65.174 7.7c-5 0-8.631 3.608-8.631 8.565 0 4.936 3.718 8.673 8.631 8.673 2.283 0 4.412-.804 5.979-2.26l.652-.609-2.739-2.694zM86.061 9.482C84.909 8.33 83.559 7.7 81.689 7.7c-1.326 0-2.828.413-3.828 1.325V0h-4v25h4v-9.365c0-3.826 2.718-4.13 3.675-4.13 2.391 0 2.325 2.239 2.325 3.587V25h4v-9.887c0-2.37-.495-4.326-1.8-5.631"/></g><path d="M65.043 13.438a2.891 2.891 0 1 1 0 5.784 2.891 2.891 0 0 1 0-5.784" fill="#ff3d2e"/><path d="M17.261 18.721c-1.521 1.565-3.587 2.413-5.761 2.413-4.456 0-7.696-3.5-7.696-8.304 0-4.826 3.24-8.326 7.696-8.326 2.153 0 4.196.847 5.74 2.391l.608.609 2.674-2.674-.587-.609C17.718 1.938 14.718.7 11.5.7 4.935.7 0 5.917 0 12.851 0 19.764 4.957 24.96 11.5 24.96c3.24 0 6.24-1.26 8.457-3.543l.587-.609-2.652-2.717z" fill="#fff"/></svg>
+                    Verified on Clutch
+                </div>
+            </div>
+            <div class="gc-review-card">
+                <div class="gc-review-stars">★★★★★</div>
+                <p class="gc-review-text">"They built our entire online presence from scratch — branding, website, Google Ads. We went from zero to consistently getting inbound calls every week. Highly recommend Sliq to any contractor."</p>
+                <div class="gc-review-author">
+                    <div class="gc-review-avatar">M</div>
+                    <div>
+                        <div class="gc-review-name">Michael T.</div>
+                        <div class="gc-review-co">Home Builder · Pacific Northwest</div>
+                    </div>
+                </div>
+                <div class="gc-review-badge">
+                    <svg viewBox="0 0 88 25" width="36" height="10"><g fill="#fff"><path d="M22.861 0h4v25h-4zM40.861 17.025c0 3.826-3.217 4.131-4.174 4.131-2.391 0-2.826-2.238-2.826-3.588V8h-4v9.548c0 2.37.744 4.326 2.048 5.63 1.152 1.153 2.878 1.783 4.748 1.783 1.326 0 3.204-.413 4.204-1.326V25h4V8h-4zM52.861 2h-4v6h-3v4h3v13h4V12h3V8h-3zM68.458 19.917c-.871.783-2.021 1.217-3.283 1.217-2.782 0-4.825-2.043-4.825-4.848s1.978-4.762 4.825-4.762c1.24 0 2.412.413 3.305 1.196l.607.522 2.697-2.696-.675-.609C69.522 8.504 67.415 7.7 65.174 7.7c-5 0-8.631 3.608-8.631 8.565 0 4.936 3.718 8.673 8.631 8.673 2.283 0 4.412-.804 5.979-2.26l.652-.609-2.739-2.694zM86.061 9.482C84.909 8.33 83.559 7.7 81.689 7.7c-1.326 0-2.828.413-3.828 1.325V0h-4v25h4v-9.365c0-3.826 2.718-4.13 3.675-4.13 2.391 0 2.325 2.239 2.325 3.587V25h4v-9.887c0-2.37-.495-4.326-1.8-5.631"/></g><path d="M65.043 13.438a2.891 2.891 0 1 1 0 5.784 2.891 2.891 0 0 1 0-5.784" fill="#ff3d2e"/><path d="M17.261 18.721c-1.521 1.565-3.587 2.413-5.761 2.413-4.456 0-7.696-3.5-7.696-8.304 0-4.826 3.24-8.326 7.696-8.326 2.153 0 4.196.847 5.74 2.391l.608.609 2.674-2.674-.587-.609C17.718 1.938 14.718.7 11.5.7 4.935.7 0 5.917 0 12.851 0 19.764 4.957 24.96 11.5 24.96c3.24 0 6.24-1.26 8.457-3.543l.587-.609-2.652-2.717z" fill="#fff"/></svg>
+                    Verified on Clutch
+                </div>
+            </div>
+            <div class="gc-review-card">
+                <div class="gc-review-stars">★★★★★</div>
+                <p class="gc-review-text">"The turnaround was insane — new website live in under 48 hours and we were already getting enquiries by end of week one. Sliq knows exactly what contractors need to compete online."</p>
+                <div class="gc-review-author">
+                    <div class="gc-review-avatar">D</div>
+                    <div>
+                        <div class="gc-review-name">David K.</div>
+                        <div class="gc-review-co">Remodeling Contractor · Bay Area</div>
+                    </div>
+                </div>
+                <div class="gc-review-badge">
+                    <svg viewBox="0 0 88 25" width="36" height="10"><g fill="#fff"><path d="M22.861 0h4v25h-4zM40.861 17.025c0 3.826-3.217 4.131-4.174 4.131-2.391 0-2.826-2.238-2.826-3.588V8h-4v9.548c0 2.37.744 4.326 2.048 5.63 1.152 1.153 2.878 1.783 4.748 1.783 1.326 0 3.204-.413 4.204-1.326V25h4V8h-4zM52.861 2h-4v6h-3v4h3v13h4V12h3V8h-3zM68.458 19.917c-.871.783-2.021 1.217-3.283 1.217-2.782 0-4.825-2.043-4.825-4.848s1.978-4.762 4.825-4.762c1.24 0 2.412.413 3.305 1.196l.607.522 2.697-2.696-.675-.609C69.522 8.504 67.415 7.7 65.174 7.7c-5 0-8.631 3.608-8.631 8.565 0 4.936 3.718 8.673 8.631 8.673 2.283 0 4.412-.804 5.979-2.26l.652-.609-2.739-2.694zM86.061 9.482C84.909 8.33 83.559 7.7 81.689 7.7c-1.326 0-2.828.413-3.828 1.325V0h-4v25h4v-9.887c0-2.37-.495-4.326-1.8-5.631"/></g><path d="M65.043 13.438a2.891 2.891 0 1 1 0 5.784 2.891 2.891 0 0 1 0-5.784" fill="#ff3d2e"/><path d="M17.261 18.721c-1.521 1.565-3.587 2.413-5.761 2.413-4.456 0-7.696-3.5-7.696-8.304 0-4.826 3.24-8.326 7.696-8.326 2.153 0 4.196.847 5.74 2.391l.608.609 2.674-2.674-.587-.609C17.718 1.938 14.718.7 11.5.7 4.935.7 0 5.917 0 12.851 0 19.764 4.957 24.96 11.5 24.96c3.24 0 6.24-1.26 8.457-3.543l.587-.609-2.652-2.717z" fill="#fff"/></svg>
+                    Verified on Clutch
+                </div>
             </div>
         </div>
     </section>
