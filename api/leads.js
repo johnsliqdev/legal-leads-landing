@@ -178,6 +178,7 @@ export default async function handler(req, res) {
           calc_leads_count = COALESCE(${toVal(body.calcLeadsCount)}, calc_leads_count),
           calc_same_budget_leads = COALESCE(${toVal(body.calcSameBudgetLeads)}, calc_same_budget_leads),
           requested_callback = COALESCE(${body.requestedCallback === undefined ? null : body.requestedCallback}, requested_callback),
+          situation = COALESCE(${toVal(body.situation)}, situation),
           meta_budget_commitment = COALESCE(${toVal(body.metaBudgetCommitment)}, meta_budget_commitment),
           dedicated_intake = COALESCE(${toVal(body.dedicatedIntake)}, dedicated_intake),
           uses_crm = COALESCE(${toVal(body.usesCRM)}, uses_crm),
@@ -207,25 +208,53 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
       if (!authorized) return json(res, 401, { error: 'unauthorized' });
 
-      const { rows } = await poolInstance.sql`
-        SELECT * FROM leads
-        ORDER BY created_at DESC;
-      `;
+      const url = new URL(req.url, `http://${req.headers.host}`);
+      const funnelFilter = url.searchParams.get('funnel');
+
+      let rows;
+      if (funnelFilter === 'gc') {
+        ({ rows } = await poolInstance.sql`
+          SELECT * FROM leads WHERE funnel = 'GC Audit Funnel' ORDER BY created_at DESC;
+        `);
+      } else if (funnelFilter === 'ls') {
+        ({ rows } = await poolInstance.sql`
+          SELECT * FROM leads WHERE funnel = 'Simple Legal Funnel' ORDER BY created_at DESC;
+        `);
+      } else if (funnelFilter === 'cpql') {
+        ({ rows } = await poolInstance.sql`
+          SELECT * FROM leads WHERE funnel IS NULL OR funnel NOT IN ('GC Audit Funnel', 'Simple Legal Funnel') ORDER BY created_at DESC;
+        `);
+      } else {
+        ({ rows } = await poolInstance.sql`
+          SELECT * FROM leads ORDER BY created_at DESC;
+        `);
+      }
+
       return json(res, 200, rows);
     }
 
     if (req.method === 'DELETE') {
       if (!authorized) return json(res, 401, { error: 'unauthorized' });
 
-      const url = new URL(req.url, `http://${req.headers.host}`);
-      const id = url.searchParams.get('id');
+      const deleteUrl = new URL(req.url, `http://${req.headers.host}`);
+      const id = deleteUrl.searchParams.get('id');
+      const deleteFunnel = deleteUrl.searchParams.get('funnel');
 
       if (id) {
         await poolInstance.sql`DELETE FROM leads WHERE id = ${id};`;
         return json(res, 200, { success: true });
       }
 
-      await poolInstance.sql`TRUNCATE TABLE leads RESTART IDENTITY;`;
+      if (deleteFunnel === 'gc') {
+        await poolInstance.sql`DELETE FROM leads WHERE funnel = 'GC Audit Funnel';`;
+      } else if (deleteFunnel === 'ls') {
+        await poolInstance.sql`DELETE FROM leads WHERE funnel = 'Simple Legal Funnel';`;
+      } else if (deleteFunnel === 'cpql') {
+        await poolInstance.sql`DELETE FROM leads WHERE funnel IS NULL OR funnel NOT IN ('GC Audit Funnel', 'Simple Legal Funnel');`;
+      } else {
+        await poolInstance.sql`TRUNCATE TABLE leads RESTART IDENTITY;`;
+      }
+
       return json(res, 200, { success: true });
     }
 

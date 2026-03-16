@@ -19,6 +19,8 @@ var lsState = {
     hasIntake:        null
 };
 
+var lsLeadId = null;
+
 var LS_STEPS = {
     1: { pct: '17%',  label: 'Your Info',    cur: 1 },
     2: { pct: '33%',  label: 'Situation',    cur: 2 },
@@ -114,6 +116,21 @@ function lsSubmitInfo() {
     lsState.phone   = phone;
     lsState.website = website;
 
+    // Fire webhook immediately on step 1 submission
+    fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            funnel:    'Simple Legal Funnel',
+            ad_source: adSource,
+            email:     email,
+            phone:     phone,
+            website:   website
+        })
+    }).then(function(r) { return r.json(); })
+      .then(function(d) { if (d.id) lsLeadId = d.id; })
+      .catch(function(err) { console.error('Lead POST failed:', err); });
+
     lsNext(2);
 }
 
@@ -169,23 +186,37 @@ function lsSubmitLead() {
     if (typeof fbq === 'function') fbq('track', 'Lead');
     if (typeof window.lintrk === 'function') window.lintrk('track', { conversion_id: 26383314 });
 
-    fetch('/api/leads', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            source:           'legal-simplified',
-            funnel:           'Simple Legal Funnel',
-            ad_source:        adSource,
-            name:             lsState.name,
-            email:            lsState.email,
-            phone:            lsState.phone,
-            website:          lsState.website,
-            selectedScenario: lsState.selectedScenario,
-            budgetCommitment: lsState.budgetCommitment,
-            hasCRM:           lsState.hasCRM,
-            hasIntake:        lsState.hasIntake
-        })
-    }).catch(function (err) { console.error('Lead POST failed:', err); });
+    if (lsLeadId) {
+        // PATCH the existing record with questionnaire answers
+        fetch('/api/leads', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id:                   lsLeadId,
+                situation:            lsState.selectedScenario,
+                metaBudgetCommitment: lsState.budgetCommitment,
+                usesCRM:              lsState.hasCRM,
+                dedicatedIntake:      lsState.hasIntake
+            })
+        }).catch(function(err) { console.error('Lead PATCH failed:', err); });
+    } else {
+        // Fallback: full POST if step-1 id was never captured
+        fetch('/api/leads', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                funnel:               'Simple Legal Funnel',
+                ad_source:            adSource,
+                email:                lsState.email,
+                phone:                lsState.phone,
+                website:              lsState.website,
+                situation:            lsState.selectedScenario,
+                metaBudgetCommitment: lsState.budgetCommitment,
+                usesCRM:              lsState.hasCRM,
+                dedicatedIntake:      lsState.hasIntake
+            })
+        }).catch(function(err) { console.error('Lead POST failed:', err); });
+    }
 
     lsNext(6);
     lsLoadBooking();

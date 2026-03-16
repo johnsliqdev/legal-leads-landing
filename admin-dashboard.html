@@ -155,9 +155,12 @@
                         <p style="color: var(--text-secondary); margin-bottom: 20px;">View all contact form submissions from potential clients</p>
 
                         <!-- Campaign toggle -->
-                        <div style="display:flex; gap:8px; margin-bottom:24px; background:var(--secondary-bg); border-radius:12px; padding:4px; width:fit-content;">
+                        <div style="display:flex; gap:8px; margin-bottom:24px; background:var(--secondary-bg); border-radius:12px; padding:4px; width:fit-content; flex-wrap:wrap;">
                             <button id="togglePI" onclick="switchCampaign('pi')" style="padding:10px 20px; border-radius:9px; border:none; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; background:var(--accent-color); color:#fff;">
-                                Personal Injury Leads
+                                CPQL Funnel
+                            </button>
+                            <button id="toggleLS" onclick="switchCampaign('ls')" style="padding:10px 20px; border-radius:9px; border:none; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; background:transparent; color:var(--text-secondary);">
+                                Simple Legal Funnel
                             </button>
                             <button id="toggleGC" onclick="switchCampaign('gc')" style="padding:10px 20px; border-radius:9px; border:none; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; background:transparent; color:var(--text-secondary);">
                                 General Contractor Leads
