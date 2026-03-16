@@ -831,6 +831,126 @@
         font-size: 12px; color: var(--muted); line-height: 1.7;
         max-width: 680px; margin: 0 auto;
     }
+
+    /* ══════════════════════════════════════════════════════════
+       ANIMATION SYSTEM
+    ══════════════════════════════════════════════════════════ */
+
+    /* Scroll-triggered fade-up */
+    [data-anim] {
+        opacity: 0;
+        transform: translateY(38px);
+        transition: opacity 0.75s cubic-bezier(0.22,1,0.36,1),
+                    transform 0.75s cubic-bezier(0.22,1,0.36,1);
+    }
+    [data-anim].in { opacity: 1; transform: none; }
+    [data-anim][data-d="1"] { transition-delay: 0.1s; }
+    [data-anim][data-d="2"] { transition-delay: 0.2s; }
+    [data-anim][data-d="3"] { transition-delay: 0.3s; }
+    [data-anim][data-d="4"] { transition-delay: 0.4s; }
+    [data-anim][data-d="5"] { transition-delay: 0.5s; }
+
+    /* Hero entrance — each child staggers in on load */
+    .gc-hero > * {
+        animation: heroUp 0.85s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .gc-hero > *:nth-child(1) { animation-delay: 0.05s; }
+    .gc-hero > *:nth-child(2) { animation-delay: 0.2s; }
+    .gc-hero > *:nth-child(3) { animation-delay: 0.35s; }
+    .gc-hero > *:nth-child(4) { animation-delay: 0.48s; }
+    .gc-hero > *:nth-child(5) { animation-delay: 0.58s; }
+    .gc-hero > *:nth-child(6) { animation-delay: 0.68s; }
+    .gc-hero > *:nth-child(7) { animation-delay: 0.76s; }
+    @keyframes heroUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to   { opacity: 1; transform: none; }
+    }
+
+    /* CTA pulse glow */
+    @keyframes ctaGlow {
+        0%,100% { box-shadow: 0 8px 40px rgba(255,0,110,0.45); }
+        50%      { box-shadow: 0 8px 64px rgba(255,0,110,0.75), 0 0 40px rgba(255,107,53,0.35); }
+    }
+    .gc-hero-cta { animation: ctaGlow 2.8s ease-in-out infinite; }
+
+    /* Live badge */
+    .gc-live-badge {
+        display: inline-flex; align-items: center; gap: 10px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 14px; padding: 10px 20px;
+        font-size: 13px; font-weight: 600; color: var(--text);
+        animation: heroUp 0.85s 0.84s cubic-bezier(0.22,1,0.36,1) both,
+                   floatBadge 4.5s 1.5s ease-in-out infinite;
+    }
+    @keyframes floatBadge {
+        0%,100% { transform: translateY(0); }
+        50%      { transform: translateY(-7px); }
+    }
+    .gc-live-dot {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: #28c840; box-shadow: 0 0 8px #28c840;
+        flex-shrink: 0;
+        animation: livePulse 1.6s ease-in-out infinite;
+    }
+    @keyframes livePulse {
+        0%,100% { opacity: 1; transform: scale(1); }
+        50%      { opacity: 0.5; transform: scale(0.75); }
+    }
+
+    /* Floating orbs */
+    .gc-orb {
+        position: absolute; border-radius: 50%; pointer-events: none;
+        filter: blur(90px);
+        animation: orbDrift var(--od,10s) ease-in-out infinite;
+    }
+    @keyframes orbDrift {
+        0%,100% { transform: translate(0,0); }
+        33%  { transform: translate(var(--ox1,20px),var(--oy1,-30px)); }
+        66%  { transform: translate(var(--ox2,-20px),var(--oy2,20px)); }
+    }
+
+    /* ── Team photo hover overlay ─────────────────────────────────── */
+    .gc-team-photo { position: relative; overflow: hidden; }
+    .gc-team-overlay {
+        position: absolute; inset: 0;
+        background: linear-gradient(to top,
+            rgba(255,0,110,0.92) 0%,
+            rgba(180,0,80,0.15) 50%,
+            transparent 70%);
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.38s, transform 0.38s;
+        display: flex; flex-direction: column;
+        justify-content: flex-end; align-items: flex-start;
+        padding: 26px 22px;
+    }
+    .gc-team-photo:hover .gc-team-overlay { opacity: 1; transform: none; }
+    .gc-team-photo:hover img { transform: scale(1.06); }
+    .gc-team-overlay-tag {
+        font-size: 10px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: 2px; color: rgba(255,255,255,0.7); margin-bottom: 6px;
+    }
+    .gc-team-overlay-line {
+        font-size: 18px; font-weight: 800; color: #fff; line-height: 1.25;
+    }
+
+    /* ── Stats hover lift ─────────────────────────────────────────── */
+    .gc-stat { transition: transform 0.25s; cursor: default; }
+    .gc-stat:hover { transform: translateY(-5px); }
+
+    /* ── Case card 3D tilt ────────────────────────────────────────── */
+    .gc-case-card { will-change: transform; }
+
+    /* ── Review card hover glow ───────────────────────────────────── */
+    .gc-review-card {
+        transition: transform 0.28s, border-color 0.28s, box-shadow 0.28s;
+    }
+    .gc-review-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(255,0,110,0.3);
+        box-shadow: 0 24px 60px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,0,110,0.15);
+    }
     </style>
 </head>
 <body>
@@ -846,6 +966,10 @@
 
     <!-- ── Hero ── -->
     <section class="gc-hero">
+        <!-- floating depth orbs -->
+        <div class="gc-orb" style="width:380px;height:380px;background:rgba(255,0,110,0.12);top:-120px;right:-80px;--od:13s;--ox1:40px;--oy1:-20px;--ox2:-30px;--oy2:35px;z-index:0"></div>
+        <div class="gc-orb" style="width:250px;height:250px;background:rgba(255,107,53,0.09);bottom:-60px;left:-60px;--od:9s;--ox1:-25px;--oy1:30px;--ox2:20px;--oy2:-20px;z-index:0"></div>
+
         <div class="gc-eyebrow">
             <div class="gc-eyebrow-dot"></div>
             For General Contractors · $500K–$5M Revenue
@@ -871,6 +995,10 @@
         <a href="#gcFormSection" class="gc-hero-cta">Apply Now — Check Your Eligibility →</a>
 
         <p class="gc-hero-note">Limited spots. <strong>Book within 24 hours to guarantee your audit.</strong></p>
+        <div class="gc-live-badge">
+            <div class="gc-live-dot"></div>
+            Accepting new contractors this week
+        </div>
     </section>
 
     <div class="gc-divider"></div>
@@ -878,20 +1006,20 @@
     <!-- ── Stats strip ── -->
     <section class="gc-stats">
         <div class="gc-stats-grid">
-            <div class="gc-stat">
-                <div class="gc-stat-num">$200K</div>
+            <div class="gc-stat" data-anim data-d="1">
+                <div class="gc-stat-num" data-count="200" data-prefix="$" data-suffix="K">$200K</div>
                 <div class="gc-stat-label">Lead generated in 60 days for a brand-new business</div>
             </div>
-            <div class="gc-stat">
-                <div class="gc-stat-num">$9K/mo</div>
+            <div class="gc-stat" data-anim data-d="2">
+                <div class="gc-stat-num" data-count="9" data-prefix="$" data-suffix="K/mo">$9K/mo</div>
                 <div class="gc-stat-label">Organic click value for a construction company</div>
             </div>
-            <div class="gc-stat">
-                <div class="gc-stat-num">250%+</div>
+            <div class="gc-stat" data-anim data-d="3">
+                <div class="gc-stat-num" data-count="250" data-suffix="%+">250%+</div>
                 <div class="gc-stat-label">Traffic increase within 4 months of launch</div>
             </div>
-            <div class="gc-stat">
-                <div class="gc-stat-num">$3M+</div>
+            <div class="gc-stat" data-anim data-d="4">
+                <div class="gc-stat-num" data-count="3" data-prefix="$" data-suffix="M+">$3M+</div>
                 <div class="gc-stat-label">In project leads unlocked through SEO alone</div>
             </div>
         </div>
@@ -972,21 +1100,21 @@
             <h2 class="gc-section-heading">What We've Done for Contractors Like You</h2>
             <p class="gc-section-sub">Not hypotheticals. These are construction and trades businesses — real numbers, real timelines.</p>
             <div class="gc-cases-grid">
-                <a href="https://sliqbydesign.com/case_studies/achieving-9000-mo-in-organic-clicks-for-a-legacy-construction-company/" target="_blank" rel="noopener" class="gc-case-card">
+                <a href="https://sliqbydesign.com/case_studies/achieving-9000-mo-in-organic-clicks-for-a-legacy-construction-company/" target="_blank" rel="noopener" class="gc-case-card" data-anim data-d="1">
                     <div class="gc-case-tag">SEO + Web</div>
                     <div class="gc-case-stat">$9K/mo</div>
                     <div class="gc-case-title">Organic Traffic Value for a Legacy Construction Company</div>
                     <div class="gc-case-desc">30 of 45 target keywords hit the top 10. 250%+ user growth in 4 months. $3M+ in new project leads from organic search alone.</div>
                     <div class="gc-case-link">Read case study →</div>
                 </a>
-                <a href="https://sliqbydesign.com/case_studies/how-we-generated-a-200000-lead-for-a-new-business-in-60-days/" target="_blank" rel="noopener" class="gc-case-card">
+                <a href="https://sliqbydesign.com/case_studies/how-we-generated-a-200000-lead-for-a-new-business-in-60-days/" target="_blank" rel="noopener" class="gc-case-card" data-anim data-d="2">
                     <div class="gc-case-tag">Web + Paid Ads</div>
                     <div class="gc-case-stat">$200K</div>
                     <div class="gc-case-title">Lead Generated in 60 Days for a Brand New Business</div>
                     <div class="gc-case-desc">Website, SEO, Google and Meta ads — all from scratch. Combined pipeline value up to $375K within the first 60 days.</div>
                     <div class="gc-case-link">Read case study →</div>
                 </a>
-                <a href="https://sliqbydesign.com/case_studies/the-making-of-the-mythodium-brand-style-guide/" target="_blank" rel="noopener" class="gc-case-card">
+                <a href="https://sliqbydesign.com/case_studies/the-making-of-the-mythodium-brand-style-guide/" target="_blank" rel="noopener" class="gc-case-card" data-anim data-d="3">
                     <div class="gc-case-tag">Brand Identity</div>
                     <div class="gc-case-stat">0 → Brand</div>
                     <div class="gc-case-title">Complete Brand System for an Architecture &amp; Design Firm</div>
@@ -1001,20 +1129,32 @@
 
     <!-- ── Team photos ── -->
     <section class="gc-team">
-        <div class="gc-inner--wide" style="text-align:center">
+        <div class="gc-inner--wide" style="text-align:center" data-anim>
             <div class="gc-section-eyebrow">The Team Behind Your Results</div>
             <h2 class="gc-section-heading">We Don't Clock Out Until You're Booked Out.</h2>
             <p class="gc-section-sub">We're a tight-knit team of designers, developers, and marketers who've built contractor websites and campaigns from the ground up.</p>
         </div>
         <div class="gc-team-grid">
-            <div class="gc-team-photo">
+            <div class="gc-team-photo" data-anim data-d="1">
                 <img src="images/sleek-1.png" alt="Sliq team working in the office">
+                <div class="gc-team-overlay">
+                    <div class="gc-team-overlay-tag">Design · Dev · Strategy</div>
+                    <div class="gc-team-overlay-line">We ship. You close.</div>
+                </div>
             </div>
-            <div class="gc-team-photo">
+            <div class="gc-team-photo" data-anim data-d="2">
                 <img src="images/ethical-2.webp" alt="Sliq team deep in strategy">
+                <div class="gc-team-overlay">
+                    <div class="gc-team-overlay-tag">Every client. Every time.</div>
+                    <div class="gc-team-overlay-line">No account managers. You talk to us.</div>
+                </div>
             </div>
-            <div class="gc-team-photo">
+            <div class="gc-team-photo" data-anim data-d="3">
                 <img src="images/creative-1.png" alt="Sliq team collaborating">
+                <div class="gc-team-overlay">
+                    <div class="gc-team-overlay-tag">Fast by design</div>
+                    <div class="gc-team-overlay-line">Website live in 48 hours. Guaranteed.</div>
+                </div>
             </div>
         </div>
     </section>
@@ -1052,7 +1192,7 @@
             <p class="gc-section-sub">Verified reviews from real businesses we've worked with.</p>
         </div>
         <div class="gc-reviews-grid">
-            <div class="gc-review-card">
+            <div class="gc-review-card" data-anim data-d="1">
                 <div class="gc-review-stars">★★★★★</div>
                 <p class="gc-review-text">"They tackle every situation as its own unique issue and were very easy to work with. SLIQ BY DESIGN has helped us improve our SEO, resulting in an increase in leads and positive feedback from clients."</p>
                 <div class="gc-review-author">
@@ -1067,7 +1207,7 @@
                     Verified on Clutch · Oct 2025
                 </div>
             </div>
-            <div class="gc-review-card">
+            <div class="gc-review-card" data-anim data-d="2">
                 <div class="gc-review-stars">★★★★★</div>
                 <p class="gc-review-text">"They are on top of their game, and we are very happy to have partnered up with them. The team is always on time, informative, and reachable — and their product knowledge is impressive."</p>
                 <div class="gc-review-author">
@@ -1082,7 +1222,7 @@
                     Verified on Clutch · Sep 2024
                 </div>
             </div>
-            <div class="gc-review-card">
+            <div class="gc-review-card" data-anim data-d="3">
                 <div class="gc-review-stars">★★★★★</div>
                 <p class="gc-review-text">"The culture of the company is great. The team is professional, talented, and communicates well — leading to quick and punctual changes. They are organized and deliver work on time."</p>
                 <div class="gc-review-author">
@@ -1308,6 +1448,60 @@
 
     <script src="general-contractors.js"></script>
     <script>
+    // ── Scroll-triggered animations ──────────────────────────────────────────
+    (function() {
+        var io = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) {
+                    e.target.classList.add('in');
+                    io.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('[data-anim]').forEach(function(el) { io.observe(el); });
+    })();
+
+    // ── Stats count-up ────────────────────────────────────────────────────────
+    (function() {
+        function animCount(el) {
+            var target = parseFloat(el.dataset.count);
+            var prefix = el.dataset.prefix || '';
+            var suffix = el.dataset.suffix || '';
+            var start = performance.now();
+            var dur = 1800;
+            function tick(now) {
+                var p = Math.min((now - start) / dur, 1);
+                var ease = 1 - Math.pow(1 - p, 4);
+                var val = target * ease;
+                var disp = target < 10 ? val.toFixed(0) : Math.round(val);
+                el.textContent = prefix + disp + suffix;
+                if (p < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        }
+        var so = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+                if (e.isIntersecting) { animCount(e.target); so.unobserve(e.target); }
+            });
+        }, { threshold: 0.6 });
+        document.querySelectorAll('[data-count]').forEach(function(el) { so.observe(el); });
+    })();
+
+    // ── Case card 3D tilt ─────────────────────────────────────────────────────
+    document.querySelectorAll('.gc-case-card').forEach(function(card) {
+        card.addEventListener('mousemove', function(e) {
+            var r = card.getBoundingClientRect();
+            var x = (e.clientX - r.left) / r.width  - 0.5;
+            var y = (e.clientY - r.top)  / r.height - 0.5;
+            card.style.transform = 'perspective(700px) rotateY(' + (x*9) + 'deg) rotateX(' + (-y*9) + 'deg) translateY(-5px)';
+            card.style.transition = 'transform 0.08s';
+        });
+        card.addEventListener('mouseleave', function() {
+            card.style.transform = '';
+            card.style.transition = 'transform 0.4s cubic-bezier(0.22,1,0.36,1)';
+        });
+    });
+
     // ── Website showcase carousel ────────────────────────────────────────────
     (function() {
         var sites = [
