@@ -477,7 +477,7 @@
     /* Client screenshots strip */
     .gc-clients {
         position: relative; z-index: 1;
-        padding: 72px 32px; text-align: center;
+        padding: 80px 32px; text-align: center;
     }
     .gc-section-eyebrow {
         font-size: 11px; font-weight: 700;
@@ -485,31 +485,34 @@
         color: var(--muted); margin-bottom: 24px;
     }
     .gc-clients-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 18px;
-        max-width: 1100px; margin: 0 auto;
+        display: flex; flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        max-width: 1160px; margin: 0 auto;
     }
-    @media (max-width: 700px) { .gc-clients-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 460px) { .gc-clients-grid { grid-template-columns: 1fr; } }
     .gc-client-card {
-        border-radius: 12px; overflow: hidden;
-        border: 1px solid var(--border);
+        width: calc(33.333% - 14px);
+        min-width: 280px;
+        border-radius: 16px; overflow: hidden;
         background: var(--card);
         text-decoration: none;
         display: block;
-        transition: border-color 0.2s, transform 0.2s;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+        transition: transform 0.25s, box-shadow 0.25s;
+        border: none;
     }
-    .gc-client-card:hover { border-color: rgba(255,0,110,0.4); transform: translateY(-3px); }
+    .gc-client-card:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 16px 56px rgba(0,0,0,0.55); }
+    @media (max-width: 700px) { .gc-client-card { width: calc(50% - 10px); min-width: 0; } }
+    @media (max-width: 460px) { .gc-client-card { width: 100%; } }
     .gc-client-shot {
-        width: 100%; aspect-ratio: 16/11; object-fit: cover; object-position: top;
-        display: block;
-        background: var(--card2);
+        width: 100%; aspect-ratio: 4/3; object-fit: cover; object-position: top;
+        display: block; background: var(--card2);
     }
     .gc-client-name {
-        padding: 10px 12px;
-        font-size: 12px; font-weight: 600; color: #bbb;
+        padding: 11px 14px;
+        font-size: 12px; font-weight: 600; color: #999;
         text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        background: var(--card);
     }
 
     /* Case studies */
@@ -789,7 +792,7 @@
 
     <!-- ── Client work strip ── -->
     <section class="gc-clients">
-        <div class="gc-section-eyebrow">Contractors we've built for</div>
+        <div class="gc-section-eyebrow">Websites We've Built That Are Live &amp; Ranking</div>
         <div class="gc-clients-grid">
             <a href="https://adusanmateo.com/" target="_blank" rel="noopener" class="gc-client-card">
                 <img class="gc-client-shot" src="https://api.microlink.io/?url=https://adusanmateo.com&screenshot=true&meta=false&embed=screenshot.url" alt="ADU San Mateo" loading="lazy">
@@ -854,7 +857,7 @@
     <section class="gc-team">
         <div class="gc-inner--wide" style="text-align:center">
             <div class="gc-section-eyebrow">The Team Behind Your Results</div>
-            <h2 class="gc-section-heading">Real People. Obsessive About Your Growth.</h2>
+            <h2 class="gc-section-heading">We Don't Clock Out Until You're Booked Out.</h2>
             <p class="gc-section-sub">We're a tight-knit team of designers, developers, and marketers who've built contractor websites and campaigns from the ground up.</p>
         </div>
         <div class="gc-team-grid">
