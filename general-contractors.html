@@ -547,11 +547,30 @@
     .gc-slide-item {
         flex: 0 0 100%; height: 100%; position: relative;
     }
+    .gc-slide-item {
+        background: #1e1e20;
+    }
+    .gc-slide-item::before {
+        /* shimmer skeleton shown while image loads */
+        content: '';
+        position: absolute; inset: 0;
+        background: linear-gradient(90deg,
+            rgba(255,255,255,0.03) 0%,
+            rgba(255,255,255,0.07) 40%,
+            rgba(255,255,255,0.03) 60%);
+        background-size: 200% 100%;
+        animation: shimmer 1.6s infinite;
+        z-index: 1;
+    }
+    @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
     .gc-slide-item img {
         width: 100%; height: 100%;
         object-fit: cover; object-position: top center;
         display: block; filter: none;
+        position: relative; z-index: 2;
+        opacity: 0; transition: opacity 0.4s;
     }
+    .gc-slide-item img.loaded { opacity: 1; }
 
     /* Prev / next arrows — positioned on the OUTER wrapper, not the clipping viewport */
     .gc-arrow {
@@ -902,19 +921,19 @@
                 <div class="gc-slides-viewport">
                     <div class="gc-slides-track" id="gcSlidesTrack">
                         <div class="gc-slide-item">
-                            <img src="https://s0.wordpress.com/mshots/v1/?url=https%3A%2F%2Fadusanmateo.com&w=1440" alt="ADU San Mateo" loading="eager">
+                            <img src="images/site-adusanmateo.jpg" alt="ADU San Mateo" loading="eager">
                         </div>
                         <div class="gc-slide-item">
-                            <img src="https://s0.wordpress.com/mshots/v1/?url=https%3A%2F%2Fbrightlinehomes.com&w=1440" alt="Brightline Homes" loading="lazy">
+                            <img src="images/site-brightlinehomes.jpg" alt="Brightline Homes" loading="lazy">
                         </div>
                         <div class="gc-slide-item">
-                            <img src="https://s0.wordpress.com/mshots/v1/?url=https%3A%2F%2Fcraftsmensguild.com&w=1440" alt="Craftsmen's Guild" loading="lazy">
+                            <img src="images/site-craftsmensguild.jpg" alt="Craftsmen's Guild" loading="lazy">
                         </div>
                         <div class="gc-slide-item">
-                            <img src="https://s0.wordpress.com/mshots/v1/?url=https%3A%2F%2Fbloomhomeconstruction.com&w=1440" alt="Bloom Home Construction" loading="lazy">
+                            <img src="images/site-bloomhome.jpg" alt="Bloom Home Construction" loading="lazy">
                         </div>
                         <div class="gc-slide-item">
-                            <img src="https://s0.wordpress.com/mshots/v1/?url=https%3A%2F%2Fthepaintinggroup.com&w=1440" alt="The Painting Group" loading="lazy">
+                            <img src="images/site-paintinggroup.jpg" alt="The Painting Group" loading="lazy">
                         </div>
                     </div>
                 </div>
@@ -1307,6 +1326,12 @@
         var urlBar = document.getElementById('gcWinUrl');
         var dots   = document.querySelectorAll('#gcDots .gc-dot');
         var tabs   = document.querySelectorAll('#gcSiteTabs .gc-site-tab');
+
+        // Fade in each image once loaded
+        document.querySelectorAll('.gc-slide-item img').forEach(function(img) {
+            if (img.complete) { img.classList.add('loaded'); }
+            else { img.addEventListener('load', function() { img.classList.add('loaded'); }); }
+        });
 
         function update(idx) {
             current = (idx + total) % total;
