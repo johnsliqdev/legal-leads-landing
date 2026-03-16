@@ -13,6 +13,7 @@ var gcState = {
     email:        null,
     phone:        null,
     website:      null,
+    competitors:  null,
     revenueRange: null,
     situation:    null
 };
@@ -99,10 +100,11 @@ function gcCheckInfo() {
 }
 
 function gcSubmitInfo() {
-    gcState.name    = document.getElementById('gcName').value.trim();
-    gcState.email   = document.getElementById('gcEmail').value.trim();
-    gcState.phone   = document.getElementById('gcPhone').value.trim();
-    gcState.website = document.getElementById('gcWebsite').value.trim();
+    gcState.name        = document.getElementById('gcName').value.trim();
+    gcState.email       = document.getElementById('gcEmail').value.trim();
+    gcState.phone       = document.getElementById('gcPhone').value.trim();
+    gcState.website     = document.getElementById('gcWebsite').value.trim();
+    gcState.competitors = document.getElementById('gcCompetitors').value.trim();
     gcNext(2);
 }
 
@@ -159,6 +161,7 @@ function gcSubmitLead() {
             email:         gcState.email,
             phone:         gcState.phone,
             website:       gcState.website,
+            competitors:   gcState.competitors,
             revenue_range: gcState.revenueRange,
             situation:     gcState.situation
         })

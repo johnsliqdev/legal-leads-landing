@@ -821,6 +821,65 @@
     .gc-award-name { font-size: 13px; font-weight: 700; color: var(--text); }
     .gc-award-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
+    /* ── Apply section two-column layout ────────────────────── */
+    #gcFormSection { padding: 100px 32px 120px; position: relative; z-index: 1; }
+    @media (max-width: 600px) { #gcFormSection { padding: 72px 20px 80px; } }
+
+    .gc-apply-top { text-align: center; margin-bottom: 56px; }
+
+    .gc-apply-layout {
+        display: grid;
+        grid-template-columns: 1fr 500px;
+        gap: 56px;
+        align-items: start;
+        max-width: 1100px; margin: 0 auto;
+    }
+    @media (max-width: 1000px) { .gc-apply-layout { grid-template-columns: 1fr; gap: 48px; } }
+
+    /* Offer pillars */
+    .gc-offer-pillars { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+    .gc-offer-pillar {
+        display: flex; align-items: flex-start; gap: 18px;
+        padding: 20px 22px;
+        background: var(--card); border: 1px solid var(--border);
+        border-radius: 16px;
+        transition: border-color 0.22s, transform 0.22s;
+    }
+    .gc-offer-pillar:hover { border-color: var(--border-a); transform: translateX(5px); }
+    .gc-offer-icon {
+        width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        display: flex; align-items: center; justify-content: center;
+        font-size: 21px;
+    }
+    .gc-offer-pillar-title { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+    .gc-offer-pillar-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+    /* Audit rules */
+    .gc-audit-rules {
+        background: rgba(255,0,110,0.04);
+        border: 1px solid rgba(255,0,110,0.2);
+        border-radius: 18px; padding: 28px 26px;
+    }
+    .gc-rules-heading {
+        font-size: 11px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: 2px; color: var(--accent); margin-bottom: 20px;
+    }
+    .gc-rule {
+        display: flex; align-items: flex-start; gap: 14px;
+        padding: 14px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .gc-rule:last-child { border-bottom: none; padding-bottom: 0; }
+    .gc-rule-num {
+        width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        display: flex; align-items: center; justify-content: center;
+        font-size: 11px; font-weight: 800; color: #fff; margin-top: 1px;
+    }
+    .gc-rule-text { font-size: 14px; line-height: 1.6; color: #d0d0d0; }
+    .gc-rule-text strong { color: #fff; font-weight: 700; }
+
     /* ── Footer ──────────────────────────────────────────────── */
     .gc-footer {
         position: relative; z-index: 1;
@@ -1275,10 +1334,63 @@
 
     <!-- ── Form section ── -->
     <section id="gcFormSection">
-        <div class="gc-form-label">Apply to Qualify</div>
-        <div class="gc-form-heading">See If You Qualify</div>
-        <p class="gc-form-sub">Takes 60 seconds. Not everyone qualifies — we only work with established contractors serious about growing online.</p>
+        <!-- Top heading -->
+        <div class="gc-apply-top" data-anim>
+            <div class="gc-form-label">Apply to Qualify</div>
+            <h2 class="gc-form-heading">See If You Qualify</h2>
+            <p class="gc-form-sub">Takes 60 seconds. Not everyone qualifies — we only work with established contractors serious about growing.</p>
+        </div>
 
+        <div class="gc-apply-layout">
+
+        <!-- ── Left: Offer + Rules ── -->
+        <div class="gc-apply-left" data-anim data-d="1">
+
+            <!-- What you get -->
+            <div class="gc-offer-pillars">
+                <div class="gc-offer-pillar">
+                    <div class="gc-offer-icon">⚡</div>
+                    <div>
+                        <div class="gc-offer-pillar-title">Custom Website — Built in 24 Hours</div>
+                        <div class="gc-offer-pillar-desc">Designed for your market, built to convert visitors into quote requests. Live and indexed in 48 hours.</div>
+                    </div>
+                </div>
+                <div class="gc-offer-pillar">
+                    <div class="gc-offer-icon">📍</div>
+                    <div>
+                        <div class="gc-offer-pillar-title">Local SEO — Own Your City on Google</div>
+                        <div class="gc-offer-pillar-desc">We build your local presence so you show up when homeowners in your area search for what you do.</div>
+                    </div>
+                </div>
+                <div class="gc-offer-pillar">
+                    <div class="gc-offer-icon">🎯</div>
+                    <div>
+                        <div class="gc-offer-pillar-title">Meta Ads — Qualified Leads on Autopilot</div>
+                        <div class="gc-offer-pillar-desc">Facebook and Instagram campaigns built for contractors — targeting homeowners ready to hire, not just browsing.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audit rules -->
+            <div class="gc-audit-rules">
+                <div class="gc-rules-heading">How the Free Audit Works</div>
+                <div class="gc-rule">
+                    <div class="gc-rule-num">1</div>
+                    <div class="gc-rule-text"><strong>You need a live website.</strong> We'll tear it apart against your competitors — scoring speed, SEO, and conversion gaps.</div>
+                </div>
+                <div class="gc-rule">
+                    <div class="gc-rule-num">2</div>
+                    <div class="gc-rule-text"><strong>Name 2–3 local competitors in the form.</strong> We pull their data too — keywords they rank for, ad spend estimates, and what they're doing better.</div>
+                </div>
+                <div class="gc-rule">
+                    <div class="gc-rule-num">3</div>
+                    <div class="gc-rule-text"><strong>Book the call and show up.</strong> We walk through your full audit live. You'll leave with a clear picture of exactly what's costing you jobs — and how to fix it.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Right: Form card ── -->
+        <div class="gc-apply-right" data-anim data-d="2">
         <div class="gc-form-card">
             <div class="gc-progress-bar">
                 <div class="gc-progress-fill" id="gcProgressFill"></div>
@@ -1309,6 +1421,10 @@
                         <label>Company Website</label>
                         <input type="text" id="gcWebsite" placeholder="smithcontracting.com" autocomplete="url">
                         <div class="gc-field-err" id="gcWebsiteErr">Enter a valid website (e.g. smithcontracting.com)</div>
+                    </div>
+                    <div class="gc-field">
+                        <label>Top 2–3 Local Competitors <span style="color:var(--muted);font-weight:400">(optional — helps us build your audit)</span></label>
+                        <input type="text" id="gcCompetitors" placeholder="e.g. acmecontracting.com, joesroofing.com">
                     </div>
                     <div class="gc-nav">
                         <button class="gc-btn-next" id="gcN1" onclick="gcSubmitInfo()" disabled>Check My Eligibility →</button>
@@ -1420,6 +1536,8 @@
 
             </div><!-- /.gc-step-body -->
         </div><!-- /.gc-form-card -->
+        </div><!-- /.gc-apply-right -->
+        </div><!-- /.gc-apply-layout -->
     </section>
 
     <!-- ── Post-booking: What Happens Next ── -->

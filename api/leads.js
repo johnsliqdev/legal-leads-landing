@@ -100,6 +100,7 @@ async function ensureSchema(poolInstance) {
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS funnel TEXT;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS revenue_range TEXT;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS situation TEXT;`;
+  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS competitors TEXT;`;
 
   // Drop unused columns (never collected)
   await poolInstance.sql`ALTER TABLE leads DROP COLUMN IF EXISTS first_name;`;
@@ -121,7 +122,7 @@ export default async function handler(req, res) {
           calc_current_monthly_spend, calc_current_cpql, calc_guaranteed_cpql,
           calc_new_monthly_spend, calc_monthly_savings, calc_annual_savings,
           calc_cpql_reduction, calc_leads_count, calc_same_budget_leads,
-          requested_callback, ad_source, funnel, revenue_range, situation
+          requested_callback, ad_source, funnel, revenue_range, situation, competitors
         ) VALUES (
           ${body.email || null}, ${body.phone || null},
           ${body.website === '' ? '' : (body.website || null)},
@@ -131,7 +132,8 @@ export default async function handler(req, res) {
           ${body.calcCpqlReduction || null}, ${body.calcLeadsCount || null},
           ${body.calcSameBudgetLeads || null}, ${body.requestedCallback || false},
           ${body.ad_source || null}, ${body.funnel || null},
-          ${body.revenue_range || null}, ${body.situation || null}
+          ${body.revenue_range || null}, ${body.situation || null},
+          ${body.competitors || null}
         )
         RETURNING id;
       `;
@@ -147,6 +149,7 @@ export default async function handler(req, res) {
         funnel:        body.funnel || '',
         revenue_range: body.revenue_range || '',
         situation:     body.situation || '',
+        competitors:   body.competitors || '',
       });
 
       return json(res, 200, { success: true, id: insertedId });
