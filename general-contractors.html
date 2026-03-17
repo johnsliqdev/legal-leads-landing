@@ -854,20 +854,34 @@
         box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,0,110,0.2);
     }
 
-    /* Clip Instagram header + footer by shifting the iframe outside
-       overflow:hidden — header pushed above, footer pushed below.
-       overflow:hidden also blocks pointer events on the clipped portions. */
-    .gc-reel-clip {
+    .gc-reel-video {
         position: absolute; inset: 0;
-        overflow: hidden;
+        width: 100%; height: 100%;
+        object-fit: cover;
+        display: block;
+        cursor: pointer;
     }
-    .gc-reel-clip iframe {
-        position: absolute;
-        top: -80px; left: 0;
-        width: 100%;
-        height: calc(100% + 160px);
-        border: none; display: block;
+    .gc-reel-play-btn {
+        position: absolute; inset: 0;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        z-index: 5;
     }
+    .gc-reel-play-btn span {
+        width: 60px; height: 60px; border-radius: 50%;
+        background: rgba(0,0,0,0.55);
+        backdrop-filter: blur(8px);
+        border: 2px solid rgba(255,255,255,0.6);
+        display: flex; align-items: center; justify-content: center;
+        transition: background 0.2s, transform 0.2s;
+    }
+    .gc-reel-card:hover .gc-reel-play-btn span {
+        background: var(--accent);
+        border-color: var(--accent);
+        transform: scale(1.1);
+    }
+    .gc-reel-play-btn.hidden { opacity: 0; pointer-events: none; }
 
     /* ── Apply section stacked layout ───────────────────────── */
     #gcFormSection { padding: 100px 32px 120px; position: relative; z-index: 1; }
@@ -1383,28 +1397,43 @@
         </div>
         <div class="gc-reels-grid">
             <div class="gc-reel-card" data-anim data-d="1">
-                <div class="gc-reel-clip">
-                    <iframe src="https://www.instagram.com/reel/DQZegHWgveE/embed/" allowfullscreen scrolling="no" allowtransparency loading="lazy"></iframe>
+                <video class="gc-reel-video" playsinline loop preload="none">
+                    <source src="images/reel-1.mp4" type="video/mp4">
+                </video>
+                <div class="gc-reel-play-btn" onclick="gcToggleReel(this)">
+                    <span><svg viewBox="0 0 24 24" fill="#fff" width="26" height="26"><polygon points="6,3 20,12 6,21"/></svg></span>
                 </div>
             </div>
             <div class="gc-reel-card" data-anim data-d="2">
-                <div class="gc-reel-clip">
-                    <iframe src="https://www.instagram.com/reel/DRdCcKjDJPG/embed/" allowfullscreen scrolling="no" allowtransparency loading="lazy"></iframe>
+                <video class="gc-reel-video" playsinline loop preload="none">
+                    <source src="images/reel-2.mp4" type="video/mp4">
+                </video>
+                <div class="gc-reel-play-btn" onclick="gcToggleReel(this)">
+                    <span><svg viewBox="0 0 24 24" fill="#fff" width="26" height="26"><polygon points="6,3 20,12 6,21"/></svg></span>
                 </div>
             </div>
             <div class="gc-reel-card" data-anim data-d="3">
-                <div class="gc-reel-clip">
-                    <iframe src="https://www.instagram.com/reel/DOeUqBUgKf9/embed/" allowfullscreen scrolling="no" allowtransparency loading="lazy"></iframe>
+                <video class="gc-reel-video" playsinline loop preload="none">
+                    <source src="images/reel-3.mp4" type="video/mp4">
+                </video>
+                <div class="gc-reel-play-btn" onclick="gcToggleReel(this)">
+                    <span><svg viewBox="0 0 24 24" fill="#fff" width="26" height="26"><polygon points="6,3 20,12 6,21"/></svg></span>
                 </div>
             </div>
             <div class="gc-reel-card" data-anim data-d="4">
-                <div class="gc-reel-clip">
-                    <iframe src="https://www.instagram.com/reel/DQ4byUggn0C/embed/" allowfullscreen scrolling="no" allowtransparency loading="lazy"></iframe>
+                <video class="gc-reel-video" playsinline loop preload="none">
+                    <source src="images/reel-4.mp4" type="video/mp4">
+                </video>
+                <div class="gc-reel-play-btn" onclick="gcToggleReel(this)">
+                    <span><svg viewBox="0 0 24 24" fill="#fff" width="26" height="26"><polygon points="6,3 20,12 6,21"/></svg></span>
                 </div>
             </div>
             <div class="gc-reel-card" data-anim data-d="5">
-                <div class="gc-reel-clip">
-                    <iframe src="https://www.instagram.com/reel/DO67JGdAlat/embed/" allowfullscreen scrolling="no" allowtransparency loading="lazy"></iframe>
+                <video class="gc-reel-video" playsinline loop preload="none">
+                    <source src="images/reel-5.mp4" type="video/mp4">
+                </video>
+                <div class="gc-reel-play-btn" onclick="gcToggleReel(this)">
+                    <span><svg viewBox="0 0 24 24" fill="#fff" width="26" height="26"><polygon points="6,3 20,12 6,21"/></svg></span>
                 </div>
             </div>
         </div>
@@ -1760,6 +1789,19 @@
 
         startTimer();
     })();
+
+    // ── Reel play/pause toggle ────────────────────────────────────────────────
+    window.gcToggleReel = function(btn) {
+        var video = btn.closest('.gc-reel-card').querySelector('video');
+        if (video.paused) {
+            video.play();
+            btn.classList.add('hidden');
+            video.onclick = function() { video.pause(); btn.classList.remove('hidden'); };
+        } else {
+            video.pause();
+            btn.classList.remove('hidden');
+        }
+    };
     </script>
 </body>
 </html>
