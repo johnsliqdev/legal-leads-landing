@@ -1397,7 +1397,7 @@
         </div>
         <div class="gc-reels-grid">
             <div class="gc-reel-card" data-anim data-d="1">
-                <video class="gc-reel-video" playsinline loop preload="none">
+                <video class="gc-reel-video" playsinline loop preload="metadata">
                     <source src="images/reel-1.mp4" type="video/mp4">
                 </video>
                 <div class="gc-reel-play-btn" onclick="gcToggleReel(this)">
@@ -1405,7 +1405,7 @@
                 </div>
             </div>
             <div class="gc-reel-card" data-anim data-d="2">
-                <video class="gc-reel-video" playsinline loop preload="none">
+                <video class="gc-reel-video" playsinline loop preload="metadata">
                     <source src="images/reel-2.mp4" type="video/mp4">
                 </video>
                 <div class="gc-reel-play-btn" onclick="gcToggleReel(this)">
@@ -1413,7 +1413,7 @@
                 </div>
             </div>
             <div class="gc-reel-card" data-anim data-d="3">
-                <video class="gc-reel-video" playsinline loop preload="none">
+                <video class="gc-reel-video" playsinline loop preload="metadata">
                     <source src="images/reel-3.mp4" type="video/mp4">
                 </video>
                 <div class="gc-reel-play-btn" onclick="gcToggleReel(this)">
@@ -1421,7 +1421,7 @@
                 </div>
             </div>
             <div class="gc-reel-card" data-anim data-d="4">
-                <video class="gc-reel-video" playsinline loop preload="none">
+                <video class="gc-reel-video" playsinline loop preload="metadata">
                     <source src="images/reel-4.mp4" type="video/mp4">
                 </video>
                 <div class="gc-reel-play-btn" onclick="gcToggleReel(this)">
@@ -1429,7 +1429,7 @@
                 </div>
             </div>
             <div class="gc-reel-card" data-anim data-d="5">
-                <video class="gc-reel-video" playsinline loop preload="none">
+                <video class="gc-reel-video" playsinline loop preload="metadata">
                     <source src="images/reel-5.mp4" type="video/mp4">
                 </video>
                 <div class="gc-reel-play-btn" onclick="gcToggleReel(this)">
@@ -1790,9 +1790,39 @@
         startTimer();
     })();
 
-    // ── Reel play/pause toggle ────────────────────────────────────────────────
+    // ── Reel thumbnails: capture frame at 1s via canvas ──────────────────────
+    document.querySelectorAll('.gc-reel-video').forEach(function(video) {
+        function capturePoster() {
+            try {
+                var c = document.createElement('canvas');
+                c.width = video.videoWidth || 720;
+                c.height = video.videoHeight || 1280;
+                c.getContext('2d').drawImage(video, 0, 0, c.width, c.height);
+                video.poster = c.toDataURL('image/jpeg', 0.85);
+            } catch(e) {}
+        }
+        video.addEventListener('loadedmetadata', function() {
+            video.currentTime = 1.0;
+        });
+        video.addEventListener('seeked', function onSeeked() {
+            capturePoster();
+            video.removeEventListener('seeked', onSeeked);
+        });
+    });
+
+    // ── Reel play/pause — only one plays at a time ────────────────────────────
     window.gcToggleReel = function(btn) {
-        var video = btn.closest('.gc-reel-card').querySelector('video');
+        var card = btn.closest('.gc-reel-card');
+        var video = card.querySelector('video');
+
+        // Pause all other reels
+        document.querySelectorAll('.gc-reel-video').forEach(function(v) {
+            if (v !== video) {
+                v.pause();
+                v.closest('.gc-reel-card').querySelector('.gc-reel-play-btn').classList.remove('hidden');
+            }
+        });
+
         if (video.paused) {
             video.play();
             btn.classList.add('hidden');
