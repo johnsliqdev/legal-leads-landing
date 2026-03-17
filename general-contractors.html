@@ -253,7 +253,7 @@
     }
 
     .gc-form-card {
-        max-width: 540px; margin: 0 auto;
+        max-width: 100%; margin: 0 auto;
         background: var(--card);
         border: 1px solid var(--border);
         border-radius: 24px;
@@ -821,20 +821,101 @@
     .gc-award-name { font-size: 13px; font-weight: 700; color: var(--text); }
     .gc-award-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-    /* ── Apply section two-column layout ────────────────────── */
+    /* ── Instagram reel aggregator ──────────────────────────── */
+    .gc-reels {
+        position: relative; z-index: 1;
+        padding: 80px 32px;
+        background: var(--bg);
+        overflow: hidden;
+    }
+    @media (max-width: 600px) { .gc-reels { padding: 60px 20px; } }
+
+    .gc-reels-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 12px;
+        max-width: 1100px; margin: 40px auto 0;
+    }
+    @media (max-width: 1024px) { .gc-reels-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 640px)  { .gc-reels-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .gc-reel-card {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        background: var(--card);
+        aspect-ratio: 9/16;
+        cursor: pointer;
+        transition: transform 0.28s, border-color 0.28s, box-shadow 0.28s;
+    }
+    .gc-reel-card:hover {
+        transform: translateY(-6px) scale(1.02);
+        border-color: var(--border-a);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,0,110,0.2);
+    }
+
+    .gc-reel-card iframe {
+        width: 100%; height: 100%;
+        border: none; display: block;
+        pointer-events: none;
+    }
+
+    /* Play overlay */
+    .gc-reel-overlay {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        background: linear-gradient(to top,
+            rgba(0,0,0,0.7) 0%,
+            rgba(0,0,0,0.15) 60%,
+            transparent 100%);
+        transition: background 0.28s;
+    }
+    .gc-reel-card:hover .gc-reel-overlay {
+        background: linear-gradient(to top,
+            rgba(255,0,110,0.55) 0%,
+            rgba(0,0,0,0.1) 60%,
+            transparent 100%);
+    }
+    .gc-reel-play {
+        width: 52px; height: 52px; border-radius: 50%;
+        background: rgba(255,255,255,0.18);
+        backdrop-filter: blur(8px);
+        border: 2px solid rgba(255,255,255,0.4);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 20px; color: #fff;
+        transition: background 0.2s, transform 0.2s;
+        margin-bottom: 10px;
+    }
+    .gc-reel-card:hover .gc-reel-play {
+        background: var(--accent);
+        border-color: var(--accent);
+        transform: scale(1.15);
+    }
+    .gc-reel-ig-badge {
+        display: flex; align-items: center; gap: 6px;
+        font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.8);
+        letter-spacing: 0.5px;
+        position: absolute; bottom: 14px; left: 14px;
+    }
+    .gc-reel-ig-badge svg { flex-shrink: 0; }
+
+    /* ── Apply section stacked layout ───────────────────────── */
     #gcFormSection { padding: 100px 32px 120px; position: relative; z-index: 1; }
     @media (max-width: 600px) { #gcFormSection { padding: 72px 20px 80px; } }
 
     .gc-apply-top { text-align: center; margin-bottom: 56px; }
 
     .gc-apply-layout {
-        display: grid;
-        grid-template-columns: 1fr 500px;
-        gap: 56px;
-        align-items: start;
-        max-width: 1100px; margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 48px;
+        max-width: 780px; margin: 0 auto;
     }
-    @media (max-width: 1000px) { .gc-apply-layout { grid-template-columns: 1fr; gap: 48px; } }
+    .gc-apply-left { width: 100%; }
+    .gc-apply-right { width: 100%; }
 
     /* Offer pillars */
     .gc-offer-pillars { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
@@ -1040,23 +1121,16 @@
         </div>
 
         <h1 class="gc-hero-headline">
-            <span style="display:block;white-space:nowrap">Your Competitors Are Getting</span>
-            <span class="hl" style="display:block;white-space:nowrap">the Jobs You Should Be Closing.</span>
+            <span style="display:block">Your New Lead-Generating Contractor Website</span>
+            <span class="hl" style="display:block">— Live in 48 Hours.</span>
         </h1>
 
         <p class="gc-hero-sub">
-            We audit your site, build a new one in <em>24 hours</em>, go live in <em>48</em> — and get <em>real leads</em> into your pipeline within a week. Not everyone qualifies. Apply to find out if you do.
+            We start with a free competitor audit. Our team analyzes the <em>top contractors in your market</em>, shows you exactly how they generate leads, and reveals the opportunities your current website is missing.<br><br>
+            If you qualify, we'll share the <em>full breakdown and strategy</em> with you at no cost.
         </p>
 
-        <div class="gc-offer-pills">
-            <div class="gc-pill"><div class="gc-pill-check">✓</div> Website built in 24 hours</div>
-            <div class="gc-pill"><div class="gc-pill-check">✓</div> Live & ranking in 48 hours</div>
-            <div class="gc-pill"><div class="gc-pill-check">✓</div> Competitor deep-dive</div>
-            <div class="gc-pill"><div class="gc-pill-check">✓</div> Full SEO audit</div>
-            <div class="gc-pill"><div class="gc-pill-check">✓</div> First leads in 7 days</div>
-        </div>
-
-        <a href="#gcFormSection" class="gc-hero-cta">Apply Now — Check Your Eligibility →</a>
+        <a href="#gcFormSection" class="gc-hero-cta">Book Your Free Audit →</a>
 
         <p class="gc-hero-note">Limited spots. <strong>Book within 24 hours to guarantee your audit.</strong></p>
         <div class="gc-live-badge">
@@ -1332,13 +1406,76 @@
 
     <div class="gc-divider"></div>
 
+    <!-- ── Instagram Reels ── -->
+    <section class="gc-reels">
+        <div style="text-align:center" data-anim>
+            <div class="gc-section-eyebrow">Behind the Scenes</div>
+            <h2 class="gc-section-heading">Follow Our Work on Instagram</h2>
+            <p class="gc-section-sub" style="margin-bottom:0">Real projects, real results — straight from our feed.</p>
+        </div>
+        <div class="gc-reels-grid">
+            <div class="gc-reel-card" data-anim data-d="1" onclick="window.open('https://www.instagram.com/reel/DQZegHWgveE/?igsh=NTc4MTIwNjQ2YQ==','_blank')">
+                <iframe src="https://www.instagram.com/reel/DQZegHWgveE/embed/captioned/" allowfullscreen scrolling="no" allowtransparency loading="lazy"></iframe>
+                <div class="gc-reel-overlay">
+                    <div class="gc-reel-play">&#9654;</div>
+                    <div class="gc-reel-ig-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                        @sliqbydesign
+                    </div>
+                </div>
+            </div>
+            <div class="gc-reel-card" data-anim data-d="2" onclick="window.open('https://www.instagram.com/reel/DRdCcKjDJPG/?igsh=NTc4MTIwNjQ2YQ==','_blank')">
+                <iframe src="https://www.instagram.com/reel/DRdCcKjDJPG/embed/captioned/" allowfullscreen scrolling="no" allowtransparency loading="lazy"></iframe>
+                <div class="gc-reel-overlay">
+                    <div class="gc-reel-play">&#9654;</div>
+                    <div class="gc-reel-ig-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                        @sliqbydesign
+                    </div>
+                </div>
+            </div>
+            <div class="gc-reel-card" data-anim data-d="3" onclick="window.open('https://www.instagram.com/reel/DOeUqBUgKf9/?igsh=NTc4MTIwNjQ2YQ==','_blank')">
+                <iframe src="https://www.instagram.com/reel/DOeUqBUgKf9/embed/captioned/" allowfullscreen scrolling="no" allowtransparency loading="lazy"></iframe>
+                <div class="gc-reel-overlay">
+                    <div class="gc-reel-play">&#9654;</div>
+                    <div class="gc-reel-ig-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                        @sliqbydesign
+                    </div>
+                </div>
+            </div>
+            <div class="gc-reel-card" data-anim data-d="4" onclick="window.open('https://www.instagram.com/reel/DQ4byUggn0C/?igsh=NTc4MTIwNjQ2YQ==','_blank')">
+                <iframe src="https://www.instagram.com/reel/DQ4byUggn0C/embed/captioned/" allowfullscreen scrolling="no" allowtransparency loading="lazy"></iframe>
+                <div class="gc-reel-overlay">
+                    <div class="gc-reel-play">&#9654;</div>
+                    <div class="gc-reel-ig-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                        @sliqbydesign
+                    </div>
+                </div>
+            </div>
+            <div class="gc-reel-card" data-anim data-d="5" onclick="window.open('https://www.instagram.com/reel/DO67JGdAlat/?igsh=NTc4MTIwNjQ2YQ==','_blank')">
+                <iframe src="https://www.instagram.com/reel/DO67JGdAlat/embed/captioned/" allowfullscreen scrolling="no" allowtransparency loading="lazy"></iframe>
+                <div class="gc-reel-overlay">
+                    <div class="gc-reel-play">&#9654;</div>
+                    <div class="gc-reel-ig-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                        @sliqbydesign
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="gc-divider"></div>
+
     <!-- ── Form section ── -->
     <section id="gcFormSection">
         <!-- Top heading -->
         <div class="gc-apply-top" data-anim>
-            <div class="gc-form-label">Apply to Qualify</div>
-            <h2 class="gc-form-heading">See If You Qualify</h2>
-            <p class="gc-form-sub">Takes 60 seconds. Not everyone qualifies — we only work with established contractors serious about growing.</p>
+            <div class="gc-form-label">Book Your Free Audit</div>
+            <h2 class="gc-form-heading">Book Your Free Audit</h2>
+            <p class="gc-form-sub">Submit your verified email and phone number to receive your audit and schedule your review.</p>
         </div>
 
         <div class="gc-apply-layout">
@@ -1380,7 +1517,7 @@
                 </div>
                 <div class="gc-rule">
                     <div class="gc-rule-num">2</div>
-                    <div class="gc-rule-text"><strong>Name 2–3 local competitors in the form.</strong> We pull their data too — keywords they rank for, ad spend estimates, and what they're doing better.</div>
+                    <div class="gc-rule-text"><strong>Name your top local competitor in the form.</strong> We pull their data too — keywords they rank for, ad spend estimates, and exactly what they're doing better than you.</div>
                 </div>
                 <div class="gc-rule">
                     <div class="gc-rule-num">3</div>
@@ -1423,11 +1560,11 @@
                         <div class="gc-field-err" id="gcWebsiteErr">Enter a valid website (e.g. smithcontracting.com)</div>
                     </div>
                     <div class="gc-field">
-                        <label>Top 2–3 Local Competitors <span style="color:var(--muted);font-weight:400">(optional — helps us build your audit)</span></label>
-                        <input type="text" id="gcCompetitors" placeholder="e.g. acmecontracting.com, joesroofing.com">
+                        <label>Your Top Competitor <span style="color:var(--muted);font-weight:400">(optional — helps us build your audit)</span></label>
+                        <input type="text" id="gcCompetitors" placeholder="e.g. acmecontracting.com">
                     </div>
                     <div class="gc-nav">
-                        <button class="gc-btn-next" id="gcN1" onclick="gcSubmitInfo()" disabled>Check My Eligibility →</button>
+                        <button class="gc-btn-next" id="gcN1" onclick="gcSubmitInfo()" disabled>Book Your Free Audit →</button>
                     </div>
                 </div>
 
