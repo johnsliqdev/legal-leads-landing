@@ -42,7 +42,7 @@
         --border-a: rgba(255,0,110,0.22);
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
 
     body {
         background: var(--bg);
@@ -122,6 +122,7 @@
         align-items: center; justify-content: flex-start;
         text-align: center;
         padding: 36px 32px 60px;
+        overflow: hidden;
     }
     @media (max-width: 600px) { .gc-hero { padding: 28px 20px 48px; } }
 
