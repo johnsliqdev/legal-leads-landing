@@ -1,6 +1,7 @@
 import { createPool } from '@vercel/postgres';
 
 const CPQL_LS_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/eead3f94-6a3f-4980-bdca-a3e23828f0dc';
+const GC_WEBHOOK_URL      = 'https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/82be4a3f-8e2b-4ace-9814-54d5227592a5';
 
 function getConnectionString() {
   return (
@@ -158,7 +159,7 @@ export default async function handler(req, res) {
           booking_reached: false,
         }, CPQL_LS_WEBHOOK_URL);
       } else {
-        // GC and other funnels — use env var URL
+        // GC and other funnels
         await fireGhlWebhook({
           email:         body.email || '',
           phone:         body.phone || '',
@@ -168,7 +169,7 @@ export default async function handler(req, res) {
           revenue_range: body.revenue_range || '',
           situation:     body.situation || '',
           competitors:   body.competitors || '',
-        });
+        }, GC_WEBHOOK_URL);
       }
 
       return json(res, 200, { success: true, id: insertedId });
