@@ -123,6 +123,7 @@ function lsSubmitInfo() {
         body: JSON.stringify({
             funnel:    'Simple Legal Funnel',
             ad_source: adSource,
+            name:      name,
             email:     email,
             phone:     phone,
             website:   website
@@ -196,7 +197,8 @@ function lsSubmitLead() {
                 situation:            lsState.selectedScenario,
                 metaBudgetCommitment: lsState.budgetCommitment,
                 usesCRM:              lsState.hasCRM,
-                dedicatedIntake:      lsState.hasIntake
+                dedicatedIntake:      lsState.hasIntake,
+                bookingReached:       true
             })
         }).catch(function(err) { console.error('Lead PATCH failed:', err); });
     } else {
@@ -207,13 +209,15 @@ function lsSubmitLead() {
             body: JSON.stringify({
                 funnel:               'Simple Legal Funnel',
                 ad_source:            adSource,
+                name:                 lsState.name,
                 email:                lsState.email,
                 phone:                lsState.phone,
                 website:              lsState.website,
                 situation:            lsState.selectedScenario,
                 metaBudgetCommitment: lsState.budgetCommitment,
                 usesCRM:              lsState.hasCRM,
-                dedicatedIntake:      lsState.hasIntake
+                dedicatedIntake:      lsState.hasIntake,
+                bookingReached:       true
             })
         }).catch(function(err) { console.error('Lead POST failed:', err); });
     }

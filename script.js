@@ -111,6 +111,7 @@ function stopVideoTracking(ended) {
 
 // Booking iframe deferred loading
 function loadBookingWidget() {
+    patchLead({ bookingReached: true });
     var iframe = document.getElementById('bookingIframe');
     if (iframe && !iframe.src) {
         // Show video only after booking iframe loads

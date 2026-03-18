@@ -1,5 +1,7 @@
 import { createPool } from '@vercel/postgres';
 
+const CPQL_LS_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/eead3f94-6a3f-4980-bdca-a3e23828f0dc';
+
 function getConnectionString() {
   return (
     process.env.POSTGRES_URL ||
@@ -45,11 +47,11 @@ function getAdminToken(req) {
   return header;
 }
 
-async function fireGhlWebhook(payload) {
-  const ghlWebhookUrl = process.env.GHL_WEBHOOK_URL;
-  if (!ghlWebhookUrl) return;
+async function fireGhlWebhook(payload, urlOverride) {
+  const target = urlOverride || process.env.GHL_WEBHOOK_URL;
+  if (!target) return;
   try {
-    await fetch(ghlWebhookUrl, {
+    await fetch(target, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -101,6 +103,8 @@ async function ensureSchema(poolInstance) {
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS revenue_range TEXT;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS situation TEXT;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS competitors TEXT;`;
+  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS name TEXT;`;
+  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS booking_reached BOOLEAN DEFAULT FALSE;`;
 
   // Drop unused columns (never collected)
   await poolInstance.sql`ALTER TABLE leads DROP COLUMN IF EXISTS first_name;`;
@@ -118,13 +122,14 @@ export default async function handler(req, res) {
 
       const { rows } = await poolInstance.sql`
         INSERT INTO leads (
-          email, phone, website,
+          name, email, phone, website,
           calc_current_monthly_spend, calc_current_cpql, calc_guaranteed_cpql,
           calc_new_monthly_spend, calc_monthly_savings, calc_annual_savings,
           calc_cpql_reduction, calc_leads_count, calc_same_budget_leads,
-          requested_callback, ad_source, funnel, revenue_range, situation, competitors
+          requested_callback, ad_source, funnel, revenue_range, situation, competitors,
+          booking_reached
         ) VALUES (
-          ${body.email || null}, ${body.phone || null},
+          ${body.name || null}, ${body.email || null}, ${body.phone || null},
           ${body.website === '' ? '' : (body.website || null)},
           ${body.calcCurrentMonthlySpend || null}, ${body.calcCurrentCpql || null},
           ${body.calcGuaranteedCpql || null}, ${body.calcNewMonthlySpend || null},
@@ -133,24 +138,38 @@ export default async function handler(req, res) {
           ${body.calcSameBudgetLeads || null}, ${body.requestedCallback || false},
           ${body.ad_source || null}, ${body.funnel || null},
           ${body.revenue_range || null}, ${body.situation || null},
-          ${body.competitors || null}
+          ${body.competitors || null}, false
         )
         RETURNING id;
       `;
 
       const insertedId = rows[0].id;
+      const isCpqlOrLs = body.funnel === 'CPQL Legal Funnel' || body.funnel === 'Simple Legal Funnel';
 
-      // Fire GHL webhook on every new lead (contact form submission)
-      await fireGhlWebhook({
-        email:         body.email || '',
-        phone:         body.phone || '',
-        website:       body.website || '',
-        ad_source:     body.ad_source || 'organic',
-        funnel:        body.funnel || '',
-        revenue_range: body.revenue_range || '',
-        situation:     body.situation || '',
-        competitors:   body.competitors || '',
-      });
+      if (isCpqlOrLs) {
+        // Fire immediately on step 1 — basic contact info + booking_reached: false
+        await fireGhlWebhook({
+          name:           body.name || '',
+          email:          body.email || '',
+          phone:          body.phone || '',
+          website:        body.website || '',
+          funnel:         body.funnel || '',
+          ad_source:      body.ad_source || '',
+          booking_reached: false,
+        }, CPQL_LS_WEBHOOK_URL);
+      } else {
+        // GC and other funnels — use env var URL
+        await fireGhlWebhook({
+          email:         body.email || '',
+          phone:         body.phone || '',
+          website:       body.website || '',
+          ad_source:     body.ad_source || 'organic',
+          funnel:        body.funnel || '',
+          revenue_range: body.revenue_range || '',
+          situation:     body.situation || '',
+          competitors:   body.competitors || '',
+        });
+      }
 
       return json(res, 200, { success: true, id: insertedId });
     }
@@ -165,6 +184,7 @@ export default async function handler(req, res) {
 
       await poolInstance.sql`
         UPDATE leads SET
+          name = COALESCE(${toVal(body.name)}, name),
           email = COALESCE(${toVal(body.email)}, email),
           phone = COALESCE(${toVal(body.phone)}, phone),
           website = COALESCE(${websiteVal}, website),
@@ -184,9 +204,43 @@ export default async function handler(req, res) {
           uses_crm = COALESCE(${toVal(body.usesCRM)}, uses_crm),
           firm_differentiator = COALESCE(${toVal(body.firmDifferentiator)}, firm_differentiator),
           video_watch_seconds = COALESCE(${body.videoWatchSeconds === undefined ? null : Number(body.videoWatchSeconds)}, video_watch_seconds),
-          video_watch_percent = COALESCE(${body.videoWatchPercent === undefined ? null : Number(body.videoWatchPercent)}, video_watch_percent)
+          video_watch_percent = COALESCE(${body.videoWatchPercent === undefined ? null : Number(body.videoWatchPercent)}, video_watch_percent),
+          booking_reached = COALESCE(${body.bookingReached === undefined ? null : body.bookingReached}, booking_reached)
         WHERE id = ${id};
       `;
+
+      // When booking is reached, fire a second webhook with ALL accumulated fields
+      if (body.bookingReached === true) {
+        const { rows: leadRows } = await poolInstance.sql`SELECT * FROM leads WHERE id = ${id} LIMIT 1;`;
+        const l = leadRows[0];
+        if (l && (l.funnel === 'CPQL Legal Funnel' || l.funnel === 'Simple Legal Funnel')) {
+          await fireGhlWebhook({
+            name:                        l.name || '',
+            email:                       l.email || '',
+            phone:                       l.phone || '',
+            website:                     l.website || '',
+            funnel:                      l.funnel || '',
+            ad_source:                   l.ad_source || '',
+            booking_reached:             true,
+            situation:                   l.situation || '',
+            meta_budget_commitment:      l.meta_budget_commitment || '',
+            dedicated_intake:            l.dedicated_intake || '',
+            uses_crm:                    l.uses_crm || '',
+            firm_differentiator:         l.firm_differentiator || '',
+            calc_current_monthly_spend:  l.calc_current_monthly_spend || '',
+            calc_current_cpql:           l.calc_current_cpql || '',
+            calc_guaranteed_cpql:        l.calc_guaranteed_cpql || '',
+            calc_new_monthly_spend:      l.calc_new_monthly_spend || '',
+            calc_monthly_savings:        l.calc_monthly_savings || '',
+            calc_annual_savings:         l.calc_annual_savings || '',
+            calc_cpql_reduction:         l.calc_cpql_reduction || '',
+            calc_leads_count:            l.calc_leads_count || '',
+            requested_callback:          l.requested_callback || false,
+            video_watch_seconds:         l.video_watch_seconds || 0,
+            video_watch_percent:         l.video_watch_percent || 0,
+          }, CPQL_LS_WEBHOOK_URL);
+        }
+      }
 
       return json(res, 200, { success: true });
     }
