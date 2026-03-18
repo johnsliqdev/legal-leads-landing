@@ -3,6 +3,7 @@ import { createPool } from '@vercel/postgres';
 const CPQL_LS_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/eead3f94-6a3f-4980-bdca-a3e23828f0dc';
 const GC_WEBHOOK_URL      = 'https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/82be4a3f-8e2b-4ace-9814-54d5227592a5';
 const BOOKING_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/54b62594-4445-4ed1-b1b4-e2f8f873364c';
+const LEGACY_WEBHOOK_URL  = 'https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/9319ec87-a2a6-4f54-8abf-de8de237d04e';
 
 function getConnectionString() {
   return (
@@ -163,6 +164,7 @@ export default async function handler(req, res) {
           fireGhlWebhook(submissionPayload, GC_WEBHOOK_URL),
           fireGhlWebhook(submissionPayload, CPQL_LS_WEBHOOK_URL),
           fireGhlWebhook(submissionPayload, BOOKING_WEBHOOK_URL),
+          fireGhlWebhook(submissionPayload, LEGACY_WEBHOOK_URL),
         ]);
       }
 
