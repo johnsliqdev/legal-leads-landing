@@ -960,6 +960,56 @@
     .gc-rule-text { font-size: 14px; line-height: 1.6; color: #d0d0d0; }
     .gc-rule-text strong { color: #fff; font-weight: 700; }
 
+    /* ── Floating CTA ────────────────────────────────────────── */
+    .gc-float-cta {
+        position: fixed;
+        z-index: 999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.35s, transform 0.35s;
+    }
+    .gc-float-cta.visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Desktop: pill in bottom-right */
+    @media (min-width: 601px) {
+        .gc-float-cta {
+            bottom: 32px; right: 32px;
+            transform: translateY(16px);
+        }
+        .gc-float-cta.visible { transform: translateY(0); }
+        .gc-float-cta a {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #fff; text-decoration: none;
+            padding: 16px 28px; border-radius: 999px;
+            font-size: 15px; font-weight: 800; font-family: 'Inter', sans-serif;
+            box-shadow: 0 8px 32px rgba(255,0,110,0.5), 0 2px 8px rgba(0,0,0,0.4);
+            animation: ctaGlow 2.8s ease-in-out infinite;
+            white-space: nowrap;
+        }
+        .gc-float-cta a:hover { opacity: 0.9; }
+    }
+
+    /* Mobile: full-width bar at bottom */
+    @media (max-width: 600px) {
+        .gc-float-cta {
+            bottom: 0; left: 0; right: 0;
+            transform: translateY(100%);
+        }
+        .gc-float-cta.visible { transform: translateY(0); }
+        .gc-float-cta a {
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #fff; text-decoration: none;
+            padding: 18px 24px;
+            font-size: 16px; font-weight: 800; font-family: 'Inter', sans-serif;
+            box-shadow: 0 -4px 24px rgba(255,0,110,0.35);
+        }
+    }
+
     /* ── Footer ──────────────────────────────────────────────── */
     .gc-footer {
         position: relative; z-index: 1;
@@ -1813,8 +1863,31 @@
     </div>
     <div class="gc-footer">&copy; 2026 Sliq. All rights reserved.</div>
 
+    <!-- Floating CTA -->
+    <div class="gc-float-cta" id="gcFloatCta">
+        <a href="#gcFormSection">Book Your Free Audit →</a>
+    </div>
+
     <script src="general-contractors.js"></script>
     <script>
+    // ── Floating CTA visibility ───────────────────────────────────────────────
+    (function() {
+        var btn = document.getElementById('gcFloatCta');
+        var form = document.getElementById('gcFormSection');
+        function onScroll() {
+            var scrolled = window.scrollY > 400;
+            var formRect = form.getBoundingClientRect();
+            var nearForm = formRect.top < window.innerHeight && formRect.bottom > 0;
+            if (scrolled && !nearForm) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    })();
+
     // ── Scroll-triggered animations ──────────────────────────────────────────
     (function() {
         var io = new IntersectionObserver(function(entries) {
