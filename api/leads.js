@@ -2,6 +2,7 @@ import { createPool } from '@vercel/postgres';
 
 const CPQL_LS_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/eead3f94-6a3f-4980-bdca-a3e23828f0dc';
 const GC_WEBHOOK_URL      = 'https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/82be4a3f-8e2b-4ace-9814-54d5227592a5';
+const BOOKING_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/54b62594-4445-4ed1-b1b4-e2f8f873364c';
 
 function getConnectionString() {
   return (
@@ -216,7 +217,7 @@ export default async function handler(req, res) {
         const { rows: leadRows } = await poolInstance.sql`SELECT * FROM leads WHERE id = ${id} LIMIT 1;`;
         const l = leadRows[0];
         if (l && (l.funnel === 'CPQL Legal Funnel' || l.funnel === 'Simple Legal Funnel')) {
-          await fireGhlWebhook({
+          const bookingPayload = {
             name:                        l.name || '',
             email:                       l.email || '',
             phone:                       l.phone || '',
@@ -240,7 +241,11 @@ export default async function handler(req, res) {
             requested_callback:          l.requested_callback || false,
             video_watch_seconds:         l.video_watch_seconds || 0,
             video_watch_percent:         l.video_watch_percent || 0,
-          }, CPQL_LS_WEBHOOK_URL);
+          };
+          await Promise.all([
+            fireGhlWebhook(bookingPayload, CPQL_LS_WEBHOOK_URL),
+            fireGhlWebhook(bookingPayload, BOOKING_WEBHOOK_URL),
+          ]);
         }
       }
 
