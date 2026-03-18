@@ -148,8 +148,7 @@ export default async function handler(req, res) {
       const insertedId = rows[0].id;
       const isCpqlOrLs = body.funnel === 'CPQL Legal Funnel' || body.funnel === 'Simple Legal Funnel';
 
-      // 82be4a3f fires for every funnel, always
-      await fireGhlWebhook({
+      const submissionPayload = {
         name:          body.name || '',
         email:         body.email || '',
         phone:         body.phone || '',
@@ -159,20 +158,14 @@ export default async function handler(req, res) {
         revenue_range: body.revenue_range || '',
         situation:     body.situation || '',
         competitors:   body.competitors || '',
-      }, GC_WEBHOOK_URL);
+        booking_reached: false,
+      };
 
-      // eead3f94 fires additionally for CPQL/LS with booking_reached flag
-      if (isCpqlOrLs) {
-        await fireGhlWebhook({
-          name:            body.name || '',
-          email:           body.email || '',
-          phone:           body.phone || '',
-          website:         body.website || '',
-          funnel:          body.funnel || '',
-          ad_source:       body.ad_source || '',
-          booking_reached: false,
-        }, CPQL_LS_WEBHOOK_URL);
-      }
+      // Both fire on every submission
+      await Promise.all([
+        fireGhlWebhook(submissionPayload, GC_WEBHOOK_URL),
+        fireGhlWebhook(submissionPayload, CPQL_LS_WEBHOOK_URL),
+      ]);
 
       return json(res, 200, { success: true, id: insertedId });
     }
