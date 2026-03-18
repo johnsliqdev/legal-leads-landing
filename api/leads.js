@@ -148,24 +148,22 @@ export default async function handler(req, res) {
       const insertedId = rows[0].id;
       const isCpqlOrLs = body.funnel === 'CPQL Legal Funnel' || body.funnel === 'Simple Legal Funnel';
 
-      const submissionPayload = {
-        name:          body.name || '',
-        email:         body.email || '',
-        phone:         body.phone || '',
-        website:       body.website || '',
-        funnel:        body.funnel || '',
-        ad_source:     body.ad_source || '',
-        revenue_range: body.revenue_range || '',
-        situation:     body.situation || '',
-        competitors:   body.competitors || '',
-        booking_reached: false,
-      };
-
-      // Both fire on every submission
-      await Promise.all([
-        fireGhlWebhook(submissionPayload, GC_WEBHOOK_URL),
-        fireGhlWebhook(submissionPayload, CPQL_LS_WEBHOOK_URL),
-      ]);
+      // Both webhooks fire only for CPQL & LS — GC gets nothing here
+      if (isCpqlOrLs) {
+        const submissionPayload = {
+          name:            body.name || '',
+          email:           body.email || '',
+          phone:           body.phone || '',
+          website:         body.website || '',
+          funnel:          body.funnel || '',
+          ad_source:       body.ad_source || '',
+          booking_reached: false,
+        };
+        await Promise.all([
+          fireGhlWebhook(submissionPayload, GC_WEBHOOK_URL),
+          fireGhlWebhook(submissionPayload, CPQL_LS_WEBHOOK_URL),
+        ]);
+      }
 
       return json(res, 200, { success: true, id: insertedId });
     }
