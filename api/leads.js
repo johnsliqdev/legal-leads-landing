@@ -148,7 +148,7 @@ export default async function handler(req, res) {
       const insertedId = rows[0].id;
       const isCpqlOrLs = body.funnel === 'CPQL Legal Funnel' || body.funnel === 'Simple Legal Funnel';
 
-      // Both webhooks fire only for CPQL & LS — GC gets nothing here
+      // All three webhooks fire for CPQL & LS on step 1 — GC gets nothing here
       if (isCpqlOrLs) {
         const submissionPayload = {
           name:            body.name || '',
@@ -162,6 +162,7 @@ export default async function handler(req, res) {
         await Promise.all([
           fireGhlWebhook(submissionPayload, GC_WEBHOOK_URL),
           fireGhlWebhook(submissionPayload, CPQL_LS_WEBHOOK_URL),
+          fireGhlWebhook(submissionPayload, BOOKING_WEBHOOK_URL),
         ]);
       }
 
