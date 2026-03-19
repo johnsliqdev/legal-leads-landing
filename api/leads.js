@@ -256,7 +256,6 @@ export default async function handler(req, res) {
           await Promise.all([
             fireGhlWebhook(bookingPayload, CPQL_LS_WEBHOOK_URL),
             fireGhlWebhook(bookingPayload, BOOKING_WEBHOOK_URL),
-            fireGhlWebhook({ ...bookingPayload, funnel_stage: 'completed_questionnaire', resume_url: resumeUrl }, LEGACY_WEBHOOK_URL),
           ]);
         }
       }
