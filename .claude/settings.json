@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls /Users/ohannesiskenderian/CascadeProjects/legal-leads-landing/images/reel-*.mp4)",
+      "Bash(git remote:*)",
+      "Bash(ls /Users/ohannesiskenderian/CascadeProjects/legal-leads-landing/*.js)",
+      "Bash(vercel --version)",
+      "Bash(npx vercel:*)"
+    ],
+    "additionalDirectories": [
+      "/Users/ohannesiskenderian/CascadeProjects/legal-leads-landing"
+    ]
+  }
+}

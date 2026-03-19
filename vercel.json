@@ -5,8 +5,4 @@
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/llms.txt", "destination": "/api/llms" },
     { "source": "/robots.txt", "destination": "/api/robots" }
-  ],
-  "crons": [
-    { "path": "/api/cron-reminders", "schedule": "0 0 * * *" }
-  ]
-}
+  ]}
