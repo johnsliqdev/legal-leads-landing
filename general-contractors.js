@@ -189,19 +189,40 @@ function gcLoadBooking() {
         }
     }
 
-    // Detect booking confirmation via height ratio (size-independent)
-    // The confirmation screen is always much shorter than the booking form — ~55% drop
+    // Detect booking confirmation via two signals:
+    // 1. Height drops at least 15% from peak (catches confirmation screen resize)
+    // 2. Height stabilises for 3s after user has had time to interact (fallback)
     var maxH = 0;
+    var resizeCount = 0;
     var redirected = false;
+    var stableTimer = null;
+
     window.addEventListener('message', function(e) {
         if (redirected || typeof e.data !== 'string') return;
         var m = e.data.match(/\[iFrameSizer\]gcBookingIframe:(\d+):/);
         if (!m) return;
         var h = parseInt(m[1], 10);
-        if (h > maxH) { maxH = h; return; }
-        if (maxH > 300 && h < maxH * 0.55) {
+        resizeCount++;
+
+        if (h > maxH) { maxH = h; }
+
+        // Signal 1: height dropped 15%+ from peak after enough interaction
+        if (resizeCount > 4 && maxH > 400 && h < maxH * 0.85) {
             redirected = true;
+            clearTimeout(stableTimer);
             window.location.href = '/thank-you';
+            return;
+        }
+
+        // Signal 2: height stable for 3s after significant interaction
+        if (resizeCount > 8) {
+            clearTimeout(stableTimer);
+            stableTimer = setTimeout(function() {
+                if (!redirected) {
+                    redirected = true;
+                    window.location.href = '/thank-you';
+                }
+            }, 3000);
         }
     });
 }
