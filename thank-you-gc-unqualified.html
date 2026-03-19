@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You — Sliq</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:     #080808;
+            --card:   #161616;
+            --accent: #ff006e;
+            --accent2:#ff6b35;
+            --text:   #ffffff;
+            --muted:  #b0b0b0;
+            --border: rgba(255,255,255,0.08);
+        }
+
+        html, body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .gc-bg {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background:
+                radial-gradient(ellipse 60% 50% at 10% 90%, rgba(255,107,53,0.08) 0%, transparent 65%),
+                radial-gradient(ellipse 50% 60% at 90% 5%,  rgba(255,0,110,0.07) 0%, transparent 65%);
+        }
+        .gc-bg::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,0,110,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,0,110,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .ty-card {
+            position: relative; z-index: 1;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 56px 48px;
+            max-width: 540px;
+            width: calc(100% - 40px);
+            text-align: center;
+        }
+
+        .ty-icon {
+            width: 64px; height: 64px; border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 28px;
+            font-size: 28px;
+        }
+
+        .ty-heading {
+            font-size: clamp(26px, 4vw, 36px);
+            font-weight: 900; letter-spacing: -0.03em; line-height: 1.1;
+            margin-bottom: 16px;
+        }
+        .ty-heading span {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        .ty-body {
+            font-size: 15px; color: var(--muted); line-height: 1.7;
+            margin-bottom: 36px;
+        }
+
+        .ty-divider {
+            height: 1px; background: var(--border); margin: 28px 0;
+        }
+
+        .ty-note {
+            font-size: 13px; color: var(--muted); line-height: 1.65;
+        }
+        .ty-note strong { color: var(--text); }
+
+        .ty-footer {
+            position: fixed; bottom: 20px; left: 0; right: 0;
+            text-align: center;
+            font-size: 12px; color: rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="gc-bg"></div>
+
+    <div class="ty-card">
+        <div class="ty-icon">🙏</div>
+        <h1 class="ty-heading">Thanks for<br><span>Your Time.</span></h1>
+        <p class="ty-body">
+            Based on your current revenue, our program isn't the right fit just yet. Everything we build — custom websites, local SEO, and paid ads — is designed for contractors doing <strong style="color:#fff;">$500K or more annually</strong>, where the ROI justifies the investment.
+        </p>
+        <div class="ty-divider"></div>
+        <p class="ty-note">
+            <strong>This isn't a forever no.</strong> If you're growing and hit that threshold, we'd love to work with you. Bookmark this page and come back when you're ready — we'll be here.
+        </p>
+    </div>
+
+    <div class="ty-footer">&copy; 2026 Sliq. All rights reserved.</div>
+</body>
+</html>

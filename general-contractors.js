@@ -72,12 +72,13 @@ function gcSelectRevenue(card) {
     card.classList.add(isDisq ? 'sel-disq' : 'sel');
     gcState.revenueRange = card.getAttribute('data-value');
 
-    var disqual = document.getElementById('gcRevenueDisqual');
     if (isDisq) {
-        disqual.style.display = 'block';
-        gcDisableBtn('gcN2');
+        setTimeout(function() {
+            window.location.href = '/thank-you-gc-unqualified';
+        }, 600);
     } else {
-        disqual.style.display = 'none';
+        var disqual = document.getElementById('gcRevenueDisqual');
+        if (disqual) disqual.style.display = 'none';
         gcEnableBtn('gcN2');
     }
 }
