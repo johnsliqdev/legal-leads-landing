@@ -78,7 +78,6 @@ async function ensureSchema(poolInstance) {
       calc_cpql_reduction TEXT,
       calc_leads_count TEXT,
       calc_same_budget_leads TEXT,
-      requested_callback BOOLEAN DEFAULT FALSE,
       meta_budget_commitment TEXT,
       dedicated_intake TEXT,
       uses_crm TEXT,
@@ -89,7 +88,6 @@ async function ensureSchema(poolInstance) {
   `;
 
   // Add columns if they don't exist (for existing databases)
-  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS requested_callback BOOLEAN DEFAULT FALSE;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS calc_same_budget_leads TEXT;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS website TEXT;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS meta_budget_commitment TEXT;`;
@@ -106,7 +104,8 @@ async function ensureSchema(poolInstance) {
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS name TEXT;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS booking_reached BOOLEAN DEFAULT FALSE;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS resume_token TEXT;`;
-  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS reminder_fired BOOLEAN DEFAULT FALSE;`;
+  await poolInstance.sql`ALTER TABLE leads DROP COLUMN IF EXISTS reminder_fired;`;
+  await poolInstance.sql`ALTER TABLE leads DROP COLUMN IF EXISTS requested_callback;`;
 
   // Drop unused columns (never collected)
   await poolInstance.sql`ALTER TABLE leads DROP COLUMN IF EXISTS first_name;`;
@@ -130,7 +129,7 @@ export default async function handler(req, res) {
           calc_current_monthly_spend, calc_current_cpql, calc_guaranteed_cpql,
           calc_new_monthly_spend, calc_monthly_savings, calc_annual_savings,
           calc_cpql_reduction, calc_leads_count, calc_same_budget_leads,
-          requested_callback, ad_source, funnel, revenue_range, situation, competitors,
+          ad_source, funnel, revenue_range, situation, competitors,
           booking_reached, resume_token
         ) VALUES (
           ${body.name || null}, ${body.email || null}, ${body.phone || null},
@@ -139,7 +138,7 @@ export default async function handler(req, res) {
           ${body.calcGuaranteedCpql || null}, ${body.calcNewMonthlySpend || null},
           ${body.calcMonthlySavings || null}, ${body.calcAnnualSavings || null},
           ${body.calcCpqlReduction || null}, ${body.calcLeadsCount || null},
-          ${body.calcSameBudgetLeads || null}, ${body.requestedCallback || false},
+          ${body.calcSameBudgetLeads || null},
           ${body.ad_source || null}, ${body.funnel || null},
           ${body.revenue_range || null}, ${body.situation || null},
           ${body.competitors || null}, false, ${resumeToken}
@@ -196,7 +195,6 @@ export default async function handler(req, res) {
           calc_cpql_reduction = COALESCE(${toVal(body.calcCpqlReduction)}, calc_cpql_reduction),
           calc_leads_count = COALESCE(${toVal(body.calcLeadsCount)}, calc_leads_count),
           calc_same_budget_leads = COALESCE(${toVal(body.calcSameBudgetLeads)}, calc_same_budget_leads),
-          requested_callback = COALESCE(${body.requestedCallback === undefined ? null : body.requestedCallback}, requested_callback),
           situation = COALESCE(${toVal(body.situation)}, situation),
           meta_budget_commitment = COALESCE(${toVal(body.metaBudgetCommitment)}, meta_budget_commitment),
           dedicated_intake = COALESCE(${toVal(body.dedicatedIntake)}, dedicated_intake),
