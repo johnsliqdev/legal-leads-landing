@@ -27,26 +27,32 @@ export default async function handler(req, res) {
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
 
-    const name    = body.first_name && body.last_name
-                    ? `${body.first_name} ${body.last_name}`.trim()
-                    : (body.full_name || body.name || null);
-    const email   = body.email || null;
-    const phone   = body.phone || null;
-    const website = body.website || null;
+    const name       = body.first_name && body.last_name
+                       ? `${body.first_name} ${body.last_name}`.trim()
+                       : (body.full_name || body.name || null);
+    const email      = body.email || null;
+    const phone      = body.phone || null;
+    const website    = body.website || null;
     const competitor = body.competitor || body.competitor_website || null;
 
     const p = getPool();
 
     await p.sql`
-      ALTER TABLE leads ADD COLUMN IF NOT EXISTS source TEXT;
+      CREATE TABLE IF NOT EXISTS gc_audits (
+        id           SERIAL PRIMARY KEY,
+        created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        name         TEXT,
+        email        TEXT,
+        phone        TEXT,
+        website      TEXT,
+        competitor   TEXT,
+        audit_status TEXT DEFAULT 'pending'
+      );
     `;
 
     await p.sql`
-      INSERT INTO leads (name, email, phone, website, competitors, funnel, source, booking_reached)
-      VALUES (
-        ${name}, ${email}, ${phone}, ${website}, ${competitor},
-        'GC Audit Funnel', 'gc-booking-webhook', true
-      );
+      INSERT INTO gc_audits (name, email, phone, website, competitor)
+      VALUES (${name}, ${email}, ${phone}, ${website}, ${competitor});
     `;
 
     return json(res, 200, { success: true });
