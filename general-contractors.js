@@ -189,26 +189,22 @@ function gcLoadBooking() {
         }
     }
 
-    // Listen for GHL booking confirmation postMessage (log all for debugging)
+    // Listen for GHL booking confirmation — log to console so we can see exact format
     window.addEventListener('message', function onBooked(e) {
         var d = e.data;
         console.log('[GHL msg]', JSON.stringify(d));
-        var str = typeof d === 'string' ? d : JSON.stringify(d || '');
-        var isBooking = /book|appoint|confirm|scheduled|success/i.test(str);
-        if (!isBooking) return;
-        window.removeEventListener('message', onBooked);
-        gcShowThankYou();
+        if (!d) return;
+        var str = typeof d === 'string' ? d : JSON.stringify(d);
+        // Only fire on explicit confirmed/scheduled events, not page load chatter
+        if (/appointmentBooked|slot_confirmation|booking_confirmed|eventBooked/i.test(str)) {
+            window.removeEventListener('message', onBooked);
+            window.location.href = '/thank-you';
+        }
     });
 }
 
 function gcShowThankYou() {
-    var formSection = document.getElementById('gcFormSection');
-    if (formSection) formSection.style.display = 'none';
-    var ty = document.getElementById('gcThankYou');
-    if (ty) {
-        ty.style.display = 'block';
-        ty.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    window.location.href = '/thank-you';
 }
 
 // ── Phone masking ─────────────────────────────────────────────────────────────
