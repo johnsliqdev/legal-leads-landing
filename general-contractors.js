@@ -9,9 +9,6 @@ var adSource = (function() {
 })();
 
 var gcState = {
-    name:         null,
-    email:        null,
-    phone:        null,
     website:      null,
     competitors:  null,
     revenueRange: null,
@@ -19,7 +16,7 @@ var gcState = {
 };
 
 var GC_STEPS = {
-    1: { pct: '25%',  label: 'Your Info',    cur: 1 },
+    1: { pct: '25%',  label: 'Your Website', cur: 1 },
     2: { pct: '50%',  label: 'Revenue',      cur: 2 },
     3: { pct: '75%',  label: 'Challenge',    cur: 3 },
     4: { pct: '100%', label: 'Reserve Spot', cur: 4 }
@@ -75,24 +72,17 @@ function gcValidateDomain(val) {
 }
 
 function gcCheckInfo() {
-    var name    = document.getElementById('gcName').value.trim();
-    var email   = document.getElementById('gcEmail').value.trim();
-    var phone   = document.getElementById('gcPhone').value.trim();
-    var website = document.getElementById('gcWebsite').value.trim();
-
-    var emailOk   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    var phoneOk   = phone.replace(/\D/g, '').length === 10;
-    var websiteOk = gcValidateDomain(website);
-    var nameOk    = name.length >= 2;
-
+    var website    = document.getElementById('gcWebsite').value.trim();
+    var websiteOk  = gcValidateDomain(website);
     var websiteErr = document.getElementById('gcWebsiteErr');
+
     if (website.length > 0 && !websiteOk) {
         websiteErr.style.display = 'block';
     } else {
         websiteErr.style.display = 'none';
     }
 
-    if (nameOk && emailOk && phoneOk && websiteOk) {
+    if (websiteOk) {
         gcEnableBtn('gcN1');
     } else {
         gcDisableBtn('gcN1');
@@ -100,9 +90,6 @@ function gcCheckInfo() {
 }
 
 function gcSubmitInfo() {
-    gcState.name        = document.getElementById('gcName').value.trim();
-    gcState.email       = document.getElementById('gcEmail').value.trim();
-    gcState.phone       = document.getElementById('gcPhone').value.trim();
     gcState.website     = document.getElementById('gcWebsite').value.trim();
     gcState.competitors = document.getElementById('gcCompetitors').value.trim();
     gcNext(2);
@@ -157,9 +144,6 @@ function gcSubmitLead() {
             source:        'general-contractors',
             funnel:        'GC Audit Funnel',
             ad_source:     adSource,
-            name:          gcState.name,
-            email:         gcState.email,
-            phone:         gcState.phone,
             website:       gcState.website,
             competitors:   gcState.competitors,
             revenue_range: gcState.revenueRange,
@@ -182,34 +166,13 @@ function gcLoadBooking() {
 
     var iframe = document.getElementById('gcBookingIframe');
     if (iframe && !iframe.src) {
-        var nameParts = (gcState.name || '').trim().split(/\s+/);
-        var firstName = nameParts[0] || '';
-        var lastName  = nameParts.slice(1).join(' ') || '';
-        var rawPhone  = (gcState.phone || '').replace(/\D/g, '');
-        iframe.src = 'https://api.leadconnectorhq.com/widget/booking/swe1lSedf4hVYFTLSTIc';
+        iframe.src = 'https://api.leadconnectorhq.com/widget/booking/bHLOuWOsVymv9VQHPXfc';
         if (!document.getElementById('gcGhlEmbed')) {
             var s = document.createElement('script');
             s.id  = 'gcGhlEmbed';
             s.src = 'https://link.msgsndr.com/js/form_embed.js';
             document.body.appendChild(s);
         }
-        // After widget loads, push contact data via set-sticky-contacts postMessage
-        iframe.addEventListener('load', function() {
-            var contactData = JSON.stringify({
-                first_name:  firstName,
-                last_name:   lastName,
-                email:       gcState.email || '',
-                phone:       rawPhone,
-                website:     gcState.website || '',
-                full_address: '',
-                customFields: {},
-                isNew: true
-            });
-            iframe.contentWindow.postMessage(
-                ['set-sticky-contacts', '_ud', contactData, '', ''],
-                'https://api.leadconnectorhq.com'
-            );
-        });
     }
 
     if (!gcBookingListenerAdded) {
@@ -227,19 +190,6 @@ function gcShowThankYou() {
 }
 
 // ── Phone masking ─────────────────────────────────────────────────────────────
-
-function gcInitPhone() {
-    var input = document.getElementById('gcPhone');
-    if (!input) return;
-    input.addEventListener('input', function(e) {
-        var v = e.target.value.replace(/\D/g, '').substring(0, 10);
-        if (v.length >= 6)      v = '(' + v.slice(0,3) + ') ' + v.slice(3,6) + '-' + v.slice(6);
-        else if (v.length >= 3) v = '(' + v.slice(0,3) + ') ' + v.slice(3);
-        else if (v.length > 0)  v = '(' + v;
-        e.target.value = v;
-        gcCheckInfo();
-    });
-}
 
 // ── Keyboard nav (A/B/C/D) ────────────────────────────────────────────────────
 
@@ -274,10 +224,7 @@ function gcDisableBtn(id) {
 // ── Init ──────────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', function() {
-    gcInitPhone();
     gcInitKeyboard();
-    ['gcName', 'gcEmail', 'gcWebsite'].forEach(function(id) {
-        var el = document.getElementById(id);
-        if (el) el.addEventListener('input', gcCheckInfo);
-    });
+    var websiteEl = document.getElementById('gcWebsite');
+    if (websiteEl) websiteEl.addEventListener('input', gcCheckInfo);
 });
