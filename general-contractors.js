@@ -182,10 +182,14 @@ function gcLoadBooking() {
 
     var iframe = document.getElementById('gcBookingIframe');
     if (iframe && !iframe.src) {
+        var nameParts = (gcState.name || '').trim().split(/\s+/);
+        var firstName = nameParts[0] || '';
+        var lastName  = nameParts.slice(1).join(' ') || '';
         iframe.src = 'https://api.leadconnectorhq.com/widget/booking/swe1lSedf4hVYFTLSTIc'
-                   + '?name=' + encodeURIComponent(gcState.name || '')
-                   + '&email=' + encodeURIComponent(gcState.email || '')
-                   + '&phone=' + encodeURIComponent(gcState.phone || '');
+                   + '?first_name=' + encodeURIComponent(firstName)
+                   + '&last_name='  + encodeURIComponent(lastName)
+                   + '&email='      + encodeURIComponent(gcState.email || '')
+                   + '&phone='      + encodeURIComponent(gcState.phone || '');
         if (!document.getElementById('gcGhlEmbed')) {
             var s = document.createElement('script');
             s.id  = 'gcGhlEmbed';
