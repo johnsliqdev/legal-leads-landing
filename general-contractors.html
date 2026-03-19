@@ -125,6 +125,12 @@
         padding: 36px 32px 60px;
         overflow: hidden;
     }
+    .gc-hero-video {
+        position: absolute; inset: 0; width: 100%; height: 100%;
+        object-fit: cover; z-index: 0;
+        opacity: 0.13; pointer-events: none;
+    }
+    .gc-hero > *:not(.gc-hero-video) { position: relative; z-index: 1; }
     @media (max-width: 600px) { .gc-hero { padding: 28px 20px 48px; } }
 
     .gc-eyebrow {
@@ -1260,6 +1266,8 @@
 
     <!-- ── Hero ── -->
     <section class="gc-hero">
+        <video class="gc-hero-video" autoplay muted loop playsinline preload="none"
+            src="https://assets.mixkit.co/videos/4010/4010-1080.mp4"></video>
         <!-- floating depth orbs -->
         <div class="gc-orb" style="width:380px;height:380px;background:rgba(255,0,110,0.12);top:-120px;right:-80px;--od:13s;--ox1:40px;--oy1:-20px;--ox2:-30px;--oy2:35px;z-index:0"></div>
         <div class="gc-orb" style="width:250px;height:250px;background:rgba(255,107,53,0.09);bottom:-60px;left:-60px;--od:9s;--ox1:-25px;--oy1:30px;--ox2:20px;--oy2:-20px;z-index:0"></div>
