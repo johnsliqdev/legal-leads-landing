@@ -189,20 +189,12 @@ function gcLoadBooking() {
         }
     }
 
-    // Detect booking confirmation via iFrameResizer height drop
-    // Format: [iFrameSizer]gcBookingIframe:HEIGHT:WIDTH:event
-    var maxHeight = 0;
-    var booked = false;
-    window.addEventListener('message', function onBooked(e) {
-        if (booked || typeof e.data !== 'string') return;
-        var match = e.data.match(/\[iFrameSizer\]gcBookingIframe:(\d+):/);
-        if (!match) return;
-        var h = parseInt(match[1], 10);
-        if (h > maxHeight) maxHeight = h;
-        // Confirmation screen is much shorter — fire when height drops significantly
-        if (maxHeight > 500 && h < 450) {
-            booked = true;
-            window.removeEventListener('message', onBooked);
+    // Detect booking confirmation via iframe load event
+    // GHL navigates the iframe to a confirmation page on booking — fires a second load
+    var loadCount = 0;
+    iframe.addEventListener('load', function() {
+        loadCount++;
+        if (loadCount > 1) {
             window.location.href = '/thank-you';
         }
     });
