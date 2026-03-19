@@ -186,17 +186,30 @@ function gcLoadBooking() {
         var firstName = nameParts[0] || '';
         var lastName  = nameParts.slice(1).join(' ') || '';
         var rawPhone  = (gcState.phone || '').replace(/\D/g, '');
-        iframe.src = 'https://api.leadconnectorhq.com/widget/booking/swe1lSedf4hVYFTLSTIc'
-                   + '?first_name=' + encodeURIComponent(firstName)
-                   + '&last_name='  + encodeURIComponent(lastName)
-                   + '&email='      + encodeURIComponent(gcState.email || '')
-                   + '&phone='      + encodeURIComponent(rawPhone);
+        iframe.src = 'https://api.leadconnectorhq.com/widget/booking/swe1lSedf4hVYFTLSTIc';
         if (!document.getElementById('gcGhlEmbed')) {
             var s = document.createElement('script');
             s.id  = 'gcGhlEmbed';
             s.src = 'https://link.msgsndr.com/js/form_embed.js';
             document.body.appendChild(s);
         }
+        // After widget loads, push contact data via set-sticky-contacts postMessage
+        iframe.addEventListener('load', function() {
+            var contactData = JSON.stringify({
+                first_name:  firstName,
+                last_name:   lastName,
+                email:       gcState.email || '',
+                phone:       rawPhone,
+                website:     gcState.website || '',
+                full_address: '',
+                customFields: {},
+                isNew: true
+            });
+            iframe.contentWindow.postMessage(
+                ['set-sticky-contacts', '_ud', contactData, '', ''],
+                'https://api.leadconnectorhq.com'
+            );
+        });
     }
 
     if (!gcBookingListenerAdded) {
