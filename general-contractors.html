@@ -411,22 +411,42 @@
     }
     .gc-meet-note strong { color: var(--text); }
 
-    /* ── Post-booking ────────────────────────────────────────── */
-    #gcPostBooking {
+    /* ── Booking slide wide ──────────────────────────────────── */
+    .gc-form-wrap-booking { max-width: 860px !important; }
+
+    /* ── Thank you page ──────────────────────────────────────── */
+    #gcThankYou {
         display: none; position: relative; z-index: 1;
-        padding: 0 32px 120px;
+        padding: 100px 32px 120px;
+        text-align: center;
     }
-    .gc-timeline-heading {
-        font-size: clamp(24px, 3vw, 34px); font-weight: 900;
-        text-align: center; letter-spacing: -0.02em; margin-bottom: 48px;
+    @media (max-width: 600px) { #gcThankYou { padding: 72px 20px 80px; } }
+    .gc-ty-badge {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: rgba(0,200,100,0.12); border: 1px solid rgba(0,200,100,0.3);
+        border-radius: 100px; padding: 8px 18px;
+        font-size: 13px; font-weight: 700; color: #00c864;
+        text-transform: uppercase; letter-spacing: 1px; margin-bottom: 32px;
     }
-    .gc-timeline-heading span {
+    .gc-ty-heading {
+        font-size: clamp(32px, 5vw, 56px); font-weight: 900;
+        letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 20px;
+    }
+    .gc-ty-heading span {
         background: linear-gradient(135deg, var(--accent), var(--accent2));
         -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
+    .gc-ty-sub {
+        font-size: 17px; color: var(--muted); line-height: 1.65;
+        max-width: 540px; margin: 0 auto 72px;
+    }
+    .gc-ty-steps-heading {
+        font-size: clamp(20px, 2.5vw, 28px); font-weight: 900;
+        letter-spacing: -0.02em; margin-bottom: 36px;
+    }
     .gc-timeline {
         display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
-        max-width: 900px; margin: 0 auto;
+        max-width: 900px; margin: 0 auto 80px;
     }
     @media (max-width: 640px) { .gc-timeline { grid-template-columns: 1fr; } }
     .gc-tcard {
@@ -440,6 +460,16 @@
         content: '';
         position: absolute; top: 0; left: 0; right: 0; height: 3px;
         background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+    .gc-ty-video-wrap {
+        max-width: 780px; margin: 0 auto;
+        border-radius: 20px; overflow: hidden;
+        border: 1px solid var(--border);
+        box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+        aspect-ratio: 16/9; background: #000;
+    }
+    .gc-ty-video-wrap iframe {
+        width: 100%; height: 100%; border: none; display: block;
     }
     .gc-tcard-time {
         font-size: 11px; font-weight: 800; text-transform: uppercase;
@@ -1685,7 +1715,7 @@
             <p class="gc-form-sub">Submit your verified email and phone number to receive your audit and schedule your review.</p>
         </div>
 
-        <div style="max-width:640px;margin:0 auto;" data-anim data-d="1">
+        <div style="max-width:640px;margin:0 auto;" id="gcFormWrap" data-anim data-d="1">
         <div class="gc-form-card">
             <div class="gc-progress-bar">
                 <div class="gc-progress-fill" id="gcProgressFill"></div>
@@ -1834,15 +1864,19 @@
         </div><!-- /.centered-form-wrap -->
     </section>
 
-    <!-- ── Post-booking: What Happens Next ── -->
-    <div id="gcPostBooking">
+    <!-- ── Thank You Page ── -->
+    <div id="gcThankYou">
         <div class="gc-inner--wide">
-            <div class="gc-timeline-heading">Here's <span>What Happens Next</span></div>
+            <div class="gc-ty-badge">&#10003; You're Booked</div>
+            <h2 class="gc-ty-heading">Check Your Email —<br><span>Your Spot Is Confirmed.</span></h2>
+            <p class="gc-ty-sub">We'll send you a Google Meet link before your call. In the meantime, here's exactly what's happening on our end.</p>
+
+            <div class="gc-ty-steps-heading">Here's What Happens Next</div>
             <div class="gc-timeline">
                 <div class="gc-tcard">
                     <div class="gc-tcard-time">Within 24 Hours</div>
                     <div class="gc-tcard-title">Your Website Is Built</div>
-                    <div class="gc-tcard-desc">Custom site designed and built. Competitor analysis and full SEO audit delivered to your call.</div>
+                    <div class="gc-tcard-desc">Custom site designed and built. Competitor analysis and full SEO audit prepared for your call.</div>
                 </div>
                 <div class="gc-tcard">
                     <div class="gc-tcard-time">Within 48 Hours</div>
@@ -1854,6 +1888,11 @@
                     <div class="gc-tcard-title">Leads Hit Your Pipeline</div>
                     <div class="gc-tcard-desc">Your site starts driving real enquiries. Your pipeline is moving and your phone starts ringing.</div>
                 </div>
+            </div>
+
+            <div class="gc-ty-video-wrap">
+                <iframe src="https://www.youtube.com/embed/kvK3G0-ewdQ?rel=0&modestbranding=1&autoplay=1&mute=1"
+                    allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
         </div>
     </div>

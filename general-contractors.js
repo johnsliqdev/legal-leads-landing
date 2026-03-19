@@ -174,9 +174,12 @@ function gcSubmitLead() {
 // ── Booking widget ────────────────────────────────────────────────────────────
 
 function gcLoadBooking() {
+    // Widen the form card for the booking widget
+    var wrap = document.getElementById('gcFormWrap');
+    if (wrap) wrap.classList.add('gc-form-wrap-booking');
+
     var iframe = document.getElementById('gcBookingIframe');
     if (iframe && !iframe.src) {
-        // TODO: replace with GC-specific GHL booking URL
         iframe.src = 'https://api.leadconnectorhq.com/widget/booking/swe1lSedf4hVYFTLSTIc';
         if (!document.getElementById('gcGhlEmbed')) {
             var s = document.createElement('script');
@@ -185,8 +188,28 @@ function gcLoadBooking() {
             document.body.appendChild(s);
         }
     }
-    var postSection = document.getElementById('gcPostBooking');
-    if (postSection) postSection.style.display = 'block';
+
+    // Listen for GHL booking confirmation postMessage
+    window.addEventListener('message', function onBooked(e) {
+        var d = e.data;
+        var isBooking = d && (
+            d.event === 'booking' ||
+            (typeof d === 'string' && d.includes('booked'))
+        );
+        if (!isBooking) return;
+        window.removeEventListener('message', onBooked);
+        gcShowThankYou();
+    });
+}
+
+function gcShowThankYou() {
+    var formSection = document.getElementById('gcFormSection');
+    if (formSection) formSection.style.display = 'none';
+    var ty = document.getElementById('gcThankYou');
+    if (ty) {
+        ty.style.display = 'block';
+        ty.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 // ── Phone masking ─────────────────────────────────────────────────────────────
