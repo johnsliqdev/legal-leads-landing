@@ -10,23 +10,24 @@
 
         :root {
             --bg:       #080808;
-            --bg2:      #111111;
             --card:     #161616;
             --accent:   #ff006e;
             --accent2:  #ff6b35;
             --text:     #ffffff;
             --muted:    #b0b0b0;
             --border:   rgba(255,255,255,0.08);
-            --border-a: rgba(255,0,110,0.22);
         }
 
         html, body {
             background: var(--bg);
             color: var(--text);
             font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            overflow-x: clip;
+            height: 100%;
+            overflow: hidden;
             -webkit-font-smoothing: antialiased;
+        }
+        @media (max-width: 768px) {
+            html, body { overflow: auto; height: auto; }
         }
 
         /* ── Animated background ── */
@@ -43,8 +44,8 @@
             background-image:
                 linear-gradient(rgba(255,0,110,0.035) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255,0,110,0.035) 1px, transparent 1px),
-                linear-gradient(rgba(255,0,110,0.08)  1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,0,110,0.08)  1px, transparent 1px);
+                linear-gradient(rgba(255,0,110,0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,0,110,0.08) 1px, transparent 1px);
             background-size: 40px 40px, 40px 40px, 200px 200px, 200px 200px;
             animation: gridDrift 50s linear infinite;
         }
@@ -54,100 +55,138 @@
             to   { background-position: 40px 40px, 40px 40px, 200px 200px, 200px 200px; }
         }
 
-        .ty-wrap { position: relative; z-index: 1; }
+        /* ── Layout ── */
+        .ty-wrap {
+            position: relative; z-index: 1;
+            display: flex; flex-direction: column;
+            height: 100vh;
+        }
+        @media (max-width: 768px) { .ty-wrap { height: auto; } }
 
         /* ── Nav ── */
         .ty-nav {
-            padding: 20px 32px;
-            display: flex; align-items: center; justify-content: center;
+            padding: 14px 32px;
+            display: flex; align-items: center; justify-content: space-between;
             border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
         }
-        .ty-nav img { height: 36px; }
-
-        /* ── Hero ── */
-        .ty-hero {
-            text-align: center;
-            padding: 80px 32px 64px;
-        }
-        @media (max-width: 600px) { .ty-hero { padding: 56px 20px 48px; } }
-
-        .ty-badge {
-            display: inline-flex; align-items: center; gap: 8px;
+        .ty-nav img { height: 30px; }
+        .ty-nav-badge {
+            display: inline-flex; align-items: center; gap: 7px;
             background: rgba(0,200,100,0.12);
             border: 1px solid rgba(0,200,100,0.3);
-            border-radius: 100px; padding: 8px 20px;
-            font-size: 13px; font-weight: 700; color: #00c864;
+            border-radius: 100px; padding: 6px 16px;
+            font-size: 12px; font-weight: 700; color: #00c864;
             text-transform: uppercase; letter-spacing: 1px;
-            margin-bottom: 32px;
+        }
+
+        /* ── Main two-column ── */
+        .ty-main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 0;
+        }
+        @media (max-width: 768px) {
+            .ty-main { grid-template-columns: 1fr; }
+        }
+
+        /* ── Left panel ── */
+        .ty-left {
+            padding: 32px 40px;
+            display: flex; flex-direction: column; justify-content: center;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+        }
+        @media (max-width: 768px) {
+            .ty-left { padding: 32px 20px; border-right: none; border-bottom: 1px solid var(--border); }
         }
 
         .ty-heading {
-            font-size: clamp(36px, 6vw, 64px);
-            font-weight: 900; letter-spacing: -0.03em; line-height: 1.05;
-            margin-bottom: 20px;
+            font-size: clamp(24px, 2.8vw, 38px);
+            font-weight: 900; letter-spacing: -0.03em; line-height: 1.1;
+            margin-bottom: 6px;
         }
         .ty-heading span {
             background: linear-gradient(135deg, var(--accent), var(--accent2));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
         .ty-sub {
-            font-size: 17px; color: var(--muted); line-height: 1.65;
-            max-width: 520px; margin: 0 auto;
+            font-size: 14px; color: var(--muted); line-height: 1.6;
+            margin-bottom: 28px;
         }
 
-        /* ── Video ── */
-        .ty-video-section {
-            padding: 0 32px 80px;
+        /* ── Steps ── */
+        .ty-ops { display: flex; flex-direction: column; gap: 0; }
+
+        .ty-op {
+            display: flex; align-items: flex-start; gap: 14px;
+            padding: 13px 0;
+            border-bottom: 1px solid var(--border);
         }
-        @media (max-width: 600px) { .ty-video-section { padding: 0 20px 64px; } }
+        .ty-op:last-child { border-bottom: none; }
+
+        .ty-op-icon {
+            width: 26px; height: 26px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; margin-top: 1px;
+            font-size: 13px;
+        }
+        .ty-op-icon.done {
+            background: rgba(0,200,100,0.15);
+            border: 1.5px solid rgba(0,200,100,0.5);
+            color: #00c864;
+        }
+        .ty-op-icon.pending {
+            background: rgba(255,255,255,0.05);
+            border: 1.5px solid rgba(255,255,255,0.15);
+            color: var(--muted);
+        }
+
+        .ty-op-body { flex: 1; }
+        .ty-op-title {
+            font-size: 14px; font-weight: 800; letter-spacing: -0.01em;
+            margin-bottom: 2px;
+        }
+        .ty-op-title.done-text { color: #fff; }
+        .ty-op-title.pending-text { color: var(--muted); }
+        .ty-op-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+        /* ── Right panel ── */
+        .ty-right {
+            padding: 24px 32px;
+            display: flex; flex-direction: column; justify-content: center;
+            gap: 16px;
+        }
+        @media (max-width: 768px) { .ty-right { padding: 24px 20px; } }
+
+        .ty-video-label {
+            font-size: 11px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 1.5px; color: var(--accent);
+        }
 
         .ty-video-wrap {
-            max-width: 860px; margin: 0 auto;
-            border-radius: 20px; overflow: hidden;
+            border-radius: 16px; overflow: hidden;
             border: 1px solid var(--border);
-            box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.5);
             aspect-ratio: 16/9; background: #000;
+            width: 100%;
         }
         .ty-video-wrap iframe {
             width: 100%; height: 100%; border: none; display: block;
         }
 
-        /* ── Next steps ── */
-        .ty-steps {
-            padding: 0 32px 80px;
+        .ty-video-note {
+            font-size: 13px; color: var(--muted); line-height: 1.55;
         }
-        @media (max-width: 600px) { .ty-steps { padding: 0 20px 64px; } }
-
-        .ty-steps-label {
-            font-size: clamp(20px, 2.5vw, 28px); font-weight: 900;
-            letter-spacing: -0.02em; text-align: center; margin-bottom: 36px;
-        }
-
-        .ty-ops {
-            max-width: 680px; margin: 0 auto;
-            display: flex; flex-direction: column; gap: 0;
-        }
-
-        .ty-op {
-            display: flex; gap: 20px; align-items: flex-start;
-            padding: 20px 0;
-            border-bottom: 1px solid var(--border);
-        }
-        .ty-op:last-child { border-bottom: none; }
-
-        .ty-op-num {
-            font-size: 11px; font-weight: 800; color: var(--accent);
-            text-transform: uppercase; letter-spacing: 1.5px;
-            min-width: 28px; padding-top: 2px;
-        }
-        .ty-op-title { font-size: 16px; font-weight: 800; margin-bottom: 4px; letter-spacing: -0.01em; }
-        .ty-op-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
 
         /* ── Footer ── */
         .ty-footer {
-            text-align: center; padding: 24px 32px;
-            font-size: 13px; color: var(--muted);
+            text-align: center; padding: 12px 32px;
+            font-size: 12px; color: rgba(255,255,255,0.25);
             border-top: 1px solid var(--border);
+            flex-shrink: 0;
         }
     </style>
 </head>
@@ -157,62 +196,67 @@
 
         <nav class="ty-nav">
             <a href="/general-contractors"><img src="images/sliq-logo.png" alt="Sliq"></a>
+            <div class="ty-nav-badge">&#10003; You're Booked</div>
         </nav>
 
-        <section class="ty-hero">
-            <div class="ty-badge">&#10003; You're Booked</div>
-            <h1 class="ty-heading">Check Your Email —<br><span>Your Spot Is Confirmed.</span></h1>
-            <p class="ty-sub">We'll send you a Google Meet link before your call. Here's exactly what's happening on our end.</p>
-        </section>
+        <div class="ty-main">
 
-        <section class="ty-video-section">
-            <div class="ty-video-wrap">
-                <iframe src="https://www.youtube.com/embed/kvK3G0-ewdQ?rel=0&modestbranding=1"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
-            </div>
-        </section>
+            <!-- Left: heading + steps -->
+            <div class="ty-left">
+                <h1 class="ty-heading">We Don't Clock Out<br><span>Till You Book Out.</span></h1>
+                <p class="ty-sub">Check your email for the Google Meet link. Here's exactly what's happening on our end.</p>
 
-        <section class="ty-steps">
-            <div class="ty-steps-label">We Don't Clock Out Till You Book Out.</div>
-            <div class="ty-ops">
-                <div class="ty-op">
-                    <div class="ty-op-num">01</div>
-                    <div>
-                        <div class="ty-op-title">You Applied</div>
-                        <div class="ty-op-desc">You're in. We've got your booking and we're already on it.</div>
+                <div class="ty-ops">
+                    <div class="ty-op">
+                        <div class="ty-op-icon done">✓</div>
+                        <div class="ty-op-body">
+                            <div class="ty-op-title done-text">You Applied</div>
+                            <div class="ty-op-desc">You're in. We've got your booking and we're already on it.</div>
+                        </div>
                     </div>
-                </div>
-                <div class="ty-op">
-                    <div class="ty-op-num">02</div>
-                    <div>
-                        <div class="ty-op-title">We Run Your Audit</div>
-                        <div class="ty-op-desc">We analyze your site's SEO gaps, pull your competitor's keyword rankings, traffic, and ad spend estimates.</div>
+                    <div class="ty-op">
+                        <div class="ty-op-icon pending">○</div>
+                        <div class="ty-op-body">
+                            <div class="ty-op-title pending-text">We Run Your Audit</div>
+                            <div class="ty-op-desc">We analyze your site's SEO gaps, pull your competitor's keyword rankings, traffic, and ad spend estimates.</div>
+                        </div>
                     </div>
-                </div>
-                <div class="ty-op">
-                    <div class="ty-op-num">03</div>
-                    <div>
-                        <div class="ty-op-title">Strategy Call</div>
-                        <div class="ty-op-desc">We walk you through the full audit live. You see exactly what your competitor is doing — and what it's costing you.</div>
+                    <div class="ty-op">
+                        <div class="ty-op-icon pending">○</div>
+                        <div class="ty-op-body">
+                            <div class="ty-op-title pending-text">Strategy Call</div>
+                            <div class="ty-op-desc">We walk you through the full audit live. You see exactly what your competitor is doing — and what it's costing you.</div>
+                        </div>
                     </div>
-                </div>
-                <div class="ty-op">
-                    <div class="ty-op-num">04</div>
-                    <div>
-                        <div class="ty-op-title">We Build Your Site</div>
-                        <div class="ty-op-desc">Custom lead-generating website designed for your market. Live and indexed in 48 hours, no exceptions.</div>
+                    <div class="ty-op">
+                        <div class="ty-op-icon pending">○</div>
+                        <div class="ty-op-body">
+                            <div class="ty-op-title pending-text">We Build Your Site</div>
+                            <div class="ty-op-desc">Custom lead-generating website designed for your market. Live and indexed in 48 hours.</div>
+                        </div>
                     </div>
-                </div>
-                <div class="ty-op">
-                    <div class="ty-op-num">05</div>
-                    <div>
-                        <div class="ty-op-title">Leads Hit Your Pipeline</div>
-                        <div class="ty-op-desc">SEO goes live, Meta Ads launch, and your phone starts ringing. Your competition doesn't see it coming.</div>
+                    <div class="ty-op">
+                        <div class="ty-op-icon pending">○</div>
+                        <div class="ty-op-body">
+                            <div class="ty-op-title pending-text">Leads Hit Your Pipeline</div>
+                            <div class="ty-op-desc">SEO goes live, Meta Ads launch, and your phone starts ringing. Your competition doesn't see it coming.</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+
+            <!-- Right: video -->
+            <div class="ty-right">
+                <div class="ty-video-label">Watch While You Wait</div>
+                <div class="ty-video-wrap">
+                    <iframe src="https://www.youtube.com/embed/kvK3G0-ewdQ?rel=0&modestbranding=1"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
+                </div>
+                <p class="ty-video-note">See how we build a contractor's online presence from zero — and what it takes to rank above the competition in your local market.</p>
+            </div>
+
+        </div>
 
         <footer class="ty-footer">&copy; 2026 Sliq. All rights reserved.</footer>
 
