@@ -189,12 +189,18 @@ function gcLoadBooking() {
         }
     }
 
-    // Detect booking confirmation via iframe load event
-    // GHL navigates the iframe to a confirmation page on booking — fires a second load
-    var loadCount = 0;
-    iframe.addEventListener('load', function() {
-        loadCount++;
-        if (loadCount > 1) {
+    // Detect booking confirmation via height ratio (size-independent)
+    // The confirmation screen is always much shorter than the booking form — ~55% drop
+    var maxH = 0;
+    var redirected = false;
+    window.addEventListener('message', function(e) {
+        if (redirected || typeof e.data !== 'string') return;
+        var m = e.data.match(/\[iFrameSizer\]gcBookingIframe:(\d+):/);
+        if (!m) return;
+        var h = parseInt(m[1], 10);
+        if (h > maxH) { maxH = h; return; }
+        if (maxH > 300 && h < maxH * 0.55) {
+            redirected = true;
             window.location.href = '/thank-you';
         }
     });
