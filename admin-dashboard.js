@@ -89,11 +89,10 @@ async function saveCpqlTarget(value) {
 
 async function loadSubmissions() {
     const token = sessionStorage.getItem('adminApiToken') || '';
-    const funnelParam = activeCampaign === 'gc' ? '?funnel=gc' : activeCampaign === 'ls' ? '?funnel=ls' : '?funnel=cpql';
-    const res = await fetch(`/api/leads${funnelParam}`, {
-        method: 'GET',
-        headers: { 'x-admin-token': token }
-    });
+    const url = activeCampaign === 'gc'
+        ? '/api/gc-audits'
+        : activeCampaign === 'ls' ? '/api/leads?funnel=ls' : '/api/leads?funnel=cpql';
+    const res = await fetch(url, { method: 'GET', headers: { 'x-admin-token': token } });
     if (!res.ok) throw new Error(`Failed to load submissions: ${res.status}`);
     return await res.json();
 }
@@ -129,10 +128,9 @@ function renderMetrics(submissions) {
     };
     if (activeCampaign === 'gc') {
         const total = submissions.length;
-        const rev = {};
-        submissions.forEach(function(s) { const k = s.revenue_range || 'Unknown'; rev[k] = (rev[k] || 0) + 1; });
-        const top = Object.entries(rev).sort(function(a, b) { return b[1] - a[1]; })[0];
-        el.innerHTML = card('Total Leads', total) + (top ? card('Top Revenue Range', top[0].split('/')[0].trim()) : '');
+        const pending = submissions.filter(function(s) { return s.audit_status === 'pending'; }).length;
+        const complete = submissions.filter(function(s) { return s.audit_status === 'complete'; }).length;
+        el.innerHTML = card('Total Bookings', total) + card('Audits Pending', pending) + card('Audits Complete', complete);
     } else if (activeCampaign === 'ls') {
         const total = submissions.length;
         const qualified = submissions.filter(function(s) { return s.meta_budget_commitment && s.meta_budget_commitment !== 'Under $10,000/mo'; }).length;
@@ -205,21 +203,20 @@ function renderLsSubmission(s) {
 
 function renderGcSubmission(s) {
     const v = function(x) { return x || '—'; };
+    const statusColor = s.audit_status === 'complete' ? '#00c864' : '#ff006e';
     return `<div class="submission-item">
         <div class="submission-header">
             <div class="submission-date">${new Date(s.created_at).toLocaleString()}</div>
-            <div class="submission-id">ID: ${s.id} · General Contractor</div>
+            <div class="submission-id">ID: ${s.id} · <span style="color:${statusColor};font-weight:700;text-transform:uppercase;">${v(s.audit_status)}</span></div>
         </div>
         <div class="submission-details">
             <div class="sub-section">Contact</div>
+            <div class="sub-field"><div class="sub-label">Name</div><div class="sub-value">${v(s.name)}</div></div>
             <div class="sub-field"><div class="sub-label">Email</div><div class="sub-value">${v(s.email)}</div></div>
             <div class="sub-field"><div class="sub-label">Phone</div><div class="sub-value">${v(s.phone)}</div></div>
+            <div class="sub-section">Audit</div>
             <div class="sub-field"><div class="sub-label">Website</div><div class="sub-value">${v(s.website)}</div></div>
-            <div class="sub-field"><div class="sub-label">Top Competitor</div><div class="sub-value">${v(s.competitors)}</div></div>
-            <div class="sub-section">Qualification</div>
-            <div class="sub-field"><div class="sub-label">Revenue Range</div><div class="sub-value">${v(s.revenue_range)}</div></div>
-            <div class="sub-field"><div class="sub-label">Biggest Challenge</div><div class="sub-value">${v(s.situation)}</div></div>
-            <div class="sub-field"><div class="sub-label">Ad Source</div><div class="sub-value">${v(s.ad_source)}</div></div>
+            <div class="sub-field"><div class="sub-label">Competitor</div><div class="sub-value">${v(s.competitor)}</div></div>
         </div>
     </div>`;
 }
@@ -235,8 +232,9 @@ document.getElementById('clearSubmissions')?.addEventListener('click', async fun
     if (!confirm('Delete all submissions for this funnel? This cannot be undone.')) return;
     try {
         const token = sessionStorage.getItem('adminApiToken') || '';
-        const funnelParam = activeCampaign === 'gc' ? '?funnel=gc' : activeCampaign === 'ls' ? '?funnel=ls' : '?funnel=cpql';
-        const res = await fetch(`/api/leads${funnelParam}`, { method: 'DELETE', headers: { 'x-admin-token': token } });
+        const deleteUrl = activeCampaign === 'gc' ? '/api/gc-audits'
+                        : activeCampaign === 'ls' ? '/api/leads?funnel=ls' : '/api/leads?funnel=cpql';
+        const res = await fetch(deleteUrl, { method: 'DELETE', headers: { 'x-admin-token': token } });
         if (!res.ok) throw new Error('Failed');
         await displaySubmissions();
         showNotification('Submissions cleared', 'success');
