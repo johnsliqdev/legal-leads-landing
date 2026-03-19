@@ -1,9 +1,6 @@
 import { createPool } from '@vercel/postgres';
 
-const CPQL_LS_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/eead3f94-6a3f-4980-bdca-a3e23828f0dc';
-const GC_WEBHOOK_URL      = 'https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/82be4a3f-8e2b-4ace-9814-54d5227592a5';
-const BOOKING_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/54b62594-4445-4ed1-b1b4-e2f8f873364c';
-const LEGACY_WEBHOOK_URL  = 'https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/9319ec87-a2a6-4f54-8abf-de8de237d04e';
+const GC_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/82be4a3f-8e2b-4ace-9814-54d5227592a5';
 
 function getConnectionString() {
   return (
@@ -171,12 +168,8 @@ export default async function handler(req, res) {
           funnel_stage:    'submitted',
           resume_url:      resumeUrl,
         };
-        await Promise.all([
-          fireGhlWebhook(submissionPayload, GC_WEBHOOK_URL),
-          fireGhlWebhook(submissionPayload, CPQL_LS_WEBHOOK_URL),
-          fireGhlWebhook(submissionPayload, BOOKING_WEBHOOK_URL),
-          // 9319ec87 (LEGACY) is NOT fired here — cron handles it after 2 mins
-        ]);
+        await fireGhlWebhook(submissionPayload, GC_WEBHOOK_URL);
+        // 9319ec87 (LEGACY) is NOT fired here — cron handles it after 2 mins
       }
 
       return json(res, 200, { success: true, id: insertedId, resume_token: resumeToken });
@@ -216,51 +209,6 @@ export default async function handler(req, res) {
           booking_reached = COALESCE(${body.bookingReached === undefined ? null : body.bookingReached}, booking_reached)
         WHERE id = ${id};
       `;
-
-      // When booking is reached, fire a second webhook with ALL accumulated fields
-      if (body.bookingReached === true) {
-        const { rows: leadRows } = await poolInstance.sql`SELECT * FROM leads WHERE id = ${id} LIMIT 1;`;
-        const l = leadRows[0];
-        if (l && (l.funnel === 'CPQL Legal Funnel' || l.funnel === 'Simple Legal Funnel')) {
-          const bookingPayload = {
-            name:                        l.name || '',
-            email:                       l.email || '',
-            phone:                       l.phone || '',
-            website:                     l.website || '',
-            funnel:                      l.funnel || '',
-            ad_source:                   l.ad_source || '',
-            booking_reached:             true,
-            situation:                   l.situation || '',
-            meta_budget_commitment:      l.meta_budget_commitment || '',
-            dedicated_intake:            l.dedicated_intake || '',
-            uses_crm:                    l.uses_crm || '',
-            firm_differentiator:         l.firm_differentiator || '',
-            calc_current_monthly_spend:  l.calc_current_monthly_spend || '',
-            calc_current_cpql:           l.calc_current_cpql || '',
-            calc_guaranteed_cpql:        l.calc_guaranteed_cpql || '',
-            calc_new_monthly_spend:      l.calc_new_monthly_spend || '',
-            calc_monthly_savings:        l.calc_monthly_savings || '',
-            calc_annual_savings:         l.calc_annual_savings || '',
-            calc_cpql_reduction:         l.calc_cpql_reduction || '',
-            calc_leads_count:            l.calc_leads_count || '',
-            requested_callback:          l.requested_callback || false,
-            video_watch_seconds:         l.video_watch_seconds || 0,
-            video_watch_percent:         l.video_watch_percent || 0,
-          };
-          const host = req.headers.host || '';
-          const proto = host.includes('localhost') ? 'http' : 'https';
-          const resumePath = l.funnel === 'Simple Legal Funnel' ? '/legal-simplified' : '/cpql';
-          const resumeUrl = l.resume_token
-            ? `${proto}://${host}${resumePath}?resume=${l.resume_token}`
-            : '';
-
-          await Promise.all([
-            fireGhlWebhook(bookingPayload, CPQL_LS_WEBHOOK_URL),
-            fireGhlWebhook(bookingPayload, BOOKING_WEBHOOK_URL),
-            fireGhlWebhook({ ...bookingPayload, funnel_stage: 'completed_questionnaire', resume_url: resumeUrl }, LEGACY_WEBHOOK_URL),
-          ]);
-        }
-      }
 
       return json(res, 200, { success: true });
     }

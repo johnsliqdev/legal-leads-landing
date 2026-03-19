@@ -20,8 +20,8 @@ function json(res, status, data) {
 }
 
 export default async function handler(req, res) {
-  // Vercel cron requests include this header automatically
-  if (req.headers['authorization'] !== `Bearer ${process.env.CRON_SECRET}`) {
+  // Vercel automatically sends this header on every cron invocation
+  if (req.headers['x-vercel-cron'] !== '1') {
     return json(res, 401, { error: 'unauthorized' });
   }
 
