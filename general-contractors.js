@@ -9,20 +9,17 @@ var adSource = (function() {
 })();
 
 var gcState = {
-    website:      null,
-    competitors:  null,
     revenueRange: null,
     situation:    null
 };
 
 var GC_STEPS = {
-    1: { pct: '25%',  label: 'Your Website', cur: 1 },
-    2: { pct: '50%',  label: 'Revenue',      cur: 2 },
-    3: { pct: '75%',  label: 'Challenge',    cur: 3 },
-    4: { pct: '100%', label: 'Reserve Spot', cur: 4 }
+    2: { pct: '33%',  label: 'Revenue',      cur: 1 },
+    3: { pct: '66%',  label: 'Challenge',    cur: 2 },
+    4: { pct: '100%', label: 'Reserve Spot', cur: 3 }
 };
 
-var gcCurrentSlide = 1;
+var gcCurrentSlide = 2;
 
 function gcShowSlide(n, direction) {
     var prev = document.getElementById('gcS' + gcCurrentSlide);
@@ -62,37 +59,6 @@ function gcNext(n) {
 
 function gcBack(n) {
     gcShowSlide(n, 'back');
-}
-
-// ── Step 1: Validation ────────────────────────────────────────────────────────
-
-function gcValidateDomain(val) {
-    var cleaned = val.trim().replace(/^https?:\/\//i, '').replace(/^www\./i, '');
-    return /^[a-zA-Z0-9]([a-zA-Z0-9\-]*\.)+[a-zA-Z]{2,10}(\/.*)?$/.test(cleaned);
-}
-
-function gcCheckInfo() {
-    var website    = document.getElementById('gcWebsite').value.trim();
-    var websiteOk  = gcValidateDomain(website);
-    var websiteErr = document.getElementById('gcWebsiteErr');
-
-    if (website.length > 0 && !websiteOk) {
-        websiteErr.style.display = 'block';
-    } else {
-        websiteErr.style.display = 'none';
-    }
-
-    if (websiteOk) {
-        gcEnableBtn('gcN1');
-    } else {
-        gcDisableBtn('gcN1');
-    }
-}
-
-function gcSubmitInfo() {
-    gcState.website     = document.getElementById('gcWebsite').value.trim();
-    gcState.competitors = document.getElementById('gcCompetitors').value.trim();
-    gcNext(2);
 }
 
 // ── Revenue selection ─────────────────────────────────────────────────────────
@@ -144,8 +110,6 @@ function gcSubmitLead() {
             source:        'general-contractors',
             funnel:        'GC Audit Funnel',
             ad_source:     adSource,
-            website:       gcState.website,
-            competitors:   gcState.competitors,
             revenue_range: gcState.revenueRange,
             situation:     gcState.situation
         })
@@ -225,6 +189,4 @@ function gcDisableBtn(id) {
 
 document.addEventListener('DOMContentLoaded', function() {
     gcInitKeyboard();
-    var websiteEl = document.getElementById('gcWebsite');
-    if (websiteEl) websiteEl.addEventListener('input', gcCheckInfo);
 });

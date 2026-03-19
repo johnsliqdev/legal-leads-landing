@@ -1726,27 +1726,9 @@
             </div>
             <div class="gc-step-body">
 
-                <!-- Slide 1: Website -->
-                <div class="gc-slide active" id="gcS1">
-                    <div class="gc-q-eyebrow">Step 1 of 4</div>
-                    <div class="gc-q-text">Start with your website</div>
-                    <div class="gc-field">
-                        <label>Company Website</label>
-                        <input type="text" id="gcWebsite" placeholder="smithcontracting.com" autocomplete="url">
-                        <div class="gc-field-err" id="gcWebsiteErr">Enter a valid website (e.g. smithcontracting.com)</div>
-                    </div>
-                    <div class="gc-field">
-                        <label>Your Top Competitor <span style="color:var(--muted);font-weight:400">(optional — helps us build your audit)</span></label>
-                        <input type="text" id="gcCompetitors" placeholder="e.g. acmecontracting.com">
-                    </div>
-                    <div class="gc-nav">
-                        <button class="gc-btn-next" id="gcN1" onclick="gcSubmitInfo()" disabled>Check My Eligibility →</button>
-                    </div>
-                </div>
-
-                <!-- Slide 2: Revenue -->
-                <div class="gc-slide" id="gcS2">
-                    <div class="gc-q-eyebrow">Step 2 of 4</div>
+                <!-- Slide 1: Revenue -->
+                <div class="gc-slide active" id="gcS2">
+                    <div class="gc-q-eyebrow">Step 1 of 3</div>
                     <div class="gc-q-text">What's your contracting business doing annually?</div>
                     <div class="gc-options" id="gcQ1">
                         <div class="gc-option" data-value="$1M–$5M/year" onclick="gcSelectRevenue(this)">
@@ -1774,14 +1756,13 @@
                         Our program is built for established contractors doing $500K+. Bookmark this page — we'd love to work with you when you're there.
                     </div>
                     <div class="gc-nav">
-                        <button class="gc-btn-back" onclick="gcBack(1)">← Back</button>
                         <button class="gc-btn-next" id="gcN2" onclick="gcNext(3)" disabled>Continue →</button>
                     </div>
                 </div>
 
-                <!-- Slide 3: Situation -->
+                <!-- Slide 2: Situation -->
                 <div class="gc-slide" id="gcS3">
-                    <div class="gc-q-eyebrow">Step 3 of 4</div>
+                    <div class="gc-q-eyebrow">Step 2 of 3</div>
                     <div class="gc-q-text">What's costing you jobs right now?</div>
                     <div class="gc-scenarios" id="gcScenarios">
                         <div class="gc-scenario" data-value="No real online presence" onclick="gcSelectSituation(this)">
@@ -1831,9 +1812,9 @@
                     </div>
                 </div>
 
-                <!-- Slide 4: Booking -->
+                <!-- Slide 3: Booking -->
                 <div class="gc-slide" id="gcS4">
-                    <div class="gc-q-eyebrow">Step 4 of 4</div>
+                    <div class="gc-q-eyebrow">Step 3 of 3</div>
                     <div class="gc-q-text">Reserve your audit spot</div>
                     <div class="gc-booking-strip">
                         Spots are limited. <strong>Book within 48 hours to guarantee your audit.</strong>
