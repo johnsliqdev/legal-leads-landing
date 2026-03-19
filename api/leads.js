@@ -158,15 +158,13 @@ export default async function handler(req, res) {
         const resumeUrl = `${proto}://${host}${resumePath}?resume=${resumeToken}`;
 
         const submissionPayload = {
-          name:            body.name || '',
-          email:           body.email || '',
-          phone:           body.phone || '',
-          website:         body.website || '',
-          funnel:          body.funnel || '',
-          ad_source:       body.ad_source || '',
-          booking_reached: false,
-          funnel_stage:    'submitted',
-          resume_url:      resumeUrl,
+          name:       body.name || '',
+          email:      body.email || '',
+          phone:      body.phone || '',
+          website:    body.website || '',
+          funnel:     body.funnel || '',
+          ad_source:  body.ad_source || '',
+          resume_url: resumeUrl,
         };
         await fireGhlWebhook(submissionPayload, GC_WEBHOOK_URL);
         // 9319ec87 (LEGACY) is NOT fired here — cron handles it after 2 mins
