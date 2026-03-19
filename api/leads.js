@@ -1,6 +1,5 @@
 import { createPool } from '@vercel/postgres';
 
-const GC_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/82be4a3f-8e2b-4ace-9814-54d5227592a5';
 
 function getConnectionString() {
   return (
@@ -47,19 +46,6 @@ function getAdminToken(req) {
   return header;
 }
 
-async function fireGhlWebhook(payload, urlOverride) {
-  const target = urlOverride || process.env.GHL_WEBHOOK_URL;
-  if (!target) return;
-  try {
-    await fetch(target, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-  } catch (err) {
-    console.error('GHL webhook error:', err);
-  }
-}
 
 async function ensureSchema(poolInstance) {
   await poolInstance.sql`
@@ -184,26 +170,6 @@ export default async function handler(req, res) {
         WHERE id = ${id};
       `;
 
-      // Fire intake webhook when lead passes budget qualification
-      if (body.qualificationPassed === true) {
-        const { rows: leadRows } = await poolInstance.sql`SELECT * FROM leads WHERE id = ${id} LIMIT 1;`;
-        const l = leadRows[0];
-        if (l && (l.funnel === 'CPQL Legal Funnel' || l.funnel === 'Simple Legal Funnel')) {
-          const host = req.headers.host || '';
-          const proto = host.includes('localhost') ? 'http' : 'https';
-          const resumePath = l.funnel === 'Simple Legal Funnel' ? '/legal-simplified' : '/cpql';
-          const resumeUrl = l.resume_token ? `${proto}://${host}${resumePath}?resume=${l.resume_token}` : '';
-          await fireGhlWebhook({
-            name:       l.name || '',
-            email:      l.email || '',
-            phone:      l.phone || '',
-            website:    l.website || '',
-            funnel:     l.funnel || '',
-            ad_source:  l.ad_source || '',
-            resume_url: resumeUrl,
-          }, GC_WEBHOOK_URL);
-        }
-      }
 
       return json(res, 200, { success: true });
     }
