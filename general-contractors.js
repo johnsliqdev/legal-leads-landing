@@ -189,14 +189,19 @@ function gcLoadBooking() {
         }
     }
 
-    // Listen for GHL booking confirmation — log to console so we can see exact format
+    // Detect booking confirmation via iFrameResizer height drop
+    // Format: [iFrameSizer]gcBookingIframe:HEIGHT:WIDTH:event
+    var maxHeight = 0;
+    var booked = false;
     window.addEventListener('message', function onBooked(e) {
-        var d = e.data;
-        console.log('[GHL msg]', JSON.stringify(d));
-        if (!d) return;
-        var str = typeof d === 'string' ? d : JSON.stringify(d);
-        // Only fire on explicit confirmed/scheduled events, not page load chatter
-        if (/appointmentBooked|slot_confirmation|booking_confirmed|eventBooked/i.test(str)) {
+        if (booked || typeof e.data !== 'string') return;
+        var match = e.data.match(/\[iFrameSizer\]gcBookingIframe:(\d+):/);
+        if (!match) return;
+        var h = parseInt(match[1], 10);
+        if (h > maxHeight) maxHeight = h;
+        // Confirmation screen is much shorter — fire when height drops significantly
+        if (maxHeight > 500 && h < 450) {
+            booked = true;
             window.removeEventListener('message', onBooked);
             window.location.href = '/thank-you';
         }
