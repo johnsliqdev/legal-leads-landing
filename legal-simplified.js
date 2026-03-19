@@ -286,6 +286,24 @@ function lsInitKeyboard() {
     });
 }
 
+// ── Budget qualification pass ─────────────────────────────────────────────────
+
+function lsPassQualification() {
+    if (lsLeadId) {
+        fetch('/api/leads', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id:                   lsLeadId,
+                situation:            lsState.selectedScenario,
+                metaBudgetCommitment: lsState.budgetCommitment,
+                qualificationPassed:  true
+            })
+        }).catch(function(err) { console.error('Qualification PATCH failed:', err); });
+    }
+    lsNext(4);
+}
+
 // ── Button helpers ────────────────────────────────────────────────────────────
 
 function lsEnableBtn(id) {

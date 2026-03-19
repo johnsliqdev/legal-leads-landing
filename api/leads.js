@@ -147,28 +147,6 @@ export default async function handler(req, res) {
       `;
 
       const insertedId = rows[0].id;
-      const isCpqlOrLs = body.funnel === 'CPQL Legal Funnel' || body.funnel === 'Simple Legal Funnel';
-
-      // Build resume URL for CPQL & LS
-      if (isCpqlOrLs) {
-        const host = req.headers.host || '';
-        const proto = host.includes('localhost') ? 'http' : 'https';
-        const resumePath = body.funnel === 'Simple Legal Funnel' ? '/legal-simplified' : '/cpql';
-        const resumeUrl = `${proto}://${host}${resumePath}?resume=${resumeToken}`;
-
-        const submissionPayload = {
-          name:       body.name || '',
-          email:      body.email || '',
-          phone:      body.phone || '',
-          website:    body.website || '',
-          funnel:     body.funnel || '',
-          ad_source:  body.ad_source || '',
-          resume_url: resumeUrl,
-        };
-        await fireGhlWebhook(submissionPayload, GC_WEBHOOK_URL);
-        // 9319ec87 (LEGACY) is NOT fired here — cron handles it after 2 mins
-      }
-
       return json(res, 200, { success: true, id: insertedId, resume_token: resumeToken });
     }
 
@@ -205,6 +183,27 @@ export default async function handler(req, res) {
           booking_reached = COALESCE(${body.bookingReached === undefined ? null : body.bookingReached}, booking_reached)
         WHERE id = ${id};
       `;
+
+      // Fire intake webhook when lead passes budget qualification
+      if (body.qualificationPassed === true) {
+        const { rows: leadRows } = await poolInstance.sql`SELECT * FROM leads WHERE id = ${id} LIMIT 1;`;
+        const l = leadRows[0];
+        if (l && (l.funnel === 'CPQL Legal Funnel' || l.funnel === 'Simple Legal Funnel')) {
+          const host = req.headers.host || '';
+          const proto = host.includes('localhost') ? 'http' : 'https';
+          const resumePath = l.funnel === 'Simple Legal Funnel' ? '/legal-simplified' : '/cpql';
+          const resumeUrl = l.resume_token ? `${proto}://${host}${resumePath}?resume=${l.resume_token}` : '';
+          await fireGhlWebhook({
+            name:       l.name || '',
+            email:      l.email || '',
+            phone:      l.phone || '',
+            website:    l.website || '',
+            funnel:     l.funnel || '',
+            ad_source:  l.ad_source || '',
+            resume_url: resumeUrl,
+          }, GC_WEBHOOK_URL);
+        }
+      }
 
       return json(res, 200, { success: true });
     }

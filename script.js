@@ -704,7 +704,8 @@ function initializeContactForm() {
                 metaBudgetCommitment,
                 dedicatedIntake: dedicatedIntake.value,
                 usesCRM: usesCRM.value,
-                firmDifferentiator: firmDifferentiator || null
+                firmDifferentiator: firmDifferentiator || null,
+                qualificationPassed: true
             });
 
             // Show booking (video appears after iframe loads)
