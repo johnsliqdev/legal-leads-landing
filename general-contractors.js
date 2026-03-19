@@ -189,13 +189,12 @@ function gcLoadBooking() {
         }
     }
 
-    // Listen for GHL booking confirmation postMessage
+    // Listen for GHL booking confirmation postMessage (log all for debugging)
     window.addEventListener('message', function onBooked(e) {
         var d = e.data;
-        var isBooking = d && (
-            d.event === 'booking' ||
-            (typeof d === 'string' && d.includes('booked'))
-        );
+        console.log('[GHL msg]', JSON.stringify(d));
+        var str = typeof d === 'string' ? d : JSON.stringify(d || '');
+        var isBooking = /book|appoint|confirm|scheduled|success/i.test(str);
         if (!isBooking) return;
         window.removeEventListener('message', onBooked);
         gcShowThankYou();
