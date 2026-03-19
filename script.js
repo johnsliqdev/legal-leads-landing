@@ -12,6 +12,7 @@ let lastCalculation = null;
 let cpqlTarget = 700;
 let contactFormData = null;
 let leadId = null;
+let resumeToken = null;
 
 // YouTube video tracking
 let ytPlayer = null;
@@ -579,7 +580,7 @@ function initializeContactForm() {
                 })
                 .then((data) => {
                     leadId = data.id;
-                    console.log('Lead created with id:', leadId);
+                    if (data.resume_token) resumeToken = data.resume_token;
                 })
                 .catch((err) => console.error('Contact POST failed:', err));
 
@@ -1092,4 +1093,47 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initial update
     updateProgressBar();
+
+    // ── Resume link detection ─────────────────────────────────────────────────
+    const resumeParam = new URLSearchParams(window.location.search).get('resume');
+    if (resumeParam) {
+        fetch('/api/leads?resume_token=' + encodeURIComponent(resumeParam))
+            .then(r => r.json())
+            .then(lead => {
+                if (!lead || lead.error) return;
+
+                // Pre-fill contact form
+                if (lead.email)   document.getElementById('email').value   = lead.email;
+                if (lead.phone)   document.getElementById('phone').value   = lead.phone;
+                if (lead.website) document.getElementById('website').value = lead.website;
+
+                // Store contact data
+                contactFormData = { email: lead.email, phone: lead.phone, website: lead.website };
+
+                // Lock the form (already submitted)
+                ['email','phone','website'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.disabled = true;
+                });
+                const btn = document.querySelector('#contactForm button[type="submit"]');
+                if (btn) {
+                    btn.disabled = true;
+                    btn.textContent = 'Submitted ✓';
+                    btn.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+                }
+
+                // Show calculator section
+                const calcSection = document.getElementById('calculatorSection');
+                if (calcSection) calcSection.style.display = 'block';
+
+                if (lead.booking_reached) {
+                    // Go straight to booking widget
+                    loadBookingWidget();
+                } else {
+                    // Scroll to calculator so they can continue
+                    if (calcSection) calcSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            })
+            .catch(err => console.error('Resume fetch failed:', err));
+    }
 });

@@ -20,6 +20,7 @@ var lsState = {
 };
 
 var lsLeadId = null;
+var lsResumeToken = null;
 
 var LS_STEPS = {
     1: { pct: '17%',  label: 'Your Info',    cur: 1 },
@@ -129,7 +130,10 @@ function lsSubmitInfo() {
             website:   website
         })
     }).then(function(r) { return r.json(); })
-      .then(function(d) { if (d.id) lsLeadId = d.id; })
+      .then(function(d) {
+          if (d.id) lsLeadId = d.id;
+          if (d.resume_token) lsResumeToken = d.resume_token;
+      })
       .catch(function(err) { console.error('Lead POST failed:', err); });
 
     lsNext(2);
@@ -337,9 +341,43 @@ function lsInitVideo() {
 document.addEventListener('DOMContentLoaded', function () {
     lsInitPhone();
     lsInitKeyboard();
-    // Wire all info-field inputs to validation
     ['lsName','lsEmail','lsWebsite'].forEach(function(id) {
         var el = document.getElementById(id);
         if (el) el.addEventListener('input', lsCheckInfo);
     });
+
+    // ── Resume link detection ─────────────────────────────────────────────────
+    var resumeParam = new URLSearchParams(window.location.search).get('resume');
+    if (resumeParam) {
+        fetch('/api/leads?resume_token=' + encodeURIComponent(resumeParam))
+            .then(function(r) { return r.json(); })
+            .then(function(lead) {
+                if (!lead || lead.error) return;
+
+                // Pre-fill step 1 fields
+                var fields = { lsName: lead.name, lsEmail: lead.email, lsPhone: lead.phone, lsWebsite: lead.website };
+                Object.keys(fields).forEach(function(id) {
+                    var el = document.getElementById(id);
+                    if (el && fields[id]) el.value = fields[id];
+                });
+
+                // Restore state
+                lsState.name    = lead.name    || null;
+                lsState.email   = lead.email   || null;
+                lsState.phone   = lead.phone   || null;
+                lsState.website = lead.website || null;
+
+                lsCheckInfo();
+
+                if (lead.booking_reached) {
+                    // Completed questionnaire — go straight to booking
+                    lsNext(6);
+                    lsLoadBooking();
+                } else {
+                    // Dropped after step 1 — go to first question
+                    lsNext(2);
+                }
+            })
+            .catch(function(err) { console.error('Resume fetch failed:', err); });
+    }
 });

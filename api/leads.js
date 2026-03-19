@@ -108,6 +108,7 @@ async function ensureSchema(poolInstance) {
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS competitors TEXT;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS name TEXT;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS booking_reached BOOLEAN DEFAULT FALSE;`;
+  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS resume_token TEXT;`;
 
   // Drop unused columns (never collected)
   await poolInstance.sql`ALTER TABLE leads DROP COLUMN IF EXISTS first_name;`;
@@ -123,6 +124,8 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
 
+      const resumeToken = crypto.randomUUID();
+
       const { rows } = await poolInstance.sql`
         INSERT INTO leads (
           name, email, phone, website,
@@ -130,7 +133,7 @@ export default async function handler(req, res) {
           calc_new_monthly_spend, calc_monthly_savings, calc_annual_savings,
           calc_cpql_reduction, calc_leads_count, calc_same_budget_leads,
           requested_callback, ad_source, funnel, revenue_range, situation, competitors,
-          booking_reached
+          booking_reached, resume_token
         ) VALUES (
           ${body.name || null}, ${body.email || null}, ${body.phone || null},
           ${body.website === '' ? '' : (body.website || null)},
@@ -141,7 +144,7 @@ export default async function handler(req, res) {
           ${body.calcSameBudgetLeads || null}, ${body.requestedCallback || false},
           ${body.ad_source || null}, ${body.funnel || null},
           ${body.revenue_range || null}, ${body.situation || null},
-          ${body.competitors || null}, false
+          ${body.competitors || null}, false, ${resumeToken}
         )
         RETURNING id;
       `;
@@ -149,8 +152,13 @@ export default async function handler(req, res) {
       const insertedId = rows[0].id;
       const isCpqlOrLs = body.funnel === 'CPQL Legal Funnel' || body.funnel === 'Simple Legal Funnel';
 
-      // All three webhooks fire for CPQL & LS on step 1 — GC gets nothing here
+      // Build resume URL for CPQL & LS
       if (isCpqlOrLs) {
+        const host = req.headers.host || '';
+        const proto = host.includes('localhost') ? 'http' : 'https';
+        const resumePath = body.funnel === 'Simple Legal Funnel' ? '/legal-simplified' : '/cpql';
+        const resumeUrl = `${proto}://${host}${resumePath}?resume=${resumeToken}`;
+
         const submissionPayload = {
           name:            body.name || '',
           email:           body.email || '',
@@ -159,6 +167,8 @@ export default async function handler(req, res) {
           funnel:          body.funnel || '',
           ad_source:       body.ad_source || '',
           booking_reached: false,
+          funnel_stage:    'submitted',
+          resume_url:      resumeUrl,
         };
         await Promise.all([
           fireGhlWebhook(submissionPayload, GC_WEBHOOK_URL),
@@ -168,7 +178,7 @@ export default async function handler(req, res) {
         ]);
       }
 
-      return json(res, 200, { success: true, id: insertedId });
+      return json(res, 200, { success: true, id: insertedId, resume_token: resumeToken });
     }
 
     if (req.method === 'PATCH') {
@@ -236,14 +246,37 @@ export default async function handler(req, res) {
             video_watch_seconds:         l.video_watch_seconds || 0,
             video_watch_percent:         l.video_watch_percent || 0,
           };
+          const host = req.headers.host || '';
+          const proto = host.includes('localhost') ? 'http' : 'https';
+          const resumePath = l.funnel === 'Simple Legal Funnel' ? '/legal-simplified' : '/cpql';
+          const resumeUrl = l.resume_token
+            ? `${proto}://${host}${resumePath}?resume=${l.resume_token}`
+            : '';
+
           await Promise.all([
             fireGhlWebhook(bookingPayload, CPQL_LS_WEBHOOK_URL),
             fireGhlWebhook(bookingPayload, BOOKING_WEBHOOK_URL),
+            fireGhlWebhook({ ...bookingPayload, funnel_stage: 'completed_questionnaire', resume_url: resumeUrl }, LEGACY_WEBHOOK_URL),
           ]);
         }
       }
 
       return json(res, 200, { success: true });
+    }
+
+    // Public resume-token lookup (no auth required)
+    if (req.method === 'GET') {
+      const resumeUrl = new URL(req.url, `http://${req.headers.host}`);
+      const resumeToken = resumeUrl.searchParams.get('resume_token');
+      if (resumeToken) {
+        const { rows: rRows } = await poolInstance.sql`
+          SELECT name, email, phone, website, funnel, booking_reached,
+                 situation, meta_budget_commitment, uses_crm, dedicated_intake
+          FROM leads WHERE resume_token = ${resumeToken} LIMIT 1;
+        `;
+        if (!rRows.length) return json(res, 404, { error: 'not_found' });
+        return json(res, 200, rRows[0]);
+      }
     }
 
     const reqToken = getAdminToken(req);
