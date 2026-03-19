@@ -27,13 +27,12 @@ export default async function handler(req, res) {
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
 
-    const name       = body.first_name && body.last_name
-                       ? `${body.first_name} ${body.last_name}`.trim()
-                       : (body.full_name || body.name || null);
+    const name       = body.full_name || (body.first_name && body.last_name
+                       ? `${body.first_name} ${body.last_name}`.trim() : null);
     const email      = body.email || null;
     const phone      = body.phone || null;
-    const website    = body.website || null;
-    const competitor = body.competitor || body.competitor_website || null;
+    const website    = body.customData?.website || body.website || null;
+    const competitor = body.customData?.competitor || body.competitor || null;
 
     const p = getPool();
 
