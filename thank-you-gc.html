@@ -138,10 +138,20 @@
             border: 1.5px solid rgba(0,200,100,0.5);
             color: #00c864;
         }
-        .ty-op-icon.pending {
-            background: rgba(255,255,255,0.05);
-            border: 1.5px solid rgba(255,255,255,0.15);
-            color: var(--muted);
+        .ty-op-icon.next {
+            background: rgba(255,210,0,0.12);
+            border: 1.5px solid rgba(255,210,0,0.5);
+            color: #ffd200;
+            animation: shimmer 1.8s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,210,0,0); opacity: 1; }
+            50%       { box-shadow: 0 0 12px 3px rgba(255,210,0,0.35); opacity: 0.85; }
+        }
+        .ty-op-icon.locked {
+            background: rgba(255,255,255,0.04);
+            border: 1.5px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.25);
         }
 
         .ty-op-body { flex: 1; }
@@ -203,7 +213,7 @@
 
             <!-- Left: heading + steps -->
             <div class="ty-left">
-                <h1 class="ty-heading">We Don't Clock Out<br><span>Till You Book Out.</span></h1>
+                <h1 class="ty-heading">You're Booked —<br><span>Next Steps.</span></h1>
                 <p class="ty-sub">Check your email for the Google Meet link. Here's exactly what's happening on our end.</p>
 
                 <div class="ty-ops">
@@ -215,28 +225,34 @@
                         </div>
                     </div>
                     <div class="ty-op">
-                        <div class="ty-op-icon pending">○</div>
+                        <div class="ty-op-icon next">●</div>
                         <div class="ty-op-body">
-                            <div class="ty-op-title pending-text">We Run Your Audit</div>
+                            <div class="ty-op-title" style="color:#ffd200;">We Run Your Audit</div>
                             <div class="ty-op-desc">We analyze your site's SEO gaps, pull your competitor's keyword rankings, traffic, and ad spend estimates.</div>
                         </div>
                     </div>
                     <div class="ty-op">
-                        <div class="ty-op-icon pending">○</div>
+                        <div class="ty-op-icon locked">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></svg>
+                        </div>
                         <div class="ty-op-body">
                             <div class="ty-op-title pending-text">Strategy Call</div>
                             <div class="ty-op-desc">We walk you through the full audit live. You see exactly what your competitor is doing — and what it's costing you.</div>
                         </div>
                     </div>
                     <div class="ty-op">
-                        <div class="ty-op-icon pending">○</div>
+                        <div class="ty-op-icon locked">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></svg>
+                        </div>
                         <div class="ty-op-body">
                             <div class="ty-op-title pending-text">We Build Your Site</div>
                             <div class="ty-op-desc">Custom lead-generating website designed for your market. Live and indexed in 48 hours.</div>
                         </div>
                     </div>
                     <div class="ty-op">
-                        <div class="ty-op-icon pending">○</div>
+                        <div class="ty-op-icon locked">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></svg>
+                        </div>
                         <div class="ty-op-body">
                             <div class="ty-op-title pending-text">Leads Hit Your Pipeline</div>
                             <div class="ty-op-desc">SEO goes live, Meta Ads launch, and your phone starts ringing. Your competition doesn't see it coming.</div>
