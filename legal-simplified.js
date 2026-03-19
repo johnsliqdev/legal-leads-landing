@@ -391,6 +391,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Completed questionnaire — go straight to booking
                     lsNext(6);
                     lsLoadBooking();
+                } else if (lead.meta_budget_commitment) {
+                    // Passed budget question — resume at CRM step
+                    lsState.selectedScenario = lead.situation || null;
+                    lsState.budgetCommitment = lead.meta_budget_commitment;
+                    lsNext(4);
                 } else {
                     // Dropped after step 1 — go to first question
                     lsNext(2);

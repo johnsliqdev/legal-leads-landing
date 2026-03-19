@@ -1127,9 +1127,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const calcSection = document.getElementById('calculatorSection');
                 if (calcSection) calcSection.style.display = 'block';
 
-                if (lead.booking_reached) {
-                    // Go straight to booking widget
+                if (lead.booking_reached || lead.meta_budget_commitment) {
+                    // Passed qualification — go straight to booking widget
+                    document.getElementById('bookingSection').style.display = 'block';
                     loadBookingWidget();
+                    document.getElementById('bookingSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
                 } else {
                     // Scroll to calculator so they can continue
                     if (calcSection) calcSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
