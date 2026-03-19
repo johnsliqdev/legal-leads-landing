@@ -1087,16 +1087,16 @@
     [data-anim][data-d="5"] { transition-delay: 0.5s; }
 
     /* Hero entrance — each child staggers in on load */
-    .gc-hero > * {
+    .gc-hero-video, .gc-hero-video-overlay { animation: none !important; }
+    .gc-hero > *:not(.gc-hero-video):not(.gc-hero-video-overlay) {
         animation: heroUp 0.85s cubic-bezier(0.22,1,0.36,1) both;
     }
-    .gc-hero > *:nth-child(1) { animation-delay: 0.05s; }
-    .gc-hero > *:nth-child(2) { animation-delay: 0.2s; }
-    .gc-hero > *:nth-child(3) { animation-delay: 0.35s; }
-    .gc-hero > *:nth-child(4) { animation-delay: 0.48s; }
-    .gc-hero > *:nth-child(5) { animation-delay: 0.58s; }
-    .gc-hero > *:nth-child(6) { animation-delay: 0.68s; }
-    .gc-hero > *:nth-child(7) { animation-delay: 0.76s; }
+    /* nth-child counts from 1; video=1, overlay=2, orb=3, orb=4, content starts at 5 */
+    .gc-hero > *:nth-child(5) { animation-delay: 0.35s; }
+    .gc-hero > *:nth-child(6) { animation-delay: 0.48s; }
+    .gc-hero > *:nth-child(7) { animation-delay: 0.58s; }
+    .gc-hero > *:nth-child(8) { animation-delay: 0.68s; }
+    .gc-hero > *:nth-child(9) { animation-delay: 0.76s; }
     @keyframes heroUp {
         from { opacity: 0; transform: translateY(30px); }
         to   { opacity: 1; transform: none; }
