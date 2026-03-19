@@ -109,6 +109,7 @@ async function ensureSchema(poolInstance) {
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS name TEXT;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS booking_reached BOOLEAN DEFAULT FALSE;`;
   await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS resume_token TEXT;`;
+  await poolInstance.sql`ALTER TABLE leads ADD COLUMN IF NOT EXISTS reminder_fired BOOLEAN DEFAULT FALSE;`;
 
   // Drop unused columns (never collected)
   await poolInstance.sql`ALTER TABLE leads DROP COLUMN IF EXISTS first_name;`;
@@ -174,7 +175,7 @@ export default async function handler(req, res) {
           fireGhlWebhook(submissionPayload, GC_WEBHOOK_URL),
           fireGhlWebhook(submissionPayload, CPQL_LS_WEBHOOK_URL),
           fireGhlWebhook(submissionPayload, BOOKING_WEBHOOK_URL),
-          fireGhlWebhook(submissionPayload, LEGACY_WEBHOOK_URL),
+          // 9319ec87 (LEGACY) is NOT fired here — cron handles it after 2 mins
         ]);
       }
 
