@@ -46,13 +46,15 @@ export default async function handler(req, res) {
         phone        TEXT,
         website      TEXT,
         competitor   TEXT,
-        audit_status TEXT DEFAULT 'pending'
+        audit_status TEXT DEFAULT 'pending',
+        raw_payload  TEXT
       );
     `;
+    await p.sql`ALTER TABLE gc_audits ADD COLUMN IF NOT EXISTS raw_payload TEXT;`;
 
     await p.sql`
-      INSERT INTO gc_audits (name, email, phone, website, competitor)
-      VALUES (${name}, ${email}, ${phone}, ${website}, ${competitor});
+      INSERT INTO gc_audits (name, email, phone, website, competitor, raw_payload)
+      VALUES (${name}, ${email}, ${phone}, ${website}, ${competitor}, ${JSON.stringify(body)});
     `;
 
     return json(res, 200, { success: true });

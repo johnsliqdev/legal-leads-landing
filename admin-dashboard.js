@@ -217,6 +217,8 @@ function renderGcSubmission(s) {
             <div class="sub-section">Audit</div>
             <div class="sub-field"><div class="sub-label">Website</div><div class="sub-value">${v(s.website)}</div></div>
             <div class="sub-field"><div class="sub-label">Competitor</div><div class="sub-value">${v(s.competitor)}</div></div>
+            <div class="sub-section">Raw Payload (debug)</div>
+            <div class="sub-field" style="flex-direction:column;gap:4px;"><div class="sub-value" style="font-size:11px;word-break:break-all;white-space:pre-wrap;font-family:monospace;">${v(s.raw_payload)}</div></div>
         </div>
     </div>`;
 }
