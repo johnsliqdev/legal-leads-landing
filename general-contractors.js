@@ -173,6 +173,8 @@ function gcSubmitLead() {
 
 // ── Booking widget ────────────────────────────────────────────────────────────
 
+var gcBookingListenerAdded = false;
+
 function gcLoadBooking() {
     // Widen the form card for the booking widget
     var wrap = document.getElementById('gcFormWrap');
@@ -180,9 +182,10 @@ function gcLoadBooking() {
 
     var iframe = document.getElementById('gcBookingIframe');
     if (iframe && !iframe.src) {
-        var redirectUrl = encodeURIComponent(window.location.origin + '/thank-you');
         iframe.src = 'https://api.leadconnectorhq.com/widget/booking/swe1lSedf4hVYFTLSTIc'
-                   + '?redirect_url=' + redirectUrl;
+                   + '?name=' + encodeURIComponent(gcState.name || '')
+                   + '&email=' + encodeURIComponent(gcState.email || '')
+                   + '&phone=' + encodeURIComponent(gcState.phone || '');
         if (!document.getElementById('gcGhlEmbed')) {
             var s = document.createElement('script');
             s.id  = 'gcGhlEmbed';
@@ -190,10 +193,19 @@ function gcLoadBooking() {
             document.body.appendChild(s);
         }
     }
+
+    if (!gcBookingListenerAdded) {
+        gcBookingListenerAdded = true;
+        window.addEventListener('message', function(e) {
+            if (Array.isArray(e.data) && e.data[0] === 'msgsndr-booking-complete') {
+                window.location.href = '/thank-you-gc';
+            }
+        });
+    }
 }
 
 function gcShowThankYou() {
-    window.location.href = '/thank-you';
+    window.location.href = '/thank-you-gc';
 }
 
 // ── Phone masking ─────────────────────────────────────────────────────────────
