@@ -180,7 +180,9 @@ function gcLoadBooking() {
 
     var iframe = document.getElementById('gcBookingIframe');
     if (iframe && !iframe.src) {
-        iframe.src = 'https://api.leadconnectorhq.com/widget/booking/swe1lSedf4hVYFTLSTIc';
+        var redirectUrl = encodeURIComponent(window.location.origin + '/thank-you');
+        iframe.src = 'https://api.leadconnectorhq.com/widget/booking/swe1lSedf4hVYFTLSTIc'
+                   + '?redirect_url=' + redirectUrl;
         if (!document.getElementById('gcGhlEmbed')) {
             var s = document.createElement('script');
             s.id  = 'gcGhlEmbed';
@@ -188,43 +190,6 @@ function gcLoadBooking() {
             document.body.appendChild(s);
         }
     }
-
-    // Detect booking confirmation via two signals:
-    // 1. Height drops at least 15% from peak (catches confirmation screen resize)
-    // 2. Height stabilises for 3s after user has had time to interact (fallback)
-    var maxH = 0;
-    var resizeCount = 0;
-    var redirected = false;
-    var stableTimer = null;
-
-    window.addEventListener('message', function(e) {
-        if (redirected || typeof e.data !== 'string') return;
-        var m = e.data.match(/\[iFrameSizer\]gcBookingIframe:(\d+):/);
-        if (!m) return;
-        var h = parseInt(m[1], 10);
-        resizeCount++;
-
-        if (h > maxH) { maxH = h; }
-
-        // Signal 1: height dropped 15%+ from peak after enough interaction
-        if (resizeCount > 4 && maxH > 400 && h < maxH * 0.85) {
-            redirected = true;
-            clearTimeout(stableTimer);
-            window.location.href = '/thank-you';
-            return;
-        }
-
-        // Signal 2: height stable for 3s after significant interaction
-        if (resizeCount > 8) {
-            clearTimeout(stableTimer);
-            stableTimer = setTimeout(function() {
-                if (!redirected) {
-                    redirected = true;
-                    window.location.href = '/thank-you';
-                }
-            }, 3000);
-        }
-    });
 }
 
 function gcShowThankYou() {

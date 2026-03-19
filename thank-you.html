@@ -129,6 +129,12 @@
     </style>
 </head>
 <body>
+    <script>
+        // If GHL loaded this page inside the booking iframe, break out to full page
+        if (window.self !== window.top) {
+            window.top.location.href = '/thank-you';
+        }
+    </script>
 
     <nav class="ty-nav">
         <a href="/general-contractors"><img src="images/sliq-logo.png" alt="Sliq"></a>
