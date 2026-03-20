@@ -122,8 +122,8 @@
         display: flex; flex-direction: column;
         align-items: center; justify-content: flex-start;
         text-align: center;
-        min-height: 100vh;
-        padding: 140px 32px 60px;
+        min-height: calc(100vh - 76px);
+        padding: 60px 32px 60px;
         overflow: hidden;
     }
     .gc-hero-video-wrap {
@@ -141,7 +141,7 @@
         position: absolute; inset: 0;
         background: rgba(8,8,8,0.65);
     }
-    @media (max-width: 600px) { .gc-hero { padding: 80px 20px 48px; } }
+    @media (max-width: 600px) { .gc-hero { padding: 40px 20px 48px; } }
 
     .gc-eyebrow {
         display: inline-flex; align-items: center; gap: 8px;
