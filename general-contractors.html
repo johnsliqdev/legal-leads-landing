@@ -1817,6 +1817,91 @@
         <a href="#gcFormSection">See If You Qualify →</a>
     </div>
 
+    <!-- ── GC Session Tracking ── -->
+    <script>
+    (function() {
+        var sessionId = sessionStorage.getItem('gcSid');
+        if (!sessionId) {
+            sessionId = 'gc_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            sessionStorage.setItem('gcSid', sessionId);
+        }
+
+        var startTime = Date.now();
+        var sectionsViewed = [];
+        var reachedForm = false;
+        var startedForm = false;
+        var completedForm = false;
+        var currentStep = null;
+        var revenueSelected = null;
+
+        // Section visibility tracking
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (!entry.isIntersecting) return;
+                var label = entry.target.getAttribute('data-track') || entry.target.id || entry.target.className.split(' ')[0];
+                if (label && sectionsViewed.indexOf(label) === -1) sectionsViewed.push(label);
+                if (entry.target.id === 'gcFormSection') reachedForm = true;
+            });
+        }, { threshold: 0.25 });
+
+        document.querySelectorAll('section[id], #gcFormSection, .gc-process, .gc-showcase').forEach(function(el) {
+            observer.observe(el);
+        });
+
+        function sendSession(useBeacon) {
+            var timeOnPage = Math.round((Date.now() - startTime) / 1000);
+            var payload = JSON.stringify({
+                session_id:        sessionId,
+                time_on_page:      timeOnPage,
+                sections_viewed:   sectionsViewed,
+                reached_form:      reachedForm,
+                started_form:      startedForm,
+                completed_form:    completedForm,
+                form_step_dropped: completedForm ? null : currentStep,
+                revenue_selected:  revenueSelected,
+                source:            (typeof adSource !== 'undefined' ? adSource : 'direct')
+            });
+            if (useBeacon && navigator.sendBeacon) {
+                navigator.sendBeacon('/api/gc-session', payload);
+            } else {
+                fetch('/api/gc-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: payload,
+                    keepalive: true
+                }).catch(function(){});
+            }
+        }
+
+        // Heartbeat every 45s
+        setInterval(function() { sendSession(false); }, 45000);
+
+        // Send on hide/leave
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) sendSession(true);
+        });
+        window.addEventListener('pagehide', function() { sendSession(true); });
+
+        // Initial ping
+        setTimeout(function() { sendSession(false); }, 3000);
+
+        // Expose hooks for form
+        window.gcTrackFormStep = function(step) {
+            startedForm = true;
+            currentStep = step;
+            reachedForm = true;
+            sendSession(false);
+        };
+        window.gcTrackRevenue = function(val) {
+            revenueSelected = val;
+        };
+        window.gcTrackFormComplete = function() {
+            completedForm = true;
+            currentStep = null;
+            sendSession(false);
+        };
+    })();
+    </script>
     <script src="general-contractors.js"></script>
     <script>
         fetch('/api/settings').then(function(r){ return r.json(); }).then(function(d){

@@ -118,16 +118,66 @@ document.getElementById('gcSeatsForm')?.addEventListener('submit', async functio
     }
 });
 
+// ─── GC Analytics ─────────────────────────────────────────────────────────────
+
+async function loadGcAnalytics() {
+    const token = sessionStorage.getItem('adminApiToken') || '';
+    try {
+        const res = await fetch('/api/gc-session', {
+            headers: { 'x-admin-token': token }
+        });
+        if (!res.ok) return null;
+        const data = await res.json();
+        return data.analytics;
+    } catch (err) {
+        return null;
+    }
+}
+
+function renderGcAnalytics(a) {
+    const el = document.getElementById('gcAnalyticsPanel');
+    if (!el || !a) return;
+    const total = Number(a.total_sessions) || 0;
+    const pct = function(n) { return total ? Math.round((Number(n) / total) * 100) : 0; };
+    const avgTime = Number(a.avg_time_on_page) || 0;
+    const mins = Math.floor(avgTime / 60);
+    const secs = avgTime % 60;
+
+    el.innerHTML =
+        '<div class="analytics-grid">' +
+            metricCard('Total Visits', total) +
+            metricCard('Reached Form', pct(a.reached_form) + '%') +
+            metricCard('Started Form', pct(a.started_form) + '%') +
+            metricCard('Completed Form', pct(a.completed_form) + '%') +
+            metricCard('Avg. Time on Page', mins + 'm ' + secs + 's') +
+        '</div>' +
+        '<div style="margin-top:16px;">' +
+            '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:10px;">Form Drop-off by Step</div>' +
+            '<div class="analytics-grid">' +
+                metricCard('Dropped Step 1', Number(a.dropped_step1) || 0) +
+                metricCard('Dropped Step 2', Number(a.dropped_step2) || 0) +
+                metricCard('Dropped Step 3', Number(a.dropped_step3) || 0) +
+                metricCard('Dropped Step 4', Number(a.dropped_step4) || 0) +
+            '</div>' +
+        '</div>';
+}
+
+function metricCard(label, value) {
+    return '<div class="metric-card"><div class="metric-value">' + value + '</div><div class="metric-label">' + label + '</div></div>';
+}
+
 // ─── Submissions ──────────────────────────────────────────────────────────────
 
 async function loadSubmissions() {
     const token = sessionStorage.getItem('adminApiToken') || '';
     const url = activeCampaign === 'gc'
-        ? '/api/gc-audits'
+        ? '/api/gc-lead'
         : activeCampaign === 'ls' ? '/api/leads?funnel=ls' : '/api/leads?funnel=cpql';
     const res = await fetch(url, { method: 'GET', headers: { 'x-admin-token': token } });
     if (!res.ok) throw new Error(`Failed to load submissions: ${res.status}`);
-    return await res.json();
+    const raw = await res.json();
+    // gc-lead returns { leads: [...] }; other endpoints return arrays directly
+    return activeCampaign === 'gc' ? (raw.leads || []) : raw;
 }
 
 async function displaySubmissions() {
@@ -142,6 +192,9 @@ async function displaySubmissions() {
         return;
     }
     renderMetrics(submissions);
+    if (activeCampaign === 'gc') {
+        loadGcAnalytics().then(renderGcAnalytics).catch(function(err) { console.error(err); });
+    }
     if (submissions.length === 0) {
         list.innerHTML = '<div class="no-submissions">No submissions yet.</div>';
         return;
@@ -163,7 +216,7 @@ function renderMetrics(submissions) {
         const total = submissions.length;
         const pending = submissions.filter(function(s) { return s.audit_status === 'pending'; }).length;
         const complete = submissions.filter(function(s) { return s.audit_status === 'complete'; }).length;
-        el.innerHTML = card('Total Bookings', total) + card('Audits Pending', pending) + card('Audits Complete', complete);
+        el.innerHTML = card('Total Opt-ins', total) + card('Pending Audit', pending) + card('Audit Complete', complete);
     } else if (activeCampaign === 'ls') {
         const total = submissions.length;
         const qualified = submissions.filter(function(s) { return s.meta_budget_commitment && s.meta_budget_commitment !== 'Under $10,000/mo'; }).length;
@@ -237,20 +290,17 @@ function renderLsSubmission(s) {
 function renderGcSubmission(s) {
     const v = function(x) { return x || '—'; };
     const statusColor = s.audit_status === 'complete' ? '#00c864' : '#ff006e';
-    return `<div class="submission-item">
-        <div class="submission-header">
-            <div class="submission-date">${new Date(s.created_at).toLocaleString()}</div>
-            <div class="submission-id">ID: ${s.id} · <span style="color:${statusColor};font-weight:700;text-transform:uppercase;">${v(s.audit_status)}</span></div>
-        </div>
-        <div class="submission-details">
-            <div class="sub-section">Contact</div>
-            <div class="sub-field"><div class="sub-label">Name</div><div class="sub-value">${v(s.name)}</div></div>
-            <div class="sub-field"><div class="sub-label">Email</div><div class="sub-value">${v(s.email)}</div></div>
-            <div class="sub-field"><div class="sub-label">Phone</div><div class="sub-value">${v(s.phone)}</div></div>
-            <div class="sub-section">Audit</div>
-            <div class="sub-field"><div class="sub-label">Website</div><div class="sub-value">${v(s.website)}</div></div>
-            <div class="sub-field"><div class="sub-label">Competitor</div><div class="sub-value">${v(s.competitor)}</div></div>
-        </div>
+    const date = s.created_at ? new Date(s.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
+    return `<div class="submission-card">
+        <div class="sub-row"><span class="sub-label">Name</span><span class="sub-val">${v(s.name)}</span></div>
+        <div class="sub-row"><span class="sub-label">Email</span><span class="sub-val">${v(s.email)}</span></div>
+        <div class="sub-row"><span class="sub-label">Phone</span><span class="sub-val">${v(s.phone)}</span></div>
+        <div class="sub-row"><span class="sub-label">Revenue</span><span class="sub-val">${v(s.revenue_range)}</span></div>
+        <div class="sub-row"><span class="sub-label">Website</span><span class="sub-val">${v(s.website)}</span></div>
+        <div class="sub-row"><span class="sub-label">Competitor</span><span class="sub-val">${v(s.competitor)}</span></div>
+        <div class="sub-row"><span class="sub-label">Source</span><span class="sub-val">${v(s.source)}</span></div>
+        <div class="sub-row"><span class="sub-label">Status</span><span class="sub-val" style="color:${statusColor};font-weight:700;">${v(s.audit_status)}</span></div>
+        <div class="sub-row"><span class="sub-label">Date</span><span class="sub-val">${date}</span></div>
     </div>`;
 }
 
@@ -265,7 +315,7 @@ document.getElementById('clearSubmissions')?.addEventListener('click', async fun
     if (!confirm('Delete all submissions for this funnel? This cannot be undone.')) return;
     try {
         const token = sessionStorage.getItem('adminApiToken') || '';
-        const deleteUrl = activeCampaign === 'gc' ? '/api/gc-audits'
+        const deleteUrl = activeCampaign === 'gc' ? '/api/gc-lead'
                         : activeCampaign === 'ls' ? '/api/leads?funnel=ls' : '/api/leads?funnel=cpql';
         const res = await fetch(deleteUrl, { method: 'DELETE', headers: { 'x-admin-token': token } });
         if (!res.ok) throw new Error('Failed');
@@ -488,6 +538,14 @@ async function updateDisplay() {
         console.error(err);
     }
     await displaySubmissions();
+    try {
+        if (activeCampaign === 'gc') {
+            const analytics = await loadGcAnalytics();
+            renderGcAnalytics(analytics);
+        }
+    } catch (err) {
+        console.error(err);
+    }
 }
 
 if (checkAuth()) {

@@ -50,6 +50,9 @@ function gcShowSlide(n, direction) {
         document.getElementById('gcStepLabel').textContent   = step.label;
         document.getElementById('gcStepCur').textContent     = step.cur;
     }
+
+    // Track form step entry
+    if (typeof window.gcTrackFormStep === 'function') window.gcTrackFormStep(n);
 }
 
 function gcNext(n) {
@@ -92,6 +95,9 @@ function gcSelectRevenue(card) {
     card.classList.add(isDisq ? 'sel-disq' : 'sel');
     gcState.revenueRange = card.getAttribute('data-value');
 
+    // Track revenue selection in session
+    if (typeof window.gcTrackRevenue === 'function') window.gcTrackRevenue(gcState.revenueRange);
+
     if (isDisq) {
         setTimeout(function() {
             window.location.replace('/thank-you-gc-unqualified');
@@ -127,28 +133,32 @@ function gcSubmitLead() {
     if (typeof fbq === 'function') fbq('track', 'Lead');
     if (typeof window.lintrk === 'function') window.lintrk('track', { conversion_id: 26383314 });
 
-    // Make sure state is current
     gcState.website    = document.getElementById('gcWebsite').value.trim();
     gcState.competitor = document.getElementById('gcCompetitor').value.trim();
     gcState.name       = document.getElementById('gcName').value.trim();
     gcState.email      = document.getElementById('gcEmail').value.trim();
     gcState.phone      = document.getElementById('gcPhone').value.trim();
 
-    fetch('/api/leads', {
+    var sessionId = sessionStorage.getItem('gcSid') || null;
+
+    // Store to gc_leads (direct opt-in)
+    fetch('/api/gc-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            source:        'general-contractors',
-            funnel:        'GC Audit Funnel',
-            ad_source:     adSource,
+            session_id:    sessionId,
             name:          gcState.name,
             email:         gcState.email,
             phone:         gcState.phone,
             revenue_range: gcState.revenueRange,
             website:       gcState.website,
-            competitor:    gcState.competitor
+            competitor:    gcState.competitor,
+            source:        adSource
         })
-    }).catch(function(err) { console.error('Lead POST failed:', err); });
+    }).catch(function(err) { console.error('gc-lead POST failed:', err); });
+
+    // Also fire tracking complete
+    if (typeof window.gcTrackFormComplete === 'function') window.gcTrackFormComplete();
 
     gcNext(4);
     gcLoadBooking();
