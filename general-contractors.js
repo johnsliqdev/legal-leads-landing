@@ -75,12 +75,24 @@ function gcNext(n) {
         }).catch(function(err) { console.error('gc-lead POST failed:', err); });
     }
 
-    // Step 2 → 3: patch revenue
+    // Step 2 → 3: patch revenue + fire GHL webhook
     if (gcCurrentSlide === 2 && n === 3 && gcState.revenueRange) {
         fetch('/api/gc-lead', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ session_id: sid, revenue_range: gcState.revenueRange })
+        }).catch(function(){});
+
+        fetch('https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/cb630048-c8fe-41d0-b5c4-e35f4193767c', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name:          gcState.name,
+                email:         gcState.email,
+                phone:         gcState.phone,
+                revenue_range: gcState.revenueRange,
+                source:        adSource
+            })
         }).catch(function(){});
     }
 
