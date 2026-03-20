@@ -176,14 +176,6 @@
         .ty-video-wrap iframe {
             width: 100%; height: 100%; border: none; display: block;
         }
-        /* Cover YouTube title/uploader overlay at the top */
-        .ty-video-wrap::before {
-            content: ''; position: absolute;
-            top: 0; left: 0; right: 0; height: 52px;
-            background: #0a0a0a;
-            z-index: 2; pointer-events: none;
-            border-radius: 16px 16px 0 0;
-        }
 
         .ty-video-note {
             font-size: 13px; color: var(--muted); line-height: 1.55;
@@ -258,9 +250,10 @@
             <div class="ty-right">
                 <div class="ty-video-label">Watch While You Wait</div>
                 <div class="ty-video-wrap">
-                    <iframe src="https://www.youtube.com/embed/HZz6TfeqZFk?rel=0&modestbranding=1"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen></iframe>
+                    <video src="/images/Post Booking Video for Thank You Page.mp4"
+                        controls playsinline preload="metadata"
+                        style="width:100%;height:100%;object-fit:cover;display:block;border-radius:16px;">
+                    </video>
                 </div>
                 <p class="ty-video-note">See how we build a contractor's online presence from zero — and what it takes to rank above the competition in your local market.</p>
             </div>
