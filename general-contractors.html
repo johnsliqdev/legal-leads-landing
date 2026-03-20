@@ -1827,21 +1827,6 @@
                 document.getElementById('gcS4').classList.contains('active');
             scrollToForm(onBookingSlide);
         });
-        // Re-anchor when GHL calendar iframe resizes (e.g. months, timeslots)
-        var iframeObserver = null;
-        function watchIframe() {
-            var slide = document.getElementById('gcS4');
-            if (!slide || iframeObserver) return;
-            iframeObserver = new ResizeObserver(function() {
-                if (slide.classList.contains('active')) {
-                    var card = document.querySelector('.gc-form-card');
-                    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-            iframeObserver.observe(slide);
-        }
-        document.addEventListener('DOMContentLoaded', watchIframe);
-        setTimeout(watchIframe, 500);
     })();
 
     // ── Floating CTA visibility ───────────────────────────────────────────────
