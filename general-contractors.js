@@ -9,17 +9,22 @@ var adSource = (function() {
 })();
 
 var gcState = {
+    name:        null,
+    email:       null,
+    phone:       null,
     revenueRange: null,
-    situation:    null
+    website:     null,
+    competitor:  null
 };
 
 var GC_STEPS = {
-    2: { pct: '33%',  label: 'Revenue',      cur: 1 },
-    3: { pct: '66%',  label: 'Challenge',    cur: 2 },
-    4: { pct: '100%', label: 'Reserve Spot', cur: 3 }
+    1: { pct: '25%',  label: 'Your Info',    cur: 1 },
+    2: { pct: '50%',  label: 'Revenue',      cur: 2 },
+    3: { pct: '75%',  label: 'Your Website', cur: 3 },
+    4: { pct: '100%', label: 'Reserve Spot', cur: 4 }
 };
 
-var gcCurrentSlide = 2;
+var gcCurrentSlide = 1;
 
 function gcShowSlide(n, direction) {
     var prev = document.getElementById('gcS' + gcCurrentSlide);
@@ -52,14 +57,28 @@ function gcNext(n) {
     setTimeout(function() {
         var card = document.querySelector('.gc-form-card');
         if (!card) return;
-        // Booking slide: align top so the calendar is immediately visible
-        // Other slides: center the card in the viewport
         card.scrollIntoView({ behavior: 'smooth', block: n === 4 ? 'start' : 'center' });
     }, 80);
 }
 
 function gcBack(n) {
     gcShowSlide(n, 'back');
+}
+
+// ── Contact info validation ────────────────────────────────────────────────────
+
+function gcValidateContact() {
+    var name  = document.getElementById('gcName').value.trim();
+    var email = document.getElementById('gcEmail').value.trim();
+    var phone = document.getElementById('gcPhone').value.trim();
+    var valid = name.length > 1 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && phone.replace(/\D/g,'').length >= 7;
+    var btn = document.getElementById('gcN1');
+    if (btn) btn.disabled = !valid;
+    if (valid) {
+        gcState.name  = name;
+        gcState.email = email;
+        gcState.phone = phone;
+    }
 }
 
 // ── Revenue selection ─────────────────────────────────────────────────────────
@@ -84,15 +103,18 @@ function gcSelectRevenue(card) {
     }
 }
 
-// ── Situation selection ───────────────────────────────────────────────────────
+// ── Website fields validation ──────────────────────────────────────────────────
 
-function gcSelectSituation(card) {
-    document.querySelectorAll('#gcScenarios .gc-scenario').forEach(function(c) {
-        c.classList.remove('sel');
-    });
-    card.classList.add('sel');
-    gcState.situation = card.getAttribute('data-value');
-    gcEnableBtn('gcN3');
+function gcValidateWebsite() {
+    var website    = document.getElementById('gcWebsite').value.trim();
+    var competitor = document.getElementById('gcCompetitor').value.trim();
+    var valid = website.length > 3 && competitor.length > 3;
+    var btn = document.getElementById('gcN3');
+    if (btn) btn.disabled = !valid;
+    if (valid) {
+        gcState.website    = website;
+        gcState.competitor = competitor;
+    }
 }
 
 // ── Submit & advance to booking ───────────────────────────────────────────────
@@ -105,6 +127,13 @@ function gcSubmitLead() {
     if (typeof fbq === 'function') fbq('track', 'Lead');
     if (typeof window.lintrk === 'function') window.lintrk('track', { conversion_id: 26383314 });
 
+    // Make sure state is current
+    gcState.website    = document.getElementById('gcWebsite').value.trim();
+    gcState.competitor = document.getElementById('gcCompetitor').value.trim();
+    gcState.name       = document.getElementById('gcName').value.trim();
+    gcState.email      = document.getElementById('gcEmail').value.trim();
+    gcState.phone      = document.getElementById('gcPhone').value.trim();
+
     fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -112,8 +141,12 @@ function gcSubmitLead() {
             source:        'general-contractors',
             funnel:        'GC Audit Funnel',
             ad_source:     adSource,
+            name:          gcState.name,
+            email:         gcState.email,
+            phone:         gcState.phone,
             revenue_range: gcState.revenueRange,
-            situation:     gcState.situation
+            website:       gcState.website,
+            competitor:    gcState.competitor
         })
     }).catch(function(err) { console.error('Lead POST failed:', err); });
 
@@ -126,7 +159,6 @@ function gcSubmitLead() {
 var gcBookingListenerAdded = false;
 
 function gcLoadBooking() {
-    // Widen the form card for the booking widget
     var wrap = document.getElementById('gcFormWrap');
     if (wrap) wrap.classList.add('gc-form-wrap-booking');
 
@@ -155,23 +187,16 @@ function gcShowThankYou() {
     window.location.href = '/thank-you-gc';
 }
 
-// ── Phone masking ─────────────────────────────────────────────────────────────
-
-// ── Keyboard nav (A/B/C/D) ────────────────────────────────────────────────────
+// ── Keyboard nav (A/B/C/D on revenue slide only) ──────────────────────────────
 
 function gcInitKeyboard() {
     document.addEventListener('keydown', function(e) {
+        if (gcCurrentSlide !== 2) return;
         var key = e.key.toUpperCase();
         var keyMap = { A: 0, B: 1, C: 2, D: 3 };
         if (!(key in keyMap)) return;
-
-        var activeCards = null;
-        if (gcCurrentSlide === 2) activeCards = document.querySelectorAll('#gcQ1 .gc-option');
-        if (gcCurrentSlide === 3) activeCards = document.querySelectorAll('#gcScenarios .gc-scenario');
-        if (!activeCards) return;
-
-        var idx = keyMap[key];
-        if (activeCards[idx]) activeCards[idx].click();
+        var activeCards = document.querySelectorAll('#gcQ1 .gc-option');
+        if (activeCards[keyMap[key]]) activeCards[keyMap[key]].click();
     });
 }
 

@@ -413,6 +413,22 @@
     .gc-btn-next:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,0,110,0.45); }
     .gc-btn-next:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
 
+    /* Input fields in form slides */
+    .gc-fields { display: flex; flex-direction: column; gap: 16px; margin-bottom: 4px; }
+    .gc-field-group { display: flex; flex-direction: column; gap: 6px; }
+    .gc-field-label { font-size: 13px; font-weight: 600; color: #aaa; text-transform: uppercase; letter-spacing: 0.6px; }
+    .gc-field-input {
+        width: 100%; padding: 14px 16px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 10px;
+        color: #fff; font-size: 16px;
+        outline: none; transition: border-color 0.2s;
+        box-sizing: border-box;
+    }
+    .gc-field-input:focus { border-color: var(--accent); background: rgba(255,0,110,0.06); }
+    .gc-field-input::placeholder { color: rgba(255,255,255,0.25); }
+
     /* Booking slide */
     .gc-booking-strip {
         background: rgba(255,0,110,0.07);
@@ -1356,22 +1372,7 @@
             </div>
 
 
-            <!-- To Qualify -->
-            <div class="gc-audit-rules" style="max-width:680px;margin:48px auto 0" data-anim>
-                <div class="gc-rules-heading">To Qualify for the Free Audit</div>
-                <div class="gc-rule">
-                    <div class="gc-rule-num">1</div>
-                    <div class="gc-rule-text"><strong>You need a live website.</strong> We'll score it against your top competitor — speed, SEO, and conversion gaps.</div>
-                </div>
-                <div class="gc-rule">
-                    <div class="gc-rule-num">2</div>
-                    <div class="gc-rule-text"><strong>Name your top competitor of choice.</strong> We pull their data — keywords they rank for, traffic estimates, and exactly what they're doing better than you.</div>
-                </div>
-                <div class="gc-rule">
-                    <div class="gc-rule-num">3</div>
-                    <div class="gc-rule-text"><strong>Book the call and show up.</strong> We walk through your full audit live. You'll leave knowing exactly what's costing you jobs — and how to fix it.</div>
-                </div>
-            </div>
+            <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:20px;margin-bottom:0;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.6;" data-anim>* The website is provided at no cost when you engage our Google Business Profile management and Meta Ads services for a minimum of 3 months.</p>
 
             <!-- CTA -->
             <div style="text-align:center;margin-top:52px" data-anim>
@@ -1687,84 +1688,98 @@
             </div>
             <div class="gc-step-body">
 
-                <!-- Slide 1: Revenue -->
-                <div class="gc-slide active" id="gcS2">
-                    <div class="gc-q-eyebrow">Step 1 of 3</div>
+                <!-- Slide 1: Contact Info -->
+                <div class="gc-slide active" id="gcS1">
+                    <div class="gc-q-eyebrow">Step 1 of 4</div>
+                    <div class="gc-q-text">Let's start with your details</div>
+                    <div class="gc-fields">
+                        <div class="gc-field-group">
+                            <label class="gc-field-label">Full Name</label>
+                            <input type="text" id="gcName" class="gc-field-input" placeholder="John Smith" oninput="gcValidateContact()" autocomplete="name">
+                        </div>
+                        <div class="gc-field-group">
+                            <label class="gc-field-label">Email Address</label>
+                            <input type="email" id="gcEmail" class="gc-field-input" placeholder="you@company.com" oninput="gcValidateContact()" autocomplete="email">
+                        </div>
+                        <div class="gc-field-group">
+                            <label class="gc-field-label">Phone Number</label>
+                            <input type="tel" id="gcPhone" class="gc-field-input" placeholder="+1 (555) 000-0000" oninput="gcValidateContact()" autocomplete="tel">
+                        </div>
+                    </div>
+                    <div class="gc-nav">
+                        <button class="gc-btn-next" id="gcN1" onclick="gcNext(2)" disabled>Continue →</button>
+                    </div>
+                </div>
+
+                <!-- Slide 2: Revenue -->
+                <div class="gc-slide" id="gcS2">
+                    <div class="gc-q-eyebrow">Step 2 of 4</div>
                     <div class="gc-q-text">What's your contracting business doing annually?</div>
                     <div class="gc-options" id="gcQ1">
-                        <div class="gc-option" data-value="$1M–$5M/year" onclick="gcSelectRevenue(this)">
+                        <div class="gc-option" data-value="$3M+/year" onclick="gcSelectRevenue(this)">
                             <div class="gc-option-key">A</div>
                             <div>
-                                <div class="gc-option-text">$1M – $5M / year</div>
-                                <div class="gc-option-sub">Established — ready to dominate online</div>
+                                <div class="gc-option-text">$3 Million +</div>
+                                <div class="gc-option-sub">Industry leader — ready to dominate online</div>
+                            </div>
+                        </div>
+                        <div class="gc-option" data-value="$1M–$3M/year" onclick="gcSelectRevenue(this)">
+                            <div class="gc-option-key">B</div>
+                            <div>
+                                <div class="gc-option-text">$1 Million – $3 Million</div>
+                                <div class="gc-option-sub">Established — ready to scale digitally</div>
                             </div>
                         </div>
                         <div class="gc-option" data-value="$500K–$999K/year" onclick="gcSelectRevenue(this)">
-                            <div class="gc-option-key">B</div>
+                            <div class="gc-option-key">C</div>
                             <div>
-                                <div class="gc-option-text">$500K – $999K / year</div>
-                                <div class="gc-option-sub">Scaling up, need a stronger digital presence</div>
+                                <div class="gc-option-text">$500K – $999K</div>
+                                <div class="gc-option-sub">Growing — need a stronger online presence</div>
                             </div>
                         </div>
                         <div class="gc-option" data-value="Under $500K/year" data-disq="true" onclick="gcSelectRevenue(this)">
-                            <div class="gc-option-key">C</div>
+                            <div class="gc-option-key">D</div>
                             <div>
-                                <div class="gc-option-text">Under $500K / year</div>
+                                <div class="gc-option-text">Under $500K</div>
                             </div>
                         </div>
                     </div>
-                    <div class="gc-disqual" id="gcRevenueDisqual">
+                    <div class="gc-disqual" id="gcRevenueDisqual" style="display:none;">
                         Our program is built for established contractors doing $500K+. Bookmark this page — we'd love to work with you when you're there.
                     </div>
                     <div class="gc-nav">
+                        <button class="gc-btn-back" onclick="gcBack(1)">← Back</button>
                         <button class="gc-btn-next" id="gcN2" onclick="gcNext(3)" disabled>Continue →</button>
                     </div>
                 </div>
 
-                <!-- Slide 2: Situation -->
+                <!-- Slide 3: Website + Competitor -->
                 <div class="gc-slide" id="gcS3">
-                    <div class="gc-q-eyebrow">Step 2 of 3</div>
-                    <div class="gc-q-text">What's costing you jobs right now?</div>
-                    <div class="gc-scenarios" id="gcScenarios">
-                        <div class="gc-scenario" data-value="No real online presence" onclick="gcSelectSituation(this)">
-                            <div class="gc-scenario-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                            </div>
-                            <div class="gc-scenario-body">
-                                <strong>No real online presence</strong>
-                                <span>Competitors Google you — nothing shows up</span>
-                            </div>
-                            <div class="gc-scenario-check">✓</div>
+                    <div class="gc-q-eyebrow">Step 3 of 4</div>
+                    <div class="gc-q-text">Your website &amp; top competitor</div>
+                    <div class="gc-fields">
+                        <div class="gc-field-group">
+                            <label class="gc-field-label">Your Website</label>
+                            <input type="url" id="gcWebsite" class="gc-field-input" placeholder="https://yourcompany.com" oninput="gcValidateWebsite()">
                         </div>
-                        <div class="gc-scenario" data-value="Website looks outdated" onclick="gcSelectSituation(this)">
-                            <div class="gc-scenario-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                            </div>
-                            <div class="gc-scenario-body">
-                                <strong>Website looks outdated</strong>
-                                <span>Doesn't reflect the quality of your work</span>
-                            </div>
-                            <div class="gc-scenario-check">✓</div>
+                        <div class="gc-field-group">
+                            <label class="gc-field-label">Your Top Competitor's Website</label>
+                            <input type="url" id="gcCompetitor" class="gc-field-input" placeholder="https://competitor.com" oninput="gcValidateWebsite()">
                         </div>
-                        <div class="gc-scenario" data-value="Not showing up on Google" onclick="gcSelectSituation(this)">
-                            <div class="gc-scenario-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                            </div>
-                            <div class="gc-scenario-body">
-                                <strong>Not showing up on Google</strong>
-                                <span>Invisible when homeowners search locally</span>
-                            </div>
-                            <div class="gc-scenario-check">✓</div>
+                    </div>
+                    <div class="gc-audit-rules" style="margin-top:20px;">
+                        <div class="gc-rules-heading">Why we need this</div>
+                        <div class="gc-rule">
+                            <div class="gc-rule-num">1</div>
+                            <div class="gc-rule-text"><strong>We score your site.</strong> Speed, SEO, and conversion gaps — measured against your top competitor.</div>
                         </div>
-                        <div class="gc-scenario" data-value="All of the above" onclick="gcSelectSituation(this)">
-                            <div class="gc-scenario-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-                            </div>
-                            <div class="gc-scenario-body">
-                                <strong>All of the above</strong>
-                                <span>Falling behind on every front</span>
-                            </div>
-                            <div class="gc-scenario-check">✓</div>
+                        <div class="gc-rule">
+                            <div class="gc-rule-num">2</div>
+                            <div class="gc-rule-text"><strong>We pull their data.</strong> Keywords they rank for, traffic estimates, and exactly what they're doing better than you.</div>
+                        </div>
+                        <div class="gc-rule">
+                            <div class="gc-rule-num">3</div>
+                            <div class="gc-rule-text"><strong>You get the full breakdown live.</strong> On the call, you'll see exactly what's costing you jobs — and how to fix it.</div>
                         </div>
                     </div>
                     <div class="gc-nav">
@@ -1773,9 +1788,9 @@
                     </div>
                 </div>
 
-                <!-- Slide 3: Booking -->
+                <!-- Slide 4: Booking -->
                 <div class="gc-slide" id="gcS4">
-                    <div class="gc-q-eyebrow">Step 3 of 3</div>
+                    <div class="gc-q-eyebrow">Step 4 of 4</div>
                     <div class="gc-q-text">Reserve your audit spot</div>
                     <div class="gc-booking-strip">
                         Spots are limited. <strong>Book within 48 hours to guarantee your audit.</strong>
