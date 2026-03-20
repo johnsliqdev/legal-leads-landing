@@ -49,12 +49,13 @@ function gcShowSlide(n, direction) {
 
 function gcNext(n) {
     gcShowSlide(n, 'forward');
-    var card = document.querySelector('.gc-form-card');
-    if (card && window.innerWidth < 900) {
-        setTimeout(function() {
-            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 50);
-    }
+    setTimeout(function() {
+        var card = document.querySelector('.gc-form-card');
+        if (!card) return;
+        // Booking slide: align top so the calendar is immediately visible
+        // Other slides: center the card in the viewport
+        card.scrollIntoView({ behavior: 'smooth', block: n === 4 ? 'start' : 'center' });
+    }, 80);
 }
 
 function gcBack(n) {

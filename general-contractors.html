@@ -1839,6 +1839,38 @@
 
     <script src="general-contractors.js"></script>
     <script>
+    // ── CTA anchor override: always center the form card ─────────────────────
+    (function() {
+        function scrollToForm(isBooking) {
+            var card = document.querySelector('.gc-form-card');
+            if (!card) return;
+            card.scrollIntoView({ behavior: 'smooth', block: isBooking ? 'start' : 'center' });
+        }
+        document.addEventListener('click', function(e) {
+            var link = e.target.closest('a[href="#gcFormSection"]');
+            if (!link) return;
+            e.preventDefault();
+            var onBookingSlide = document.getElementById('gcS4') &&
+                document.getElementById('gcS4').classList.contains('active');
+            scrollToForm(onBookingSlide);
+        });
+        // Re-anchor when GHL calendar iframe resizes (e.g. months, timeslots)
+        var iframeObserver = null;
+        function watchIframe() {
+            var slide = document.getElementById('gcS4');
+            if (!slide || iframeObserver) return;
+            iframeObserver = new ResizeObserver(function() {
+                if (slide.classList.contains('active')) {
+                    var card = document.querySelector('.gc-form-card');
+                    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+            iframeObserver.observe(slide);
+        }
+        document.addEventListener('DOMContentLoaded', watchIframe);
+        setTimeout(watchIframe, 500);
+    })();
+
     // ── Floating CTA visibility ───────────────────────────────────────────────
     (function() {
         var btn = document.getElementById('gcFloatCta');
