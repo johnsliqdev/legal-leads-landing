@@ -1862,9 +1862,9 @@
                 source:            (typeof adSource !== 'undefined' ? adSource : 'direct')
             });
             if (useBeacon && navigator.sendBeacon) {
-                navigator.sendBeacon('/api/gc-session', payload);
+                navigator.sendBeacon('/api/gc-lead?type=session', payload);
             } else {
-                fetch('/api/gc-session', {
+                fetch('/api/gc-lead?type=session', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: payload,

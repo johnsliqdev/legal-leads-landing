@@ -123,7 +123,7 @@ document.getElementById('gcSeatsForm')?.addEventListener('submit', async functio
 async function loadGcAnalytics() {
     const token = sessionStorage.getItem('adminApiToken') || '';
     try {
-        const res = await fetch('/api/gc-session', {
+        const res = await fetch('/api/gc-lead?type=session', {
             headers: { 'x-admin-token': token }
         });
         if (!res.ok) return null;
