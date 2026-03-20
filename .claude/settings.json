@@ -5,7 +5,21 @@
       "Bash(git remote:*)",
       "Bash(ls /Users/ohannesiskenderian/CascadeProjects/legal-leads-landing/*.js)",
       "Bash(vercel --version)",
-      "Bash(npx vercel:*)"
+      "Bash(npx vercel:*)",
+      "WebFetch(domain:www.pexels.com)",
+      "WebFetch(domain:api.pexels.com)",
+      "WebFetch(domain:mixkit.co)",
+      "WebFetch(domain:coverr.co)",
+      "WebFetch(domain:assets.mixkit.co)",
+      "WebFetch(domain:pixabay.com)",
+      "WebFetch(domain:cdn.pixabay.com)",
+      "WebFetch(domain:www.videvo.net)",
+      "WebFetch(domain:videos.pexels.com)",
+      "WebFetch(domain:player.vimeo.com)",
+      "WebFetch(domain:www.videezy.com)",
+      "WebFetch(domain:static.videezy.com)",
+      "Bash(curl -I --max-time 10 \"https://static.videezy.com/system/resources/previews/000/004/337/original/61.mp4\")",
+      "Bash(curl -I --max-time 15 \"https://assets.mixkit.co/videos/4010/4010-1080.mp4\")"
     ],
     "additionalDirectories": [
       "/Users/ohannesiskenderian/CascadeProjects/legal-leads-landing"
