@@ -509,6 +509,21 @@
                 </div>
             </div>
             <div class="card">
+                <div class="card-title">Seats Available <small>Updates the live badge on the hero</small></div>
+                <form id="gcSeatsForm">
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label>Open Spots This Week</label>
+                            <input type="number" id="gcSeatsInput" min="0" max="99" step="1" required placeholder="2">
+                        </div>
+                        <div class="form-group" style="display:flex;align-items:flex-end;">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                    <div class="save-msg" id="gcSeatsSaveSuccess">Saved.</div>
+                </form>
+            </div>
+            <div class="card">
                 <div class="card-title">Hero &amp; Copy <small>Saved to DB, applies on page load</small></div>
                 <form id="gcContentForm">
                     <div class="form-group">

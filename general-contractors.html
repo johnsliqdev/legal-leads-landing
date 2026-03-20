@@ -1296,9 +1296,9 @@
 
         <a href="#gcFormSection" class="gc-hero-cta">Get Your Free Website — See If You Qualify →</a>
 
-        <div class="gc-live-badge">
+        <div class="gc-live-badge" id="gcLiveBadge">
             <div class="gc-live-dot"></div>
-            Limited spots — accepting new contractors this week
+            <span id="gcSeatsText">Limited spots — accepting new contractors this week</span>
         </div>
     </section>
 
@@ -1804,6 +1804,14 @@
     </div>
 
     <script src="general-contractors.js"></script>
+    <script>
+        fetch('/api/settings').then(function(r){ return r.json(); }).then(function(d){
+            var seats = Number(d && d.gcSeats);
+            if (!Number.isFinite(seats) || seats < 0) seats = 2;
+            var el = document.getElementById('gcSeatsText');
+            if (el) el.textContent = seats + ' spot' + (seats === 1 ? '' : 's') + ' left this week';
+        }).catch(function(){});
+    </script>
     <script>
     // ── CTA anchor override: always center the form card ─────────────────────
     (function() {

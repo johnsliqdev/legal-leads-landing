@@ -55,6 +55,12 @@ async function ensureSchema(poolInstance) {
     VALUES ('adminPassword', 'sliq2024')
     ON CONFLICT (key) DO NOTHING;
   `;
+
+  await poolInstance.sql`
+    INSERT INTO app_settings (key, value)
+    VALUES ('gcSeats', '2')
+    ON CONFLICT (key) DO NOTHING;
+  `;
 }
 
 export default async function handler(req, res) {
@@ -67,7 +73,11 @@ export default async function handler(req, res) {
         SELECT value FROM app_settings WHERE key = 'cpqlTarget' LIMIT 1;
       `;
       const value = rows?.[0]?.value ?? '700';
-      return json(res, 200, { cpqlTarget: Number(value) });
+      const { rows: seatsRows } = await poolInstance.sql`
+        SELECT value FROM app_settings WHERE key = 'gcSeats' LIMIT 1;
+      `;
+      const seats = Number(seatsRows?.[0]?.value ?? '2');
+      return json(res, 200, { cpqlTarget: Number(value), gcSeats: seats });
     }
 
     // Helper: check auth against DB password or env var
@@ -142,7 +152,22 @@ export default async function handler(req, res) {
         ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
       `;
 
-      return json(res, 200, { success: true, cpqlTarget: next });
+      if (body.gcSeats !== undefined) {
+        const seats = Number(body.gcSeats);
+        if (Number.isFinite(seats) && seats >= 0) {
+          await poolInstance.sql`
+            INSERT INTO app_settings (key, value)
+            VALUES ('gcSeats', ${String(seats)})
+            ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
+          `;
+        }
+      }
+
+      const { rows: seatsRows } = await poolInstance.sql`
+        SELECT value FROM app_settings WHERE key = 'gcSeats' LIMIT 1;
+      `;
+      const seats = Number(seatsRows?.[0]?.value ?? '2');
+      return json(res, 200, { success: true, cpqlTarget: next, gcSeats: seats });
     }
 
     res.setHeader('Allow', 'GET,POST,PUT');

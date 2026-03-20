@@ -85,6 +85,39 @@ async function saveCpqlTarget(value) {
     return cpqlTarget;
 }
 
+// ─── GC Seats ─────────────────────────────────────────────────────────────────
+
+async function loadGcSeats() {
+    const res = await fetch('/api/settings', { method: 'GET' });
+    if (!res.ok) return 2;
+    const data = await res.json();
+    return Number.isFinite(Number(data?.gcSeats)) ? Number(data.gcSeats) : 2;
+}
+
+async function saveGcSeats(seats) {
+    const token = sessionStorage.getItem('adminApiToken') || '';
+    const res = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+        body: JSON.stringify({ cpqlTarget: cpqlTarget, gcSeats: seats })
+    });
+    if (!res.ok) throw new Error('Failed to save seats');
+    return seats;
+}
+
+document.getElementById('gcSeatsForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const val = parseInt(document.getElementById('gcSeatsInput').value, 10);
+    if (Number.isFinite(val) && val >= 0) {
+        try {
+            await saveGcSeats(val);
+            showFlash('gcSeatsSaveSuccess');
+        } catch (err) {
+            showNotification('Failed to save seats', 'error');
+        }
+    }
+});
+
 // ─── Submissions ──────────────────────────────────────────────────────────────
 
 async function loadSubmissions() {
@@ -444,6 +477,13 @@ async function updateDisplay() {
         const target = await loadCpqlTarget();
         const el = document.getElementById('cpqlTarget');
         if (el) el.value = target;
+    } catch (err) {
+        console.error(err);
+    }
+    try {
+        const seats = await loadGcSeats();
+        const seatsEl = document.getElementById('gcSeatsInput');
+        if (seatsEl) seatsEl.value = seats;
     } catch (err) {
         console.error(err);
     }
