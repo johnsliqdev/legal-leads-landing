@@ -46,9 +46,13 @@ async function ensureSchema(db) {
   `;
 }
 
-function isAuthorized(token) {
+async function isAuthorized(token, db) {
+  if (!token) return false;
   const env = process.env.ADMIN_API_TOKEN;
-  return env && token === env;
+  if (env && token === env) return true;
+  const { rows } = await db.sql`SELECT value FROM app_settings WHERE key = 'adminPassword' LIMIT 1;`;
+  const dbPassword = rows?.[0]?.value;
+  return dbPassword && token === dbPassword;
 }
 
 export default async function handler(req, res) {
@@ -87,7 +91,7 @@ export default async function handler(req, res) {
 
     if (req.method === 'GET') {
       const token = req.headers['x-admin-token'];
-      if (!isAuthorized(token)) return json(res, 401, { error: 'unauthorized' });
+      if (!await isAuthorized(token, db)) return json(res, 401, { error: 'unauthorized' });
 
       const { rows } = await db.sql`
         SELECT

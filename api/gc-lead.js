@@ -45,9 +45,13 @@ async function ensureSchema(db) {
   `;
 }
 
-function isAuthorized(token) {
+async function isAuthorized(token, db) {
+  if (!token) return false;
   const env = process.env.ADMIN_API_TOKEN;
-  return env && token === env;
+  if (env && token === env) return true;
+  const { rows } = await db.sql`SELECT value FROM app_settings WHERE key = 'adminPassword' LIMIT 1;`;
+  const dbPassword = rows?.[0]?.value;
+  return dbPassword && token === dbPassword;
 }
 
 export default async function handler(req, res) {
@@ -72,13 +76,13 @@ export default async function handler(req, res) {
     const token = req.headers['x-admin-token'];
 
     if (req.method === 'GET') {
-      if (!isAuthorized(token)) return json(res, 401, { error: 'unauthorized' });
+      if (!await isAuthorized(token, db)) return json(res, 401, { error: 'unauthorized' });
       const { rows } = await db.sql`SELECT * FROM gc_leads ORDER BY created_at DESC LIMIT 200;`;
       return json(res, 200, { leads: rows });
     }
 
     if (req.method === 'DELETE') {
-      if (!isAuthorized(token)) return json(res, 401, { error: 'unauthorized' });
+      if (!await isAuthorized(token, db)) return json(res, 401, { error: 'unauthorized' });
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
       if (body.id) {
         await db.sql`DELETE FROM gc_leads WHERE id = ${body.id};`;
