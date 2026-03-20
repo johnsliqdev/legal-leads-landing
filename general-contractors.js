@@ -75,7 +75,7 @@ function gcSelectRevenue(card) {
 
     if (isDisq) {
         setTimeout(function() {
-            window.location.href = '/thank-you-gc-unqualified';
+            window.location.replace('/thank-you-gc-unqualified');
         }, 600);
     } else {
         var disqual = document.getElementById('gcRevenueDisqual');
