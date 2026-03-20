@@ -40,9 +40,11 @@ async function ensureSchema(db) {
       website TEXT,
       competitor TEXT,
       source TEXT,
-      audit_status TEXT DEFAULT 'pending'
+      audit_status TEXT DEFAULT 'pending',
+      booked_call BOOLEAN DEFAULT FALSE
     );
   `;
+  await db.sql`ALTER TABLE gc_leads ADD COLUMN IF NOT EXISTS booked_call BOOLEAN DEFAULT FALSE;`;
   await db.sql`
     CREATE TABLE IF NOT EXISTS gc_sessions (
       id SERIAL PRIMARY KEY,
@@ -125,25 +127,47 @@ export default async function handler(req, res) {
             ROUND(AVG(time_on_page))                             AS avg_time_on_page
           FROM gc_sessions;
         `;
-        return json(res, 200, { analytics: rows[0] });
+        const { rows: bookingRows } = await db.sql`
+          SELECT COUNT(*) AS booked_calls FROM gc_leads WHERE booked_call = TRUE;
+        `;
+        return json(res, 200, { analytics: { ...rows[0], booked_calls: bookingRows[0].booked_calls } });
       }
 
       res.setHeader('Allow', 'GET,POST');
       return json(res, 405, { error: 'method_not_allowed' });
     }
 
-    // ── Lead opt-in (default) ─────────────────────────────────────────────────
+    // ── Lead opt-in: POST (create on step 1) ─────────────────────────────────
     if (req.method === 'POST') {
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-      const { session_id, name, email, phone, revenue_range, website, competitor, source } = body;
+      const { session_id, name, email, phone, source } = body;
 
       if (!email && !phone) return json(res, 400, { error: 'email or phone required' });
 
       await db.sql`
-        INSERT INTO gc_leads (session_id, name, email, phone, revenue_range, website, competitor, source)
-        VALUES (${session_id || null}, ${name || null}, ${email || null}, ${phone || null},
-                ${revenue_range || null}, ${website || null}, ${competitor || null}, ${source || null});
+        INSERT INTO gc_leads (session_id, name, email, phone, source)
+        VALUES (${session_id || null}, ${name || null}, ${email || null}, ${phone || null}, ${source || null})
+        ON CONFLICT DO NOTHING;
       `;
+      return json(res, 200, { success: true });
+    }
+
+    // ── Lead opt-in: PATCH (increment fields as they progress) ───────────────
+    if (req.method === 'PATCH') {
+      const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+      const { session_id, revenue_range, website, competitor, booked_call } = body;
+
+      if (!session_id) return json(res, 400, { error: 'session_id required' });
+
+      if (revenue_range !== undefined) {
+        await db.sql`UPDATE gc_leads SET revenue_range = ${revenue_range} WHERE session_id = ${session_id};`;
+      }
+      if (website !== undefined) {
+        await db.sql`UPDATE gc_leads SET website = ${website}, competitor = ${competitor || null} WHERE session_id = ${session_id};`;
+      }
+      if (booked_call !== undefined) {
+        await db.sql`UPDATE gc_leads SET booked_call = ${booked_call} WHERE session_id = ${session_id};`;
+      }
       return json(res, 200, { success: true });
     }
 
@@ -166,7 +190,7 @@ export default async function handler(req, res) {
       return json(res, 200, { success: true });
     }
 
-    res.setHeader('Allow', 'GET,POST,DELETE');
+    res.setHeader('Allow', 'GET,POST,PATCH,DELETE');
     return json(res, 405, { error: 'method_not_allowed' });
   } catch (err) {
     return json(res, 500, { error: String(err?.message || err) });

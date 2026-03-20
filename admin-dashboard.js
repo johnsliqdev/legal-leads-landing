@@ -143,12 +143,14 @@ function renderGcAnalytics(a) {
     const mins = Math.floor(avgTime / 60);
     const secs = avgTime % 60;
 
+    const booked = Number(a.booked_calls) || 0;
     el.innerHTML =
         '<div class="analytics-grid">' +
             metricCard('Total Visits', total) +
             metricCard('Reached Form', pct(a.reached_form) + '%') +
             metricCard('Started Form', pct(a.started_form) + '%') +
             metricCard('Completed Form', pct(a.completed_form) + '%') +
+            metricCard('Booked a Call', booked + ' (' + pct(a.booked_calls) + '%)') +
             metricCard('Avg. Time on Page', mins + 'm ' + secs + 's') +
         '</div>' +
         '<div style="margin-top:16px;">' +
@@ -299,6 +301,7 @@ function renderGcSubmission(s) {
         <div class="sub-row"><span class="sub-label">Website</span><span class="sub-val">${v(s.website)}</span></div>
         <div class="sub-row"><span class="sub-label">Competitor</span><span class="sub-val">${v(s.competitor)}</span></div>
         <div class="sub-row"><span class="sub-label">Source</span><span class="sub-val">${v(s.source)}</span></div>
+        <div class="sub-row"><span class="sub-label">Booked Call</span><span class="sub-val" style="color:${s.booked_call ? '#00c864' : 'var(--muted)'};font-weight:700;">${s.booked_call ? '✓ Yes' : 'Not yet'}</span></div>
         <div class="sub-row"><span class="sub-label">Status</span><span class="sub-val" style="color:${statusColor};font-weight:700;">${v(s.audit_status)}</span></div>
         <div class="sub-row"><span class="sub-label">Date</span><span class="sub-val">${date}</span></div>
     </div>`;

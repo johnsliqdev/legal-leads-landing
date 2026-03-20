@@ -51,11 +51,39 @@ function gcShowSlide(n, direction) {
         document.getElementById('gcStepCur').textContent     = step.cur;
     }
 
-    // Track form step entry
     if (typeof window.gcTrackFormStep === 'function') window.gcTrackFormStep(n);
 }
 
 function gcNext(n) {
+    var sid = sessionStorage.getItem('gcSid') || null;
+
+    // Step 1 → 2: create lead record immediately
+    if (gcCurrentSlide === 1 && n === 2) {
+        gcState.name  = document.getElementById('gcName').value.trim();
+        gcState.email = document.getElementById('gcEmail').value.trim();
+        gcState.phone = document.getElementById('gcPhone').value.trim();
+        fetch('/api/gc-lead', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                session_id: sid,
+                name:       gcState.name,
+                email:      gcState.email,
+                phone:      gcState.phone,
+                source:     adSource
+            })
+        }).catch(function(err) { console.error('gc-lead POST failed:', err); });
+    }
+
+    // Step 2 → 3: patch revenue
+    if (gcCurrentSlide === 2 && n === 3 && gcState.revenueRange) {
+        fetch('/api/gc-lead', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ session_id: sid, revenue_range: gcState.revenueRange })
+        }).catch(function(){});
+    }
+
     gcShowSlide(n, 'forward');
     setTimeout(function() {
         var card = document.querySelector('.gc-form-card');
@@ -95,7 +123,6 @@ function gcSelectRevenue(card) {
     card.classList.add(isDisq ? 'sel-disq' : 'sel');
     gcState.revenueRange = card.getAttribute('data-value');
 
-    // Track revenue selection in session
     if (typeof window.gcTrackRevenue === 'function') window.gcTrackRevenue(gcState.revenueRange);
 
     if (isDisq) {
@@ -123,7 +150,7 @@ function gcValidateWebsite() {
     }
 }
 
-// ── Submit & advance to booking ───────────────────────────────────────────────
+// ── Submit (step 3 → 4): patch website + competitor ───────────────────────────
 
 function gcSubmitLead() {
     var btn = document.getElementById('gcN3');
@@ -135,29 +162,19 @@ function gcSubmitLead() {
 
     gcState.website    = document.getElementById('gcWebsite').value.trim();
     gcState.competitor = document.getElementById('gcCompetitor').value.trim();
-    gcState.name       = document.getElementById('gcName').value.trim();
-    gcState.email      = document.getElementById('gcEmail').value.trim();
-    gcState.phone      = document.getElementById('gcPhone').value.trim();
 
-    var sessionId = sessionStorage.getItem('gcSid') || null;
+    var sid = sessionStorage.getItem('gcSid') || null;
 
-    // Store to gc_leads (direct opt-in)
     fetch('/api/gc-lead', {
-        method: 'POST',
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            session_id:    sessionId,
-            name:          gcState.name,
-            email:         gcState.email,
-            phone:         gcState.phone,
-            revenue_range: gcState.revenueRange,
-            website:       gcState.website,
-            competitor:    gcState.competitor,
-            source:        adSource
+            session_id: sid,
+            website:    gcState.website,
+            competitor: gcState.competitor
         })
-    }).catch(function(err) { console.error('gc-lead POST failed:', err); });
+    }).catch(function(err) { console.error('gc-lead PATCH failed:', err); });
 
-    // Also fire tracking complete
     if (typeof window.gcTrackFormComplete === 'function') window.gcTrackFormComplete();
 
     gcNext(4);
@@ -187,14 +204,19 @@ function gcLoadBooking() {
         gcBookingListenerAdded = true;
         window.addEventListener('message', function(e) {
             if (Array.isArray(e.data) && e.data[0] === 'msgsndr-booking-complete') {
+                var sid = sessionStorage.getItem('gcSid') || null;
+                if (sid) {
+                    fetch('/api/gc-lead', {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ session_id: sid, booked_call: true }),
+                        keepalive: true
+                    }).catch(function(){});
+                }
                 window.location.href = '/thank-you-gc';
             }
         });
     }
-}
-
-function gcShowThankYou() {
-    window.location.href = '/thank-you-gc';
 }
 
 // ── Keyboard nav (A/B/C/D on revenue slide only) ──────────────────────────────
