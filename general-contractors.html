@@ -1921,16 +1921,11 @@
                 if (lead.email) document.getElementById('gcEmail').value = lead.email;
                 if (lead.phone) document.getElementById('gcPhone').value = lead.phone;
 
-                // Determine which step to resume at
-                if (lead.website && lead.competitor) {
-                    // All done — go straight to booking
-                    gcShowSlide(4, 'forward');
-                    gcLoadBooking();
-                } else if (lead.revenue_range) {
-                    // Has revenue — go to website step
+                // Always resume at step 3 (website/competitor) at most —
+                // never skip straight to booking; forces re-submission so DB stays fresh
+                if (lead.revenue_range) {
                     gcShowSlide(3, 'forward');
                 } else {
-                    // Has contact info only — go to revenue step
                     gcShowSlide(2, 'forward');
                 }
             }).catch(function(){});

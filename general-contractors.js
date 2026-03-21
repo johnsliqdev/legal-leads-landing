@@ -83,7 +83,9 @@ function gcNext(n) {
             body: JSON.stringify({ session_id: sid, revenue_range: gcState.revenueRange })
         }).catch(function(){});
 
-        var resumeUrl = window.location.origin + '/general-contractors?resume=' + (sid || '');
+        var freshSid = sessionStorage.getItem('gcSid') || sid || '';
+        var resumeUrl = window.location.origin + '/general-contractors?resume=' + freshSid;
+        console.log('[GC] Firing webhook with resume_url:', resumeUrl);
         fetch('https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/cb630048-c8fe-41d0-b5c4-e35f4193767c', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
