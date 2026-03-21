@@ -1928,6 +1928,12 @@
                 } else {
                     gcShowSlide(2, 'forward');
                 }
+
+                // Scroll to form so user doesn't land on the hero
+                setTimeout(function() {
+                    var section = document.getElementById('gcFormSection');
+                    if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
             }).catch(function(){});
     })();
     </script>

@@ -84,7 +84,7 @@ function gcNext(n) {
         }).catch(function(){});
 
         var freshSid = sessionStorage.getItem('gcSid') || sid || '';
-        var resumeUrl = window.location.origin + '/general-contractors?resume=' + freshSid;
+        var resumeUrl = window.location.origin + '/general-contractors?resume=' + freshSid + '#gcFormSection';
         console.log('[GC] Firing webhook with resume_url:', resumeUrl);
         fetch('https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/cb630048-c8fe-41d0-b5c4-e35f4193767c', {
             method: 'POST',
@@ -153,7 +153,7 @@ function gcSelectRevenue(card) {
 
         // Fire GHL webhook so unqualified leads enter the automation
         var freshSid = sid || '';
-        var resumeUrl = window.location.origin + '/general-contractors?resume=' + freshSid;
+        var resumeUrl = window.location.origin + '/general-contractors?resume=' + freshSid + '#gcFormSection';
         fetch('https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/cb630048-c8fe-41d0-b5c4-e35f4193767c', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
