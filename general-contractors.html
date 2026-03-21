@@ -1902,6 +1902,41 @@
     </script>
     <script src="general-contractors.js"></script>
     <script>
+    // ── Resume URL: pre-fill form and jump to correct step ───────────────────
+    (function() {
+        var resumeToken = new URLSearchParams(window.location.search).get('resume');
+        if (!resumeToken) return;
+
+        // Restore session so PATCHes keep updating the same record
+        sessionStorage.setItem('gcSid', resumeToken);
+
+        fetch('/api/gc-lead?resume=' + encodeURIComponent(resumeToken))
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                var lead = d.lead;
+                if (!lead) return;
+
+                // Pre-fill step 1 fields
+                if (lead.name)  document.getElementById('gcName').value  = lead.name;
+                if (lead.email) document.getElementById('gcEmail').value = lead.email;
+                if (lead.phone) document.getElementById('gcPhone').value = lead.phone;
+
+                // Determine which step to resume at
+                if (lead.website && lead.competitor) {
+                    // All done — go straight to booking
+                    gcShowSlide(4, 'forward');
+                    gcLoadBooking();
+                } else if (lead.revenue_range) {
+                    // Has revenue — go to website step
+                    gcShowSlide(3, 'forward');
+                } else {
+                    // Has contact info only — go to revenue step
+                    gcShowSlide(2, 'forward');
+                }
+            }).catch(function(){});
+    })();
+    </script>
+    <script>
         fetch('/api/settings').then(function(r){ return r.json(); }).then(function(d){
             var seats = Number(d && d.gcSeats);
             if (!Number.isFinite(seats) || seats < 0) seats = 2;

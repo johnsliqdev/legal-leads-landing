@@ -137,6 +137,16 @@ export default async function handler(req, res) {
       return json(res, 405, { error: 'method_not_allowed' });
     }
 
+    // ── Resume URL (public, no auth) ─────────────────────────────────────────
+    if (req.method === 'GET' && req.query?.resume) {
+      const { rows } = await db.sql`
+        SELECT name, email, phone, revenue_range, website, competitor
+        FROM gc_leads WHERE session_id = ${req.query.resume} LIMIT 1;
+      `;
+      if (!rows.length) return json(res, 404, { error: 'not_found' });
+      return json(res, 200, { lead: rows[0] });
+    }
+
     // ── Lead opt-in: POST (create on step 1) ─────────────────────────────────
     if (req.method === 'POST') {
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});

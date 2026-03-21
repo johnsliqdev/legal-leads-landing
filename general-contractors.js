@@ -83,6 +83,7 @@ function gcNext(n) {
             body: JSON.stringify({ session_id: sid, revenue_range: gcState.revenueRange })
         }).catch(function(){});
 
+        var resumeUrl = window.location.origin + '/general-contractors?resume=' + (sid || '');
         fetch('https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/cb630048-c8fe-41d0-b5c4-e35f4193767c', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -91,7 +92,8 @@ function gcNext(n) {
                 email:         gcState.email,
                 phone:         gcState.phone,
                 revenue_range: gcState.revenueRange,
-                source:        adSource
+                source:        adSource,
+                resume_url:    resumeUrl
             })
         }).catch(function(){});
     }
