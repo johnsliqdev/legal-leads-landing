@@ -324,7 +324,7 @@ async function gcMergeLeads() {
     var ids = Array.from(gcMergeSelection);
     if (ids.length !== 2) return;
     if (!confirm('Merge these 2 leads into one record? The older record will be deleted.')) return;
-    const token = localStorage.getItem('adminToken');
+    const token = sessionStorage.getItem('adminApiToken') || '';
     try {
         const r = await fetch('/api/gc-lead', {
             method: 'PATCH',
@@ -341,7 +341,7 @@ async function gcMergeLeads() {
 
 async function gcDeleteLead(id) {
     if (!confirm('Delete this lead permanently?')) return;
-    const token = localStorage.getItem('adminToken');
+    const token = sessionStorage.getItem('adminApiToken') || '';
     try {
         const r = await fetch('/api/gc-lead', {
             method: 'DELETE',
