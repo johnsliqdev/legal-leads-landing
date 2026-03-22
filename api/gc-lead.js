@@ -45,6 +45,11 @@ async function ensureSchema(db) {
     );
   `;
   await db.sql`ALTER TABLE gc_leads ADD COLUMN IF NOT EXISTS booked_call BOOLEAN DEFAULT FALSE;`;
+  await db.sql`ALTER TABLE gc_leads ADD COLUMN IF NOT EXISTS utm_source TEXT;`;
+  await db.sql`ALTER TABLE gc_leads ADD COLUMN IF NOT EXISTS utm_medium TEXT;`;
+  await db.sql`ALTER TABLE gc_leads ADD COLUMN IF NOT EXISTS utm_campaign TEXT;`;
+  await db.sql`ALTER TABLE gc_leads ADD COLUMN IF NOT EXISTS utm_content TEXT;`;
+  await db.sql`ALTER TABLE gc_leads ADD COLUMN IF NOT EXISTS utm_term TEXT;`;
   await db.sql`
     CREATE TABLE IF NOT EXISTS gc_sessions (
       id SERIAL PRIMARY KEY,
@@ -150,13 +155,14 @@ export default async function handler(req, res) {
     // ── Lead opt-in: POST (create on step 1) ─────────────────────────────────
     if (req.method === 'POST') {
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-      const { session_id, name, email, phone, source } = body;
+      const { session_id, name, email, phone, source, utm_source, utm_medium, utm_campaign, utm_content, utm_term } = body;
 
       if (!email && !phone) return json(res, 400, { error: 'email or phone required' });
 
       await db.sql`
-        INSERT INTO gc_leads (session_id, name, email, phone, source)
-        VALUES (${session_id || null}, ${name || null}, ${email || null}, ${phone || null}, ${source || null})
+        INSERT INTO gc_leads (session_id, name, email, phone, source, utm_source, utm_medium, utm_campaign, utm_content, utm_term)
+        VALUES (${session_id || null}, ${name || null}, ${email || null}, ${phone || null}, ${source || null},
+                ${utm_source || null}, ${utm_medium || null}, ${utm_campaign || null}, ${utm_content || null}, ${utm_term || null})
         ON CONFLICT DO NOTHING;
       `;
       return json(res, 200, { success: true });

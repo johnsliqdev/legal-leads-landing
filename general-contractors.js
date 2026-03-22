@@ -8,6 +8,14 @@ var adSource = (function() {
     return document.referrer ? 'organic' : 'direct';
 })();
 
+var utmParams = (function() {
+    var p = new URLSearchParams(window.location.search);
+    var keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+    var result = {};
+    keys.forEach(function(k) { if (p.get(k)) result[k] = p.get(k); });
+    return result;
+})();
+
 var gcState = {
     name:        null,
     email:       null,
@@ -66,11 +74,16 @@ function gcNext(n) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                session_id: sid,
-                name:       gcState.name,
-                email:      gcState.email,
-                phone:      gcState.phone,
-                source:     adSource
+                session_id:  sid,
+                name:        gcState.name,
+                email:       gcState.email,
+                phone:       gcState.phone,
+                source:      adSource,
+                utm_source:  utmParams.utm_source   || null,
+                utm_medium:  utmParams.utm_medium   || null,
+                utm_campaign:utmParams.utm_campaign || null,
+                utm_content: utmParams.utm_content  || null,
+                utm_term:    utmParams.utm_term     || null
             })
         }).catch(function(err) { console.error('gc-lead POST failed:', err); });
     }

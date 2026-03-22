@@ -301,6 +301,10 @@ function renderGcSubmission(s) {
         <div class="sub-row"><span class="sub-label">Website</span><span class="sub-val">${v(s.website)}</span></div>
         <div class="sub-row"><span class="sub-label">Competitor</span><span class="sub-val">${v(s.competitor)}</span></div>
         <div class="sub-row"><span class="sub-label">Source</span><span class="sub-val">${v(s.source)}</span></div>
+        ${s.utm_campaign ? `<div class="sub-row"><span class="sub-label">Campaign</span><span class="sub-val">${s.utm_campaign}</span></div>` : ''}
+        ${s.utm_medium   ? `<div class="sub-row"><span class="sub-label">Medium</span><span class="sub-val">${s.utm_medium}</span></div>`   : ''}
+        ${s.utm_content  ? `<div class="sub-row"><span class="sub-label">Ad Content</span><span class="sub-val">${s.utm_content}</span></div>` : ''}
+        ${s.utm_term     ? `<div class="sub-row"><span class="sub-label">Term</span><span class="sub-val">${s.utm_term}</span></div>`         : ''}
         <div class="sub-row"><span class="sub-label">Booked Call</span><span class="sub-val" style="color:${s.booked_call ? '#00c864' : 'var(--muted)'};font-weight:700;">${s.booked_call ? '✓ Yes' : 'Not yet'}</span></div>
         <div class="sub-row"><span class="sub-label">Status</span><span class="sub-val" style="color:${statusColor};font-weight:700;">${v(s.audit_status)}</span></div>
         <div class="sub-row"><span class="sub-label">Date</span><span class="sub-val">${date}</span></div>
