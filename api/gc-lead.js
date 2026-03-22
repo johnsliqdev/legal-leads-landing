@@ -171,7 +171,40 @@ export default async function handler(req, res) {
     // ── Lead opt-in: PATCH (increment fields as they progress) ───────────────
     if (req.method === 'PATCH') {
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-      const { session_id, revenue_range, website, competitor, booked_call } = body;
+      const { session_id, revenue_range, website, competitor, booked_call, action, primary_id, secondary_id } = body;
+
+      // ── Merge two leads (admin only) ──────────────────────────────────────
+      if (action === 'merge') {
+        const token = req.headers['x-admin-token'];
+        if (!await isAuthorized(token, db)) return json(res, 401, { error: 'unauthorized' });
+        if (!primary_id || !secondary_id) return json(res, 400, { error: 'primary_id and secondary_id required' });
+
+        const { rows } = await db.sql`SELECT * FROM gc_leads WHERE id = ANY(ARRAY[${primary_id}::int, ${secondary_id}::int]);`;
+        if (rows.length < 2) return json(res, 404, { error: 'one or both leads not found' });
+
+        const [a, b] = rows[0].id === primary_id ? [rows[0], rows[1]] : [rows[1], rows[0]];
+        const pick = (x, y) => x || y || null;
+
+        await db.sql`
+          UPDATE gc_leads SET
+            name          = ${pick(a.name, b.name)},
+            email         = ${pick(a.email, b.email)},
+            phone         = ${pick(a.phone, b.phone)},
+            revenue_range = ${pick(a.revenue_range, b.revenue_range)},
+            website       = ${pick(a.website, b.website)},
+            competitor    = ${pick(a.competitor, b.competitor)},
+            source        = ${pick(a.source, b.source)},
+            utm_source    = ${pick(a.utm_source, b.utm_source)},
+            utm_medium    = ${pick(a.utm_medium, b.utm_medium)},
+            utm_campaign  = ${pick(a.utm_campaign, b.utm_campaign)},
+            utm_content   = ${pick(a.utm_content, b.utm_content)},
+            utm_term      = ${pick(a.utm_term, b.utm_term)},
+            booked_call   = ${a.booked_call || b.booked_call}
+          WHERE id = ${primary_id};
+        `;
+        await db.sql`DELETE FROM gc_leads WHERE id = ${secondary_id};`;
+        return json(res, 200, { success: true });
+      }
 
       if (!session_id) return json(res, 400, { error: 'session_id required' });
 

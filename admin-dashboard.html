@@ -239,8 +239,18 @@
         .analytics-grid .metric-label { font-size: 11px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .5px; }
 
         /* ── Submission card (GC) ────────────────────────────── */
-        .submission-card { background: var(--bg); border: 1px solid var(--border); border-radius: 11px; padding: 18px; margin-bottom: 10px; }
+        .submission-card { background: var(--bg); border: 1px solid var(--border); border-radius: 11px; padding: 18px; margin-bottom: 10px; position: relative; }
         .submission-card:hover { border-color: rgba(255,0,110,0.2); }
+        .submission-card.selected { border-color: rgba(255,0,110,0.6); background: rgba(255,0,110,0.04); }
+        .card-top-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .gc-checkbox { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+        .btn-delete-lead { background: none; border: none; color: var(--muted); font-size: 11px; cursor: pointer; padding: 2px 6px; border-radius: 4px; }
+        .btn-delete-lead:hover { color: var(--accent); background: rgba(255,0,110,0.08); }
+        .merge-bar { display: none; background: rgba(255,0,110,0.08); border: 1px solid rgba(255,0,110,0.25); border-radius: 10px; padding: 10px 16px; margin-bottom: 12px; align-items: center; justify-content: space-between; gap: 10px; }
+        .merge-bar.visible { display: flex; }
+        .merge-bar-label { font-size: 13px; color: var(--text); }
+        .btn-merge { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border: none; border-radius: 7px; padding: 7px 16px; font-size: 12.5px; font-weight: 700; cursor: pointer; }
+        .btn-cancel-merge { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 7px; padding: 7px 12px; font-size: 12px; cursor: pointer; }
         .sub-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; }
         .sub-row:last-child { border-bottom: none; }
         .sub-label { color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
@@ -368,6 +378,13 @@
             <div class="actions-row">
                 <button class="btn btn-ghost btn-sm" id="refreshSubmissions">↻  Refresh</button>
                 <button class="btn btn-danger btn-sm" id="clearSubmissions">Clear All</button>
+            </div>
+            <div class="merge-bar" id="mergeBar">
+                <span class="merge-bar-label">2 leads selected — merge into one record?</span>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn-cancel-merge" onclick="gcCancelMerge()">Cancel</button>
+                    <button class="btn-merge" onclick="gcMergeLeads()">Merge</button>
+                </div>
             </div>
             <div id="submissionsList"></div>
         </div>

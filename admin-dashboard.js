@@ -289,11 +289,80 @@ function renderLsSubmission(s) {
     </div>`;
 }
 
+var gcMergeSelection = new Set();
+
+function gcUpdateMergeBar() {
+    var bar = document.getElementById('mergeBar');
+    if (!bar) return;
+    if (gcMergeSelection.size === 2) bar.classList.add('visible');
+    else bar.classList.remove('visible');
+}
+
+function gcToggleSelect(id) {
+    var card = document.querySelector('.submission-card[data-id="' + id + '"]');
+    if (gcMergeSelection.has(id)) {
+        gcMergeSelection.delete(id);
+        if (card) card.classList.remove('selected');
+    } else {
+        if (gcMergeSelection.size >= 2) return; // max 2
+        gcMergeSelection.add(id);
+        if (card) card.classList.add('selected');
+    }
+    gcUpdateMergeBar();
+}
+
+function gcCancelMerge() {
+    gcMergeSelection.forEach(function(id) {
+        var card = document.querySelector('.submission-card[data-id="' + id + '"]');
+        if (card) card.classList.remove('selected');
+    });
+    gcMergeSelection.clear();
+    gcUpdateMergeBar();
+}
+
+async function gcMergeLeads() {
+    var ids = Array.from(gcMergeSelection);
+    if (ids.length !== 2) return;
+    if (!confirm('Merge these 2 leads into one record? The older record will be deleted.')) return;
+    const token = localStorage.getItem('adminToken');
+    try {
+        const r = await fetch('/api/gc-lead', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+            body: JSON.stringify({ action: 'merge', primary_id: ids[0], secondary_id: ids[1] })
+        });
+        const d = await r.json();
+        if (!r.ok) { alert('Merge failed: ' + (d.error || r.status)); return; }
+        gcMergeSelection.clear();
+        showNotification('Leads merged', 'success');
+        await displaySubmissions();
+    } catch (e) { alert('Merge error: ' + e.message); }
+}
+
+async function gcDeleteLead(id) {
+    if (!confirm('Delete this lead permanently?')) return;
+    const token = localStorage.getItem('adminToken');
+    try {
+        const r = await fetch('/api/gc-lead', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+            body: JSON.stringify({ id: id })
+        });
+        if (!r.ok) { alert('Delete failed'); return; }
+        showNotification('Lead deleted', 'success');
+        await displaySubmissions();
+    } catch (e) { alert('Delete error: ' + e.message); }
+}
+
 function renderGcSubmission(s) {
     const v = function(x) { return x || '—'; };
     const statusColor = s.audit_status === 'complete' ? '#00c864' : '#ff006e';
     const date = s.created_at ? new Date(s.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
-    return `<div class="submission-card">
+    return `<div class="submission-card" data-id="${s.id}">
+        <div class="card-top-actions">
+            <input type="checkbox" class="gc-checkbox" onchange="gcToggleSelect(${s.id})" title="Select for merge">
+            <button class="btn-delete-lead" onclick="gcDeleteLead(${s.id})">✕ Delete</button>
+        </div>
         <div class="sub-row"><span class="sub-label">Name</span><span class="sub-val">${v(s.name)}</span></div>
         <div class="sub-row"><span class="sub-label">Email</span><span class="sub-val">${v(s.email)}</span></div>
         <div class="sub-row"><span class="sub-label">Phone</span><span class="sub-val">${v(s.phone)}</span></div>
