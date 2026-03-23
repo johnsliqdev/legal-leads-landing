@@ -61,6 +61,12 @@ async function ensureSchema(poolInstance) {
     VALUES ('gcSeats', '2')
     ON CONFLICT (key) DO NOTHING;
   `;
+
+  await poolInstance.sql`
+    INSERT INTO app_settings (key, value)
+    VALUES ('activeCampaigns', '["gc"]')
+    ON CONFLICT (key) DO NOTHING;
+  `;
 }
 
 export default async function handler(req, res) {
@@ -77,7 +83,12 @@ export default async function handler(req, res) {
         SELECT value FROM app_settings WHERE key = 'gcSeats' LIMIT 1;
       `;
       const seats = Number(seatsRows?.[0]?.value ?? '2');
-      return json(res, 200, { cpqlTarget: Number(value), gcSeats: seats });
+      const { rows: acRows } = await poolInstance.sql`
+        SELECT value FROM app_settings WHERE key = 'activeCampaigns' LIMIT 1;
+      `;
+      let activeCampaigns = ['gc'];
+      try { activeCampaigns = JSON.parse(acRows?.[0]?.value ?? '["gc"]'); } catch (_) {}
+      return json(res, 200, { cpqlTarget: Number(value), gcSeats: seats, activeCampaigns });
     }
 
     // Helper: check auth against DB password or env var
@@ -163,11 +174,24 @@ export default async function handler(req, res) {
         }
       }
 
+      if (Array.isArray(body.activeCampaigns)) {
+        await poolInstance.sql`
+          INSERT INTO app_settings (key, value)
+          VALUES ('activeCampaigns', ${JSON.stringify(body.activeCampaigns)})
+          ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
+        `;
+      }
+
       const { rows: seatsRows } = await poolInstance.sql`
         SELECT value FROM app_settings WHERE key = 'gcSeats' LIMIT 1;
       `;
       const seats = Number(seatsRows?.[0]?.value ?? '2');
-      return json(res, 200, { success: true, cpqlTarget: next, gcSeats: seats });
+      const { rows: acRows } = await poolInstance.sql`
+        SELECT value FROM app_settings WHERE key = 'activeCampaigns' LIMIT 1;
+      `;
+      let activeCampaigns = ['gc'];
+      try { activeCampaigns = JSON.parse(acRows?.[0]?.value ?? '["gc"]'); } catch (_) {}
+      return json(res, 200, { success: true, cpqlTarget: next, gcSeats: seats, activeCampaigns });
     }
 
     res.setHeader('Allow', 'GET,POST,PUT');

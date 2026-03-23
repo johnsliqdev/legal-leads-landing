@@ -1,6 +1,7 @@
 // Admin dashboard functionality
 let cpqlTarget = 700;
-let activeCampaign = 'pi'; // 'pi' | 'ls' | 'gc'
+let activeCampaign = 'gc'; // 'pi' | 'ls' | 'gc'
+let activeCampaigns = ['gc']; // campaigns visible in the leads tab
 
 // ─── Sidebar panel navigation ─────────────────────────────────────────────────
 
@@ -50,6 +51,19 @@ function switchCampaign(campaign) {
     displaySubmissions();
 }
 
+function applyActiveCampaigns(campaigns) {
+    activeCampaigns = Array.isArray(campaigns) ? campaigns : ['gc'];
+    var tabMap = { gc: 'tabGC', pi: 'tabPI', ls: 'tabLS' };
+    Object.keys(tabMap).forEach(function(key) {
+        var btn = document.getElementById(tabMap[key]);
+        if (btn) btn.style.display = activeCampaigns.includes(key) ? '' : 'none';
+    });
+    // If current active campaign is no longer visible, switch to first active
+    if (!activeCampaigns.includes(activeCampaign) && activeCampaigns.length > 0) {
+        switchCampaign(activeCampaigns[0]);
+    }
+}
+
 // ─── Auth ─────────────────────────────────────────────────────────────────────
 
 function checkAuth() {
@@ -62,12 +76,18 @@ function checkAuth() {
 
 // ─── CPQL target ─────────────────────────────────────────────────────────────
 
-async function loadCpqlTarget() {
+async function loadSettings() {
     const res = await fetch('/api/settings', { method: 'GET' });
-    if (!res.ok) throw new Error(`Failed to load CPQL target: ${res.status}`);
+    if (!res.ok) throw new Error(`Failed to load settings: ${res.status}`);
     const data = await res.json();
     const value = Number(data?.cpqlTarget);
     if (Number.isFinite(value)) cpqlTarget = value;
+    if (Array.isArray(data?.activeCampaigns)) activeCampaigns = data.activeCampaigns;
+    return data;
+}
+
+async function loadCpqlTarget() {
+    const data = await loadSettings();
     return cpqlTarget;
 }
 
@@ -115,6 +135,32 @@ document.getElementById('gcSeatsForm')?.addEventListener('submit', async functio
         } catch (err) {
             showNotification('Failed to save seats', 'error');
         }
+    }
+});
+
+// ─── Active Campaigns Setting ─────────────────────────────────────────────────
+
+document.getElementById('saveCampaignsBtn')?.addEventListener('click', async function() {
+    const selected = [];
+    if (document.getElementById('campaignToggleGC')?.checked) selected.push('gc');
+    if (document.getElementById('campaignTogglePI')?.checked) selected.push('pi');
+    if (document.getElementById('campaignToggleLS')?.checked) selected.push('ls');
+    if (selected.length === 0) {
+        showNotification('At least one campaign must be active', 'error');
+        return;
+    }
+    const token = sessionStorage.getItem('adminApiToken') || '';
+    try {
+        const res = await fetch('/api/settings', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'x-admin-token': token },
+            body: JSON.stringify({ cpqlTarget: cpqlTarget, activeCampaigns: selected })
+        });
+        if (!res.ok) throw new Error('Failed to save');
+        applyActiveCampaigns(selected);
+        showFlash('campaignsSaveSuccess');
+    } catch (err) {
+        showNotification('Failed to save campaigns', 'error');
     }
 });
 
@@ -600,16 +646,20 @@ function showNotification(message, type) {
 
 async function updateDisplay() {
     try {
-        const target = await loadCpqlTarget();
+        const settings = await loadSettings();
         const el = document.getElementById('cpqlTarget');
-        if (el) el.value = target;
-    } catch (err) {
-        console.error(err);
-    }
-    try {
-        const seats = await loadGcSeats();
+        if (el) el.value = cpqlTarget;
         const seatsEl = document.getElementById('gcSeatsInput');
-        if (seatsEl) seatsEl.value = seats;
+        if (seatsEl) seatsEl.value = Number.isFinite(Number(settings?.gcSeats)) ? Number(settings.gcSeats) : 2;
+        // Apply active campaigns filter
+        applyActiveCampaigns(activeCampaigns);
+        // Populate settings checkboxes
+        var gc = document.getElementById('campaignToggleGC');
+        var pi = document.getElementById('campaignTogglePI');
+        var ls = document.getElementById('campaignToggleLS');
+        if (gc) gc.checked = activeCampaigns.includes('gc');
+        if (pi) pi.checked = activeCampaigns.includes('pi');
+        if (ls) ls.checked = activeCampaigns.includes('ls');
     } catch (err) {
         console.error(err);
     }
