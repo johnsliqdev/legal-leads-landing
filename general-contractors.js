@@ -105,7 +105,7 @@ function gcNext(n) {
             body: JSON.stringify({
                 name:          gcState.name,
                 email:         gcState.email,
-                phone:         gcState.phone,
+                phone:         gcFormatPhone(gcState.phone),
                 revenue_range: gcState.revenueRange,
                 source:        adSource,
                 resume_url:    resumeUrl
@@ -123,6 +123,17 @@ function gcNext(n) {
 
 function gcBack(n) {
     gcShowSlide(n, 'back');
+}
+
+// ── Phone normalization ───────────────────────────────────────────────────────
+
+function gcFormatPhone(raw) {
+    var digits = (raw || '').replace(/\D/g, '');
+    if (digits.length === 11 && digits.charAt(0) === '1') digits = digits.slice(1);
+    if (digits.length === 10) {
+        return '(' + digits.slice(0, 3) + ') ' + digits.slice(3, 6) + '-' + digits.slice(6);
+    }
+    return raw; // fallback: send as-is if can't normalize
 }
 
 // ── Contact info validation ────────────────────────────────────────────────────
@@ -173,7 +184,7 @@ function gcSelectRevenue(card) {
             body: JSON.stringify({
                 name:          gcState.name,
                 email:         gcState.email,
-                phone:         gcState.phone,
+                phone:         gcFormatPhone(gcState.phone),
                 revenue_range: gcState.revenueRange,
                 source:        adSource,
                 resume_url:    resumeUrl
