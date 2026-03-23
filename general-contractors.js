@@ -181,7 +181,7 @@ function gcSelectRevenue(card) {
         }).catch(function(){});
 
         setTimeout(function() {
-            window.location.replace('/thank-you-gc-unqualified');
+            window.location.replace('/gc-uq');
         }, 600);
     } else {
         var disqual = document.getElementById('gcRevenueDisqual');
@@ -267,6 +267,7 @@ function gcLoadBooking() {
                         keepalive: true
                     }).catch(function(){});
                 }
+                sessionStorage.setItem('gcBooked', '1');
                 window.location.href = '/thank-you-gc';
             }
         });
