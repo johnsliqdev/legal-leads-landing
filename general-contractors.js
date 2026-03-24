@@ -10,9 +10,18 @@ var adSource = (function() {
 
 var utmParams = (function() {
     var p = new URLSearchParams(window.location.search);
-    var keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+    var knownKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+    var skipKeys  = ['fbclid', 'li_fat_id', 'gclid', 'msclkid'];
     var result = {};
-    keys.forEach(function(k) { if (p.get(k)) result[k] = p.get(k); });
+    knownKeys.forEach(function(k) { if (p.get(k)) result[k] = p.get(k); });
+    // Fallback: bare params (no value) from Meta/other platforms → store as utm_content
+    if (!result.utm_content) {
+        p.forEach(function(val, key) {
+            if (val === '' && knownKeys.indexOf(key) === -1 && skipKeys.indexOf(key) === -1) {
+                result.utm_content = key;
+            }
+        });
+    }
     return result;
 })();
 
