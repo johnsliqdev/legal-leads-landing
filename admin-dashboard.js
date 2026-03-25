@@ -420,6 +420,7 @@ function renderGcSubmission(s) {
         ${s.utm_medium   ? `<div class="sub-row"><span class="sub-label">Medium</span><span class="sub-val">${s.utm_medium}</span></div>`   : ''}
         ${s.utm_content  ? `<div class="sub-row"><span class="sub-label">Creative</span><span class="sub-val">${s.utm_content}</span></div>` : ''}
         ${s.utm_term     ? `<div class="sub-row"><span class="sub-label">Term</span><span class="sub-val">${s.utm_term}</span></div>`         : ''}
+        ${s.landing_url  ? `<div class="sub-row"><span class="sub-label">Landing URL</span><span class="sub-val" style="font-size:11px;word-break:break-all;">${s.landing_url}</span></div>` : ''}
         <div class="sub-row"><span class="sub-label">Booked Call</span><span class="sub-val" style="color:${s.booked_call ? '#00c864' : 'var(--muted)'};font-weight:700;">${s.booked_call ? '✓ Yes' : 'Not yet'}</span></div>
         <div class="sub-row"><span class="sub-label">Status</span><span class="sub-val" style="color:${statusColor};font-weight:700;">${v(s.audit_status)}</span></div>
         <div class="sub-row"><span class="sub-label">Date</span><span class="sub-val">${date}</span></div>

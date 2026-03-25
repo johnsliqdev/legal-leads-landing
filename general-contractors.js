@@ -8,6 +8,8 @@ var adSource = (function() {
     return document.referrer ? 'organic' : 'direct';
 })();
 
+var landingUrl = window.location.href;
+
 var utmParams = (function() {
     var p = new URLSearchParams(window.location.search);
     var knownKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
@@ -92,7 +94,8 @@ function gcNext(n) {
                 utm_medium:  utmParams.utm_medium   || null,
                 utm_campaign:utmParams.utm_campaign || null,
                 utm_content: utmParams.utm_content  || null,
-                utm_term:    utmParams.utm_term     || null
+                utm_term:    utmParams.utm_term     || null,
+                landing_url: landingUrl             || null
             })
         }).catch(function(err) { console.error('gc-lead POST failed:', err); });
     }
