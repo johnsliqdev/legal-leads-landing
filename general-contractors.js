@@ -179,15 +179,11 @@ function gcSelectRevenue(card) {
 
     if (isDisq) {
         var sid = sessionStorage.getItem('gcSid') || null;
-
-        // Patch revenue to DB so the lead record is complete
         fetch('/api/gc-lead', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ session_id: sid, revenue_range: gcState.revenueRange })
         }).catch(function(){});
-
-        // Fire GHL webhook so unqualified leads enter the automation
         var freshSid = sid || '';
         var resumeUrl = window.location.origin + '/general-contractors?resume=' + freshSid + '#gcFormSection';
         fetch('https://services.leadconnectorhq.com/hooks/RZP0qqWcu4bX0Ca5wbMs/webhook-trigger/cb630048-c8fe-41d0-b5c4-e35f4193767c', {
@@ -202,10 +198,7 @@ function gcSelectRevenue(card) {
                 resume_url:    resumeUrl
             })
         }).catch(function(){});
-
-        setTimeout(function() {
-            window.location.replace('/gc-uq');
-        }, 600);
+        setTimeout(function() { window.location.replace('/gc-uq'); }, 600);
     } else {
         var disqual = document.getElementById('gcRevenueDisqual');
         if (disqual) disqual.style.display = 'none';
@@ -262,20 +255,28 @@ function gcSubmitLead() {
 
 var gcBookingListenerAdded = false;
 
-function gcLoadBooking() {
-    var wrap = document.getElementById('gcFormWrap');
-    if (wrap) wrap.classList.add('gc-form-wrap-booking');
+var gcScrollLockY = 0;
 
-    var iframe = document.getElementById('gcBookingIframe');
-    if (iframe && !iframe.src) {
-        iframe.src = 'https://api.leadconnectorhq.com/widget/booking/bHLOuWOsVymv9VQHPXfc';
-        if (!document.getElementById('gcGhlEmbed')) {
-            var s = document.createElement('script');
-            s.id  = 'gcGhlEmbed';
-            s.src = 'https://link.msgsndr.com/js/form_embed.js';
-            document.body.appendChild(s);
-        }
-    }
+function gcLockScroll() {
+    gcScrollLockY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = '-' + gcScrollLockY + 'px';
+    document.body.style.width = '100%';
+    document.body.style.overflow = 'hidden';
+}
+
+function gcUnlockScroll() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    document.body.style.overflow = '';
+    window.scrollTo(0, gcScrollLockY);
+}
+
+function gcLoadBooking() {
+    var overlay = document.getElementById('gcBookingOverlay');
+    if (overlay) overlay.style.display = 'flex';
+    gcLockScroll();
 
     if (!gcBookingListenerAdded) {
         gcBookingListenerAdded = true;
@@ -290,11 +291,17 @@ function gcLoadBooking() {
                         keepalive: true
                     }).catch(function(){});
                 }
+                gcUnlockScroll();
                 sessionStorage.setItem('gcBooked', '1');
                 window.location.href = '/thank-you-gc';
             }
         });
     }
+}
+
+function gcCloseBookingOverlay() {
+    var overlay = document.getElementById('gcBookingOverlay');
+    if (overlay) overlay.style.display = 'none';
 }
 
 // ── Keyboard nav (A/B/C/D on revenue slide only) ──────────────────────────────
